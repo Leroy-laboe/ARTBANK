@@ -1,0 +1,49 @@
+.section {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 96px 20px;
+  background:
+    radial-gradient(ellipse 55% 55% at 50% 0%, rgba(185, 136, 79, 0.12), transparent 65%),
+    linear-gradient(180deg, #fbf8f2 0%, var(--bg) 100%);
+}
+
+.inner {
+  max-width: 480px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--gold-bg);
+  color: var(--gold-dark);
+  margin-bottom: 22px;
+}
+
+.eyebrow {
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 38px;
+  margin-bottom: 14px;
+}
+
+.desc {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 34px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}

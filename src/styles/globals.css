@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --ink: #15110c;
+  --ink-soft: #4a4238;
+  --muted: #7c7468;
+  --muted-2: #9a9184;
+  --bg: #faf6ef;
+  --surface: #ffffff;
+  --border: #e8e1d3;
+  --border-soft: #efe9dd;
+
+  --gold: #b9884f;
+  --gold-light: #d8b077;
+  --gold-dark: #8f6a3a;
+  --gold-bg: #f6ecd9;
+
+  --dark: #15110d;
+  --dark-2: #1f1a14;
+  --dark-border: #33291d;
+  --cream-text: #ede6d8;
+
+  --success: #2f7d4f;
+
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --container: 1280px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-full: 999px;
+
+  --shadow-sm: 0 2px 8px rgba(21, 17, 12, 0.06);
+  --shadow-md: 0 12px 32px rgba(21, 17, 12, 0.1);
+  --shadow-lg: 0 24px 60px rgba(21, 17, 12, 0.16);
+
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: 15.5px;
+  line-height: 1.55;
+}
+
+#root {
+  min-height: 100svh;
+  overflow-x: clip;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif);
+  color: var(--ink);
+  margin: 0;
+  font-weight: 500;
+}
+
+p {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+@media (max-width: 900px) {
+  .container {
+    padding: 0 20px;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

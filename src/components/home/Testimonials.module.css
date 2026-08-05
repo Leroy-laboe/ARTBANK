@@ -1,0 +1,54 @@
+.section {
+  padding: 20px 0 96px;
+  text-align: center;
+}
+
+.quoteMark {
+  color: var(--gold);
+  margin-bottom: 18px;
+  display: inline-flex;
+}
+
+.quote {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  line-height: 1.4;
+  color: var(--ink);
+  max-width: 620px;
+  margin: 0 auto 12px;
+}
+
+.attribution {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
+.avatars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatars span {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  margin-left: -12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.avatars span:first-child {
+  margin-left: 0;
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gold-bg);
+  color: var(--gold-dark);
+  font-size: 12px;
+  font-weight: 700;
+}

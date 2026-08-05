@@ -1,0 +1,124 @@
+.section {
+  padding: 0 0 88px;
+}
+
+.panel {
+  position: relative;
+  background: linear-gradient(115deg, var(--dark) 0%, #1e1710 100%);
+  border-radius: var(--radius-lg);
+  padding: 44px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 40% 80% at 100% 0%, rgba(185, 136, 79, 0.25), transparent 70%);
+}
+
+.left {
+  position: relative;
+  color: #fff;
+  max-width: 260px;
+}
+
+.left h2 {
+  color: #fff;
+  font-size: 27px;
+  margin-bottom: 10px;
+}
+
+.left p {
+  font-size: 13.5px;
+  color: var(--muted-2);
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.perks {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 20px;
+  flex: 1;
+  justify-content: center;
+}
+
+.perk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--cream-text);
+  width: 72px;
+  text-align: center;
+}
+
+.perkIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--dark-2);
+  border: 1px solid var(--dark-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-light);
+}
+
+.perk span {
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.priceBox {
+  position: relative;
+  background: var(--dark-2);
+  border: 1px solid var(--dark-border);
+  border-radius: var(--radius-md);
+  padding: 20px 26px;
+  text-align: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.priceLabel {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  margin-bottom: 6px;
+}
+
+.priceValue {
+  font-family: var(--font-serif);
+  font-size: 28px;
+}
+
+.priceValue span {
+  font-size: 13px;
+  color: var(--muted-2);
+  font-family: var(--font-sans);
+}
+
+.priceSub {
+  font-size: 11px;
+  color: var(--muted-2);
+  margin-top: 4px;
+}
+
+@media (max-width: 900px) {
+  .panel {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .perks {
+    justify-content: flex-start;
+  }
+}

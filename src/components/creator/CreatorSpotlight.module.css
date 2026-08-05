@@ -1,0 +1,75 @@
+.card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 100%;
+  display: flex;
+  align-items: flex-end;
+  color: #fff;
+  padding: 28px;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, rgba(10, 8, 6, 0.88) 100%);
+}
+
+.body {
+  position: relative;
+  width: 100%;
+}
+
+.name {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  margin-bottom: 2px;
+}
+
+.title {
+  font-size: 13px;
+  color: var(--gold-light);
+  margin-bottom: 12px;
+}
+
+.bio {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 40ch;
+  margin-bottom: 20px;
+}
+
+.metrics {
+  display: flex;
+  gap: 26px;
+  margin-bottom: 22px;
+}
+
+.metricValue {
+  font-family: var(--font-serif);
+  font-size: 18px;
+}
+
+.metricLabel {
+  font-size: 10.5px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 2px;
+}
+
+.viewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 11px 20px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+}

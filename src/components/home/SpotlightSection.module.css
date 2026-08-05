@@ -1,0 +1,29 @@
+.section {
+  padding: 40px 0 88px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 0.85fr 2fr;
+  gap: 28px;
+  align-items: stretch;
+}
+
+.spotlightCol {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+}
+
+.spotlightCol > :global(article) {
+  flex: 1;
+}
+
+@media (max-width: 1000px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .spotlightCol {
+    min-height: 320px;
+  }
+}

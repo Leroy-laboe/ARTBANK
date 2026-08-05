@@ -1,16 +1,5 @@
 import type { Artwork } from '../types/artwork';
 
-export const featuredArtwork: Artwork = {
-  id: 'featured-1',
-  title: 'Fragments of Memory',
-  artist: 'Amara Voss',
-  price: 8500,
-  currency: 'RM',
-  likes: 412,
-  verified: true,
-  gradient: 'linear-gradient(160deg, #d9c7a8 0%, #8a7358 38%, #2b2420 78%, #0d0b09 100%)',
-};
-
 export const marketplaceArtworks: Artwork[] = [
   {
     id: 'art-1',

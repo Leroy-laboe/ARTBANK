@@ -11,7 +11,6 @@ export function Header() {
           <span className={styles.wordmark}>
             ART<span>BANK</span>
           </span>
-          <span className={styles.tagline}>GLOBAL CREATOR INTELLIGENCE</span>
         </Link>
 
         <nav className={styles.nav} aria-label="Primary">

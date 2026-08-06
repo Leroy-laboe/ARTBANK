@@ -22,17 +22,18 @@ export function Hero() {
             </Button>
             <Button variant="secondary">Become a Creator</Button>
           </div>
+        </div>
 
-          <p className={styles.trustedLabel}>TRUSTED BY LEADING INSTITUTIONS WORLDWIDE</p>
-          <div className={styles.logos}>
-            {trustedBy.map((name) => (
-              <span key={name} className={styles.logo}>
-                {name}
-              </span>
-            ))}
-          </div>
+        <p className={styles.trustedLabel}>TRUSTED BY LEADING INSTITUTIONS WORLDWIDE</p>
+        <div className={styles.trustRow}>
+          {trustedBy.map((brand) => (
+            <span key={brand.name} className={styles.logo}>
+              {brand.icon && <Icon name={brand.icon} size={14} />}
+              {brand.name}
+            </span>
+          ))}
 
-          <div className={styles.collectorsRow}>
+          <div className={styles.collectorsPill}>
             <div className={styles.avatarStack}>
               {testimonialAvatars.slice(0, 4).map((gradient, i) => (
                 <span key={i} style={{ background: gradient }} />

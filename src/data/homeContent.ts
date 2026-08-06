@@ -12,7 +12,14 @@ export const navLinks = [
   { label: 'Membership', href: '/membership' },
 ];
 
-export const trustedBy = ["Sotheby's", 'CHRISTIE’S', 'MoMA', 'THE MET', 'Louvre', 'British Council'];
+export const trustedBy: { name: string; icon?: IconName }[] = [
+  { name: "Sotheby's" },
+  { name: 'CHRISTIE’S' },
+  { name: 'MoMA' },
+  { name: 'THE MET' },
+  { name: 'Louvre' },
+  { name: 'British Council', icon: 'grid-dots' },
+];
 
 export const heroStats = [
   { icon: 'shield-check' as IconName, value: '1M+', label: 'Verified Creators' },

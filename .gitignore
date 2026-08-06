@@ -11,6 +11,13 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+
+# Uploaded to Supabase Storage, kept out of the repo (large binaries, personal names)
+src/assets/Finalist Artworks/
+
+# Supabase CLI's local machine state
+supabase/.temp/
 
 # Editor directories and files
 .vscode/*

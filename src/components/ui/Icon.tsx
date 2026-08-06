@@ -25,7 +25,8 @@ export type IconName =
   | 'x-twitter'
   | 'youtube'
   | 'linkedin'
-  | 'quote';
+  | 'quote'
+  | 'grid-dots';
 
 const paths: Record<IconName, React.ReactNode> = {
   search: (
@@ -160,6 +161,14 @@ const paths: Record<IconName, React.ReactNode> = {
   ),
   quote: (
     <path d="M8.5 9.5C6 9.5 4.5 11.5 4.5 14s1.5 4.5 4 4.5v-9zm9 0c-2.5 0-4 2-4 4.5s1.5 4.5 4 4.5v-9z" fill="currentColor" stroke="none" />
+  ),
+  'grid-dots': (
+    <>
+      <rect x="4" y="4" width="7" height="7" rx="1.3" fill="currentColor" stroke="none" />
+      <rect x="13" y="4" width="7" height="7" rx="1.3" fill="currentColor" stroke="none" />
+      <rect x="4" y="13" width="7" height="7" rx="1.3" fill="currentColor" stroke="none" />
+      <rect x="13" y="13" width="7" height="7" rx="1.3" fill="currentColor" stroke="none" />
+    </>
   ),
 };
 

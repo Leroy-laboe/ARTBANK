@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
 import { navLinks } from '../../data/homeContent';
 import styles from './Header.module.css';
@@ -15,9 +15,14 @@ export function Header() {
 
         <nav className={styles.nav} aria-label="Primary">
           {navLinks.map((link) => (
-            <Link key={link.label} to={link.href}>
+            <NavLink
+              key={link.label}
+              to={link.href}
+              end={link.href === '/'}
+              className={({ isActive }) => (isActive ? styles.navActive : undefined)}
+            >
               {link.label}
-            </Link>
+            </NavLink>
           ))}
         </nav>
 

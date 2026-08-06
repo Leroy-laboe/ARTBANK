@@ -1,0 +1,150 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.imageWrap {
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.verisBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.92);
+  padding: 4px 8px;
+  border-radius: var(--radius-full);
+}
+
+.likeBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.typeTag {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: var(--radius-full);
+}
+
+.typeBuyNow {
+  background: var(--ink);
+}
+
+.typeAuction {
+  background: var(--gold-dark);
+}
+
+.body {
+  padding: 14px 16px 16px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+.artist {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.footerRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.price {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.mri {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.mriTop {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.mriLabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.metaLabel {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-bottom: 3px;
+  white-space: nowrap;
+}
+
+.endsCol {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.endsIn {
+  font-size: 13px;
+  font-weight: 700;
+  color: #c8433f;
+  white-space: nowrap;
+}

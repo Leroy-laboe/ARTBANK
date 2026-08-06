@@ -1,0 +1,36 @@
+.panel {
+  background: linear-gradient(160deg, var(--gold-bg) 0%, #f1e2c4 100%);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 22px;
+}
+
+.iconWrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--gold-dark);
+  margin-bottom: 14px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+
+.btn {
+  width: 100%;
+}

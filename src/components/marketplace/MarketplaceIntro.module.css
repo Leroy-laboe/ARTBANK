@@ -1,0 +1,51 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title {
+  font-size: 42px;
+  letter-spacing: -0.5px;
+  margin: 6px 0 14px;
+}
+
+.desc {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 34ch;
+  margin-bottom: 30px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 16px;
+  margin-top: auto;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gold-dark);
+}
+
+.statValue {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+@media (max-width: 1200px) {
+  .desc {
+    max-width: none;
+  }
+}

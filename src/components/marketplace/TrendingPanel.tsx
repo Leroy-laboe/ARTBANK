@@ -15,7 +15,7 @@ export function TrendingPanel() {
       <ul className={styles.list}>
         {trendingCreators.map((creator) => (
           <li className={styles.item} key={creator.name}>
-            <span className={styles.avatar} style={{ background: creator.gradient }} />
+            <img src={creator.imageUrl} alt={creator.name} className={styles.avatar} />
             <div className={styles.info}>
               <div className={styles.name}>{creator.name}</div>
               <div className={styles.score}>MRI {creator.mriScore}</div>

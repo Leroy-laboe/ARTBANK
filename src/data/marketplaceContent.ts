@@ -28,18 +28,54 @@ export const toolbarTabs = ['All Artworks', 'Buy Now', 'Auctions', 'New Arrivals
 export const sortOptions = ['Most Popular', 'Price: Low to High', 'Price: High to Low', 'Highest MRI', 'Newest'];
 
 export const trendingCreators = [
-  { name: 'Wei Lun Khor', mriScore: 92.4, gradient: 'linear-gradient(160deg, #cbb693 0%, #6b5335 100%)' },
-  { name: 'Ahmad Zaki', mriScore: 91.1, gradient: 'linear-gradient(160deg, #e0a542 0%, #7a4a2a 100%)' },
-  { name: 'Yasmin Ahmad', mriScore: 89.7, gradient: 'linear-gradient(160deg, #b98a52 0%, #6b4a2c 100%)' },
-  { name: 'Chong Fei', mriScore: 88.9, gradient: 'linear-gradient(160deg, #c81d3f 0%, #7e1027 100%)' },
-  { name: 'Liew Tuck Seng', mriScore: 88.1, gradient: 'linear-gradient(160deg, #cfe3e8 0%, #37525c 100%)' },
+  {
+    name: 'Wei Lun Khor',
+    mriScore: 92.4,
+    imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&auto=format&q=80',
+  },
+  {
+    name: 'Ahmad Zaki',
+    mriScore: 91.1,
+    imageUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&auto=format&q=80',
+  },
+  {
+    name: 'Yasmin Ahmad',
+    mriScore: 89.7,
+    imageUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&auto=format&q=80',
+  },
+  {
+    name: 'Chong Fei',
+    mriScore: 88.9,
+    imageUrl: 'https://images.unsplash.com/photo-1531891437562-4301cf35b7e4?w=100&h=100&fit=crop&auto=format&q=80',
+  },
+  {
+    name: 'Liew Tuck Seng',
+    mriScore: 88.1,
+    imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&auto=format&q=80',
+  },
 ];
 
 export const curatedPicks = [
-  { title: 'Emerging Talents', count: '328 Artworks', gradient: 'linear-gradient(160deg, #e58a3f 0%, #a3491f 45%, #1f1712 100%)' },
-  { title: 'Contemporary Icons', count: '412 Artworks', gradient: 'linear-gradient(160deg, #cfcac0 0%, #948d80 55%, #423c33 100%)' },
-  { title: 'Cultural Heritage', count: '256 Artworks', gradient: 'linear-gradient(160deg, #e7ddc8 0%, #b3a17c 55%, #4a3f2b 100%)' },
-  { title: 'Investment Picks', count: '189 Artworks', gradient: 'linear-gradient(160deg, #7b2ff7 0%, #26124f 55%, #d13ba8 100%)' },
+  {
+    title: 'Emerging Talents',
+    count: '328 Artworks',
+    imageUrl: 'https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=200&h=200&fit=crop&auto=format&q=80',
+  },
+  {
+    title: 'Contemporary Icons',
+    count: '412 Artworks',
+    imageUrl: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=200&h=200&fit=crop&auto=format&q=80',
+  },
+  {
+    title: 'Cultural Heritage',
+    count: '256 Artworks',
+    imageUrl: 'https://images.unsplash.com/photo-1580136579312-94651dfd596d?w=200&h=200&fit=crop&auto=format&q=80',
+  },
+  {
+    title: 'Investment Picks',
+    count: '189 Artworks',
+    imageUrl: 'https://images.unsplash.com/photo-1577720580479-7d839d829c73?w=200&h=200&fit=crop&auto=format&q=80',
+  },
 ];
 
 export const trustPoints: { icon: IconName; title: string; description: string }[] = [
@@ -54,5 +90,6 @@ export const featuredCollection = {
   eyebrow: 'Featured Collection',
   title: 'Timeless Masterpieces',
   description: 'Curated works that define generations and transcend time.',
-  gradient: 'linear-gradient(135deg, #4a3f33 0%, #241c14 55%, #100c08 100%)',
+  imageUrl:
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/500px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg',
 };

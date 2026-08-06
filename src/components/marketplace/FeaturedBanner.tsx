@@ -4,8 +4,9 @@ import styles from './FeaturedBanner.module.css';
 
 export function FeaturedBanner() {
   return (
-    <div className={styles.banner} style={{ background: featuredCollection.gradient }}>
-      <div className={styles.glow} />
+    <div className={styles.banner}>
+      <img src={featuredCollection.imageUrl} alt="" className={styles.image} />
+      <div className={styles.scrim} />
 
       <div className={styles.navBtns}>
         <button type="button" className={styles.navBtn} aria-label="Previous collection">

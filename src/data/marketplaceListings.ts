@@ -13,6 +13,8 @@ export const marketplaceListings: MarketplaceListing[] = [
     listingType: 'buy-now',
     mriScore: 92.4,
     gradient: 'linear-gradient(150deg, #efe9df 0%, #cfc4b0 100%)',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/500px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg',
   },
   {
     id: 'art-2',
@@ -27,6 +29,8 @@ export const marketplaceListings: MarketplaceListing[] = [
     mriScore: 91.1,
     endsIn: '02d 14h',
     gradient: 'linear-gradient(150deg, #e0a542 0%, #7a4a2a 55%, #1c1712 100%)',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg/500px-The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg',
   },
   {
     id: 'art-3',
@@ -40,6 +44,8 @@ export const marketplaceListings: MarketplaceListing[] = [
     listingType: 'buy-now',
     mriScore: 95.1,
     gradient: 'linear-gradient(150deg, #c81d3f 0%, #7e1027 65%, #2c0a12 100%)',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Edvard_Munch_-_The_Scream.jpg/500px-Edvard_Munch_-_The_Scream.jpg',
   },
   {
     id: 'art-4',
@@ -54,6 +60,8 @@ export const marketplaceListings: MarketplaceListing[] = [
     mriScore: 88.9,
     endsIn: '01d 09h',
     gradient: 'linear-gradient(150deg, #e23b3b 0%, #8f1f1f 55%, #2c0a0a 100%)',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/LOVE_%281967%29.jpg/500px-LOVE_%281967%29.jpg',
   },
   {
     id: 'art-5',
@@ -67,6 +75,7 @@ export const marketplaceListings: MarketplaceListing[] = [
     listingType: 'buy-now',
     mriScore: 88.7,
     gradient: 'linear-gradient(150deg, #cfe3e8 0%, #7fa3ac 50%, #37525c 100%)',
+    imageUrl: 'https://images.unsplash.com/photo-1552083375-1447ce886485?w=600&h=600&fit=crop&auto=format&q=80',
   },
   {
     id: 'art-6',
@@ -80,6 +89,7 @@ export const marketplaceListings: MarketplaceListing[] = [
     listingType: 'buy-now',
     mriScore: 83.2,
     gradient: 'linear-gradient(150deg, #4a4a4a 0%, #1c1c1c 60%, #050505 100%)',
+    imageUrl: 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=600&h=600&fit=crop&auto=format&q=80',
   },
   {
     id: 'art-7',
@@ -94,6 +104,8 @@ export const marketplaceListings: MarketplaceListing[] = [
     mriScore: 87.4,
     endsIn: '00d 22h',
     gradient: 'linear-gradient(150deg, #b98a52 0%, #6b4a2c 55%, #241a10 100%)',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/La_ronda_de_noche%2C_por_Rembrandt_van_Rijn.jpg/500px-La_ronda_de_noche%2C_por_Rembrandt_van_Rijn.jpg',
   },
   {
     id: 'art-8',
@@ -107,5 +119,7 @@ export const marketplaceListings: MarketplaceListing[] = [
     listingType: 'buy-now',
     mriScore: 91.3,
     gradient: 'linear-gradient(150deg, #e9e5dd 0%, #b9b0a1 55%, #756b5c 100%)',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Front_views_of_the_Venus_de_Milo.jpg/500px-Front_views_of_the_Venus_de_Milo.jpg',
   },
 ];

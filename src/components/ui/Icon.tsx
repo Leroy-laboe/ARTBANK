@@ -26,7 +26,20 @@ export type IconName =
   | 'youtube'
   | 'linkedin'
   | 'quote'
-  | 'grid-dots';
+  | 'grid-dots'
+  | 'list'
+  | 'sliders'
+  | 'brush'
+  | 'cube'
+  | 'camera'
+  | 'monitor'
+  | 'pencil'
+  | 'stack'
+  | 'headset'
+  | 'credit-card'
+  | 'trend-up'
+  | 'minus'
+  | 'refresh';
 
 const paths: Record<IconName, React.ReactNode> = {
   search: (
@@ -168,6 +181,95 @@ const paths: Record<IconName, React.ReactNode> = {
       <rect x="13" y="4" width="7" height="7" rx="1.3" fill="currentColor" stroke="none" />
       <rect x="4" y="13" width="7" height="7" rx="1.3" fill="currentColor" stroke="none" />
       <rect x="13" y="13" width="7" height="7" rx="1.3" fill="currentColor" stroke="none" />
+    </>
+  ),
+  list: (
+    <>
+      <line x1="9" y1="6.5" x2="20.5" y2="6.5" />
+      <line x1="9" y1="12" x2="20.5" y2="12" />
+      <line x1="9" y1="17.5" x2="20.5" y2="17.5" />
+      <line x1="3.7" y1="6.5" x2="3.71" y2="6.5" />
+      <line x1="3.7" y1="12" x2="3.71" y2="12" />
+      <line x1="3.7" y1="17.5" x2="3.71" y2="17.5" />
+    </>
+  ),
+  sliders: (
+    <>
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <line x1="4" y1="18" x2="20" y2="18" />
+      <circle cx="9" cy="6" r="2" fill="var(--surface, #fff)" />
+      <circle cx="16" cy="12" r="2" fill="var(--surface, #fff)" />
+      <circle cx="10" cy="18" r="2" fill="var(--surface, #fff)" />
+    </>
+  ),
+  brush: (
+    <>
+      <path d="M15.5 3.5c2 0 4 2 4 4-2.5 1.5-4.2 3.6-6.5 6.4l-3.4-3.4c2.8-2.3 4.9-4 6-6.5" fill="none" />
+      <path d="M9.6 10.5 6.2 13.4c-1.1 1-1.8 2.6-1.7 4.3-1.6-.2-2.5-.7-2.5-.7s.5 3.4 4 4c3.4.6 6-1.7 6-4.3 0-1.7-.7-3-1.7-4z" />
+    </>
+  ),
+  cube: (
+    <>
+      <polygon points="12 3.5 20 8 20 16 12 20.5 4 16 4 8" />
+      <polyline points="4 8 12 12.3 20 8" />
+      <line x1="12" y1="12.3" x2="12" y2="20.5" />
+    </>
+  ),
+  camera: (
+    <>
+      <path d="M4 8.5h3l1.4-2.2h7.2L17 8.5h3a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5a1 1 0 0 1 1-1z" />
+      <circle cx="12" cy="13.2" r="3.4" />
+    </>
+  ),
+  monitor: (
+    <>
+      <rect x="3.5" y="4.5" width="17" height="12" rx="1.6" />
+      <line x1="8" y1="20" x2="16" y2="20" />
+      <line x1="12" y1="16.5" x2="12" y2="20" />
+    </>
+  ),
+  pencil: (
+    <>
+      <path d="M15 4.5 19.5 9 8.5 20H4v-4.5z" />
+      <line x1="13" y1="6.5" x2="17.5" y2="11" />
+    </>
+  ),
+  stack: (
+    <>
+      <polygon points="12 3.5 20.5 8 12 12.5 3.5 8" />
+      <polyline points="6.5 9.8 3.5 11.3 12 15.8 20.5 11.3 17.5 9.8" />
+      <polyline points="6.5 13.8 3.5 15.3 12 19.8 20.5 15.3 17.5 13.8" />
+    </>
+  ),
+  headset: (
+    <>
+      <path d="M4.5 13.5v-1.8a7.5 7.5 0 0 1 15 0v1.8" />
+      <rect x="3" y="13" width="3.2" height="5" rx="1.2" />
+      <rect x="17.8" y="13" width="3.2" height="5" rx="1.2" />
+      <path d="M17.8 18v.8a2.7 2.7 0 0 1-2.7 2.7h-2.4" />
+    </>
+  ),
+  'credit-card': (
+    <>
+      <rect x="3" y="5.5" width="18" height="13" rx="2" />
+      <line x1="3" y1="9.7" x2="21" y2="9.7" />
+      <line x1="6" y1="14.5" x2="10" y2="14.5" />
+    </>
+  ),
+  'trend-up': (
+    <>
+      <polyline points="3.5 16.5 9.5 10.5 13.5 14.5 20.5 7" />
+      <polyline points="15 7 20.5 7 20.5 12.5" />
+    </>
+  ),
+  minus: <line x1="5" y1="12" x2="19" y2="12" />,
+  refresh: (
+    <>
+      <path d="M4 12a8 8 0 0 1 13.7-5.7L20 8.5" />
+      <polyline points="20 4 20 8.5 15.5 8.5" />
+      <path d="M20 12a8 8 0 0 1-13.7 5.7L4 15.5" />
+      <polyline points="4 20 4 15.5 8.5 15.5" />
     </>
   ),
 };

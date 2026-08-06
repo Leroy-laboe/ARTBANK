@@ -5,6 +5,9 @@ import styles from './CreatorSpotlight.module.css';
 export function CreatorSpotlight({ creator }: { creator: Creator }) {
   return (
     <article className={styles.card} style={{ background: creator.gradient }}>
+      {creator.imageUrl && (
+        <img src={creator.imageUrl} alt={creator.name} className={styles.image} />
+      )}
       <div className={styles.body}>
         <div className={styles.name}>{creator.name}</div>
         <div className={styles.title}>{creator.title}</div>

@@ -7,6 +7,7 @@ export interface Creator {
   artworkCount: number;
   followers: string;
   gradient: string;
+  imageUrl?: string;
 }
 
 export interface CreatorProfile {

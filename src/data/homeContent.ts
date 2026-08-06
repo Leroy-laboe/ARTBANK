@@ -35,36 +35,43 @@ export const collections = [
     title: 'Timeless Masterpieces',
     count: '1,248 Artworks',
     gradient: 'linear-gradient(160deg, #cbb693 0%, #6b5335 55%, #241c14 100%)',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/500px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg',
   },
   {
     id: 'col-2',
     title: 'Emerging Talents',
     count: '2,045 Artworks',
     gradient: 'linear-gradient(160deg, #e58a3f 0%, #a3491f 45%, #1f1712 100%)',
+    imageUrl: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=520&fit=crop&auto=format&q=80',
   },
   {
     id: 'col-3',
     title: 'Sculptures & 3D Art',
     count: '1,023 Artworks',
     gradient: 'linear-gradient(160deg, #cfcac0 0%, #948d80 55%, #423c33 100%)',
+    imageUrl: 'https://images.unsplash.com/photo-1577720580479-7d839d829c73?w=400&h=520&fit=crop&auto=format&q=80',
   },
   {
     id: 'col-4',
     title: 'Photography Excellence',
     count: '1,876 Artworks',
     gradient: 'linear-gradient(160deg, #e9ecef 0%, #9aa4ab 55%, #384049 100%)',
+    imageUrl: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400&h=520&fit=crop&auto=format&q=80',
   },
   {
     id: 'col-5',
     title: 'Digital & New Media',
     count: '1,129 Artworks',
     gradient: 'linear-gradient(160deg, #7b2ff7 0%, #26124f 55%, #d13ba8 100%)',
+    imageUrl: 'https://images.unsplash.com/photo-1620121692029-d088224ddc74?w=400&h=520&fit=crop&auto=format&q=80',
   },
   {
     id: 'col-6',
     title: 'Cultural Heritage',
     count: '1,553 Artworks',
     gradient: 'linear-gradient(160deg, #e7ddc8 0%, #b3a17c 55%, #4a3f2b 100%)',
+    imageUrl: 'https://images.unsplash.com/photo-1544967082-d9d25d867d66?w=400&h=520&fit=crop&auto=format&q=80',
   },
 ];
 
@@ -77,6 +84,7 @@ export const spotlightCreator: Creator = {
   artworkCount: 87,
   followers: '24.8K',
   gradient: 'linear-gradient(160deg, #4a3f33 0%, #201a14 70%, #0c0a08 100%)',
+  imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=760&fit=crop&auto=format&q=80',
 };
 
 export const whyArtbank: { icon: IconName; title: string; description: string }[] = [

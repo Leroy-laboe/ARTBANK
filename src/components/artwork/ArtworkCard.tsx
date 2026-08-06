@@ -15,12 +15,13 @@ export function ArtworkCard({ artwork }: { artwork: Artwork }) {
         {artwork.verified && (
           <span className={styles.verisBadge}>
             <Icon name="shield-check" size={11} />
-            VERIS
+            VERIS VERIFIED
           </span>
         )}
         <button type="button" className={styles.likeBtn} aria-label="Like artwork">
           <Icon name="heart" size={14} />
         </button>
+        <span className={styles.typeTag}>Buy Now</span>
       </div>
       <div className={styles.body}>
         <div className={styles.title}>{artwork.title}</div>
@@ -30,8 +31,11 @@ export function ArtworkCard({ artwork }: { artwork: Artwork }) {
             {artwork.price != null ? `${artwork.currency} ${artwork.price.toLocaleString()}` : 'Price on request'}
           </span>
           <span className={styles.likes}>
-            <Icon name="heart" size={13} />
-            {artwork.likes}
+            <span className={styles.likesTop}>
+              <Icon name="heart" size={13} />
+              {artwork.likes}
+            </span>
+            <span className={styles.likesLabel}>Likes</span>
           </span>
         </div>
       </div>

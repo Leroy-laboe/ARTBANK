@@ -1,0 +1,45 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0 48px;
+}
+
+.navBtn,
+.pageBtn,
+.pageActive {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.navBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageBtn:hover {
+  border-color: var(--gold);
+}
+
+.pageActive {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.ellipsis {
+  color: var(--muted);
+  padding: 0 2px;
+}

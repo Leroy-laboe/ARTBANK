@@ -1,0 +1,272 @@
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.headRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.heading {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+
+.clearBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 0;
+  margin-left: auto;
+}
+
+.clearBtn:hover {
+  color: var(--gold-dark);
+}
+
+.headIcon {
+  color: var(--muted);
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+
+.searchBox input {
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 13px;
+  color: var(--ink-soft);
+  width: 100%;
+  font-family: inherit;
+}
+
+.section {
+  border-top: 1px solid var(--border-soft);
+  padding: 18px 0;
+}
+
+.section:first-of-type {
+  padding-top: 0;
+  border-top: none;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+}
+
+.sectionTitle svg {
+  color: var(--muted);
+}
+
+.categoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.categoryItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  font-family: inherit;
+}
+
+.categoryItem:hover {
+  background: var(--bg);
+}
+
+.categoryLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.categoryCount {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.sliderTrack {
+  position: relative;
+  height: 4px;
+  background: var(--border);
+  border-radius: var(--radius-full);
+  margin: 10px 4px 20px;
+}
+
+.sliderFill {
+  position: absolute;
+  left: 0;
+  right: 91%;
+  top: 0;
+  bottom: 0;
+  background: var(--gold);
+  border-radius: var(--radius-full);
+}
+
+.sliderThumb {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--gold);
+  transform: translate(-50%, -50%);
+  box-shadow: var(--shadow-sm);
+}
+
+.rangeRow {
+  display: flex;
+  gap: 12px;
+}
+
+.rangeField {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.rangeField input {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-family: inherit;
+  outline: none;
+  width: 100%;
+}
+
+.rangeField input:focus {
+  border-color: var(--gold);
+}
+
+.selectBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  background: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-family: inherit;
+}
+
+.checkList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.checkLeft {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkLeft input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--ink);
+  cursor: pointer;
+}
+
+.checkCount {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.verisIcon {
+  color: var(--gold-dark);
+}
+
+.applyBtn {
+  width: 100%;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 13px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 6px;
+  font-family: inherit;
+}
+
+.applyBtn:hover {
+  background: var(--dark-2);
+}
+
+.resetBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 14px 0 2px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  font-family: inherit;
+}
+
+.resetBtn:hover {
+  color: var(--ink);
+}

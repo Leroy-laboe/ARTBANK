@@ -39,7 +39,11 @@ export type IconName =
   | 'credit-card'
   | 'trend-up'
   | 'minus'
-  | 'refresh';
+  | 'refresh'
+  | 'users'
+  | 'palette'
+  | 'bookmark'
+  | 'award';
 
 const paths: Record<IconName, React.ReactNode> = {
   search: (
@@ -270,6 +274,29 @@ const paths: Record<IconName, React.ReactNode> = {
       <polyline points="20 4 20 8.5 15.5 8.5" />
       <path d="M20 12a8 8 0 0 1-13.7 5.7L4 15.5" />
       <polyline points="4 20 4 15.5 8.5 15.5" />
+    </>
+  ),
+  users: (
+    <>
+      <circle cx="8.5" cy="8.2" r="3.2" />
+      <path d="M2.8 19c0-3.3 2.8-5.4 5.7-5.4S14.2 15.7 14.2 19" />
+      <path d="M15.5 5.3a3.2 3.2 0 0 1 0 6.2" />
+      <path d="M17 13.7c2.5.4 4.2 2.3 4.2 5.3" />
+    </>
+  ),
+  palette: (
+    <>
+      <path d="M12 3.5c-4.7 0-8.5 3.6-8.5 8.1 0 3.6 2.9 5.4 5.2 5.4.9 0 1.3-.5 1.3-1.1 0-.5-.3-.8-.3-1.4 0-1 .9-1.8 2.1-1.8h2.3c2.6 0 4.9-1.7 4.9-4.9 0-2.9-3.1-4.3-7-4.3z" />
+      <circle cx="7.8" cy="10.5" r="1" fill="currentColor" stroke="none" />
+      <circle cx="10.5" cy="7.3" r="1" fill="currentColor" stroke="none" />
+      <circle cx="14.2" cy="7.6" r="1" fill="currentColor" stroke="none" />
+    </>
+  ),
+  bookmark: <path d="M6.5 4h11v16l-5.5-4-5.5 4z" />,
+  award: (
+    <>
+      <circle cx="12" cy="9" r="5.5" />
+      <path d="M8.5 13.8 7 20.5l5-2.7 5 2.7-1.5-6.7" />
     </>
   ),
 };

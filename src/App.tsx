@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HomePage } from './pages/HomePage';
 import { MarketplacePage } from './pages/MarketplacePage';
+import { CreatorsPage } from './pages/CreatorsPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
 
 function App() {
@@ -9,7 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/marketplace" element={<MarketplacePage />} />
-        <Route path="/creators" element={<ComingSoonPage title="Creators" />} />
+        <Route path="/creators" element={<CreatorsPage />} />
         <Route path="/mri-rankings" element={<ComingSoonPage title="MRI Rankings" />} />
         <Route path="/archive" element={<ComingSoonPage title="ARTCHIVE" />} />
         <Route path="/articon" element={<ComingSoonPage title="ARTICON" />} />

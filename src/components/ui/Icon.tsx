@@ -43,7 +43,9 @@ export type IconName =
   | 'users'
   | 'palette'
   | 'bookmark'
-  | 'award';
+  | 'award'
+  | 'star'
+  | 'building';
 
 const paths: Record<IconName, React.ReactNode> = {
   search: (
@@ -297,6 +299,21 @@ const paths: Record<IconName, React.ReactNode> = {
     <>
       <circle cx="12" cy="9" r="5.5" />
       <path d="M8.5 13.8 7 20.5l5-2.7 5 2.7-1.5-6.7" />
+    </>
+  ),
+  star: (
+    <polygon points="12 3.5 14.6 9.6 21.2 10.2 16.3 14.6 17.7 21.1 12 17.7 6.3 21.1 7.7 14.6 2.8 10.2 9.4 9.6" />
+  ),
+  building: (
+    <>
+      <polyline points="4 9.5 12 4 20 9.5" />
+      <line x1="4" y1="9.5" x2="20" y2="9.5" />
+      <line x1="5.5" y1="9.5" x2="5.5" y2="18.5" />
+      <line x1="9.7" y1="9.5" x2="9.7" y2="18.5" />
+      <line x1="14.3" y1="9.5" x2="14.3" y2="18.5" />
+      <line x1="18.5" y1="9.5" x2="18.5" y2="18.5" />
+      <line x1="3.2" y1="18.5" x2="20.8" y2="18.5" />
+      <line x1="2.5" y1="21" x2="21.5" y2="21" />
     </>
   ),
 };

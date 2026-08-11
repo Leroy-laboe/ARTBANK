@@ -129,6 +129,51 @@ export const membershipPerks: { icon: IconName; label: string }[] = [
   { icon: 'crown', label: 'Exclusive Events' },
 ];
 
+// Placeholder clips until real testimonial recordings are supplied.
+const placeholderVideos = [
+  'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+  'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/friday.mp4',
+  'https://www.w3schools.com/html/mov_bbb.mp4',
+];
+
+export const testimonialVideos: { id: string; avatarUrl: string; videoUrl: string }[] = [
+  {
+    id: 'tv-1',
+    avatarUrl: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=120&h=120&fit=crop&auto=format&q=80',
+    videoUrl: placeholderVideos[0],
+  },
+  {
+    id: 'tv-2',
+    avatarUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&h=120&fit=crop&auto=format&q=80',
+    videoUrl: placeholderVideos[1],
+  },
+  {
+    id: 'tv-3',
+    avatarUrl: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=120&h=120&fit=crop&auto=format&q=80',
+    videoUrl: placeholderVideos[2],
+  },
+  {
+    id: 'tv-4',
+    avatarUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=120&h=120&fit=crop&auto=format&q=80',
+    videoUrl: placeholderVideos[0],
+  },
+  {
+    id: 'tv-5',
+    avatarUrl: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=120&h=120&fit=crop&auto=format&q=80',
+    videoUrl: placeholderVideos[1],
+  },
+  {
+    id: 'tv-6',
+    avatarUrl: 'https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?w=120&h=120&fit=crop&auto=format&q=80',
+    videoUrl: placeholderVideos[2],
+  },
+  {
+    id: 'tv-7',
+    avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&auto=format&q=80',
+    videoUrl: placeholderVideos[0],
+  },
+];
+
 export const testimonialAvatars = [
   'linear-gradient(160deg,#e8c9a0,#8a5a34)',
   'linear-gradient(160deg,#c9d6e8,#4a6a8a)',

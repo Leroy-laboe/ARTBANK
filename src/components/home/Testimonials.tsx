@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import { Icon } from '../ui/Icon';
-import { testimonialAvatars } from '../../data/homeContent';
+import { testimonialVideos } from '../../data/homeContent';
+import { TestimonialVideoModal } from './TestimonialVideoModal';
 import styles from './Testimonials.module.css';
 
 export function Testimonials() {
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
+
   return (
     <section className={styles.section}>
       <div className="container">
@@ -15,15 +19,41 @@ export function Testimonials() {
         <p className={styles.attribution}>— Collectors &amp; Creators Worldwide</p>
 
         <div className={styles.avatars}>
-          {testimonialAvatars.slice(0, 3).map((gradient, i) => (
-            <span key={i} style={{ background: gradient }} />
+          {testimonialVideos.slice(0, 3).map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className={styles.avatarBtn}
+              onClick={() => setActiveVideo(t.videoUrl)}
+              aria-label="Play testimonial video"
+            >
+              <img src={t.avatarUrl} alt="" loading="lazy" decoding="async" />
+              <span className={styles.playIcon}>
+                <Icon name="play" size={11} />
+              </span>
+            </button>
           ))}
           <span className={styles.more}>+</span>
-          {testimonialAvatars.slice(3, 7).map((gradient, i) => (
-            <span key={i} style={{ background: gradient }} />
+          {testimonialVideos.slice(3, 7).map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className={styles.avatarBtn}
+              onClick={() => setActiveVideo(t.videoUrl)}
+              aria-label="Play testimonial video"
+            >
+              <img src={t.avatarUrl} alt="" loading="lazy" decoding="async" />
+              <span className={styles.playIcon}>
+                <Icon name="play" size={11} />
+              </span>
+            </button>
           ))}
         </div>
       </div>
+
+      {activeVideo && (
+        <TestimonialVideoModal videoUrl={activeVideo} onClose={() => setActiveVideo(null)} />
+      )}
     </section>
   );
 }

@@ -27,7 +27,9 @@ export function CuratedCollections() {
           <div className={styles.track} ref={trackRef}>
             {collections.map((c) => (
               <article key={c.id} className={styles.card} style={{ background: c.gradient }}>
-                {c.imageUrl && <img src={c.imageUrl} alt="" className={styles.image} />}
+                {c.imageUrl && (
+                  <img src={c.imageUrl} alt="" className={styles.image} loading="lazy" decoding="async" />
+                )}
                 <div className={styles.cardBody}>
                   <div className={styles.cardTitle}>{c.title}</div>
                   <div className={styles.cardCount}>{c.count}</div>

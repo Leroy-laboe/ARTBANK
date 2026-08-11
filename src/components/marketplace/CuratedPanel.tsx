@@ -15,7 +15,7 @@ export function CuratedPanel() {
       <ul className={styles.list}>
         {curatedPicks.map((pick) => (
           <li className={styles.item} key={pick.title}>
-            <img src={pick.imageUrl} alt="" className={styles.thumb} />
+            <img src={pick.imageUrl} alt="" className={styles.thumb} loading="lazy" decoding="async" />
             <div className={styles.info}>
               <div className={styles.name}>{pick.title}</div>
               <div className={styles.count}>{pick.count}</div>

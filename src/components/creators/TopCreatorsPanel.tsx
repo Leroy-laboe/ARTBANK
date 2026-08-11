@@ -16,7 +16,13 @@ export function TopCreatorsPanel() {
         {topCreators.map((creator, index) => (
           <li className={styles.item} key={creator.name}>
             <span className={styles.rank}>{index + 1}</span>
-            <img src={creator.imageUrl} alt={creator.name} className={styles.avatar} />
+            <img
+              src={creator.imageUrl}
+              alt={creator.name}
+              className={styles.avatar}
+              loading="lazy"
+              decoding="async"
+            />
             <div className={styles.info}>
               <div className={styles.name}>{creator.name}</div>
               <div className={styles.score}>MRI {creator.mriScore}</div>

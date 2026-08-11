@@ -9,7 +9,13 @@ export function ListingCard({ listing }: { listing: MarketplaceListing }) {
     <article className={styles.card}>
       <div className={styles.imageWrap} style={{ background: listing.gradient }}>
         {listing.imageUrl && (
-          <img src={listing.imageUrl} alt={listing.title} className={styles.image} />
+          <img
+            src={listing.imageUrl}
+            alt={listing.title}
+            className={styles.image}
+            loading="lazy"
+            decoding="async"
+          />
         )}
 
         {listing.verified && (

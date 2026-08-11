@@ -22,8 +22,20 @@
   object-fit: cover;
 }
 
+/* Softens scanned/bright source images into the site's warm gallery-lit tone. */
+.imageWrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(21, 17, 12, 0.08) 0%, rgba(21, 17, 12, 0.22) 100%);
+  mix-blend-mode: multiply;
+}
+
 .verisBadge {
   position: absolute;
+  z-index: 2;
   top: 10px;
   left: 10px;
   display: inline-flex;
@@ -40,6 +52,7 @@
 
 .likeBtn {
   position: absolute;
+  z-index: 2;
   top: 10px;
   right: 10px;
   width: 28px;
@@ -56,6 +69,7 @@
 
 .typeTag {
   position: absolute;
+  z-index: 2;
   bottom: 10px;
   left: 10px;
   font-size: 10px;

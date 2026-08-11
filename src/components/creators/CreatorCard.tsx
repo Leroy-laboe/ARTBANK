@@ -6,7 +6,13 @@ export function CreatorCard({ creator }: { creator: CreatorProfile }) {
   return (
     <article className={styles.card}>
       <div className={styles.imageWrap}>
-        <img src={creator.imageUrl} alt={creator.name} className={styles.image} />
+        <img
+          src={creator.imageUrl}
+          alt={creator.name}
+          className={styles.image}
+          loading="lazy"
+          decoding="async"
+        />
 
         {creator.verified && (
           <span className={styles.verisBadge}>

@@ -10,7 +10,13 @@ export function ArtworkCard({ artwork }: { artwork: Artwork }) {
         style={artwork.imageUrl ? undefined : { background: artwork.gradient }}
       >
         {artwork.imageUrl && (
-          <img src={artwork.imageUrl} alt={artwork.title} className={styles.image} />
+          <img
+            src={artwork.imageUrl}
+            alt={artwork.title}
+            className={styles.image}
+            loading="lazy"
+            decoding="async"
+          />
         )}
         {artwork.verified && (
           <span className={styles.verisBadge}>

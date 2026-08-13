@@ -29,3 +29,10 @@ supabase/.temp/
 *.njsproj
 *.sln
 *.sw?
+
+# Nested git repo — tracked in its own repository, not as a submodule here
+Jo1nID/
+
+# Reference material, kept out of the repo
+CareerBank-Registration-UI-Bundle/
+Artbank_Staff_Quick_Brief_v1.0.pdf

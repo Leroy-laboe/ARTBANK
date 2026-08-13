@@ -1,0 +1,473 @@
+/* auth-switch — styles exactly as supplied.
+   Moved from an inline <style> block into a CSS Module for three reasons,
+   all of them collisions with the existing app rather than design changes:
+     1. The original `* { margin:0; padding:0 }` reset and its `body` rules
+        were global and would have restyled every other page. Both are scoped
+        here (`body` moved to the host page).
+     2. `.container` is already a global utility class in globals.css.
+        CSS Modules hashes these names, so the two can't clash.
+     3. Hashed names also mean the component's `.panel`, `.title`, `.btn`
+        etc. can't leak into the rest of the site.
+   Every colour, dimension, timing and easing below is unchanged. */
+
+.container *,
+.container *::before,
+.container *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  height: 550px;
+  background: linear-gradient(160deg, #f4ecda 0%, #ebe1cb 100%);
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(51, 34, 17, 0.28);
+  overflow: hidden;
+}
+
+.formsContainer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.signinSignup {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  left: 75%;
+  width: 50%;
+  transition: 1s 0.7s ease-in-out;
+  display: grid;
+  grid-template-columns: 1fr;
+  z-index: 5;
+}
+
+.signinSignup form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 5rem;
+  transition: all 0.2s 0.7s;
+  overflow: hidden;
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+
+.signUpForm {
+  opacity: 0;
+  z-index: 1;
+}
+
+.signInForm {
+  z-index: 2;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  color: #3a2a17;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.inputField {
+  max-width: 380px;
+  width: 100%;
+  background-color: #f7f1e2;
+  margin: 10px 0;
+  height: 55px;
+  border-radius: 55px;
+  display: grid;
+  grid-template-columns: 15% 85%;
+  padding: 0 0.4rem;
+  position: relative;
+  transition: 0.3s;
+}
+
+.inputField:focus-within {
+  background-color: #fdf8ec;
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+.inputField i {
+  text-align: center;
+  line-height: 55px;
+  color: #8a6a44;
+  transition: 0.5s;
+  font-size: 1.1rem;
+  font-style: normal;
+}
+
+.inputField input {
+  background: none;
+  outline: none;
+  border: none;
+  line-height: 1;
+  font-weight: 500;
+  font-size: 1rem;
+  color: #3a2a17;
+  width: 100%;
+  font-family: inherit;
+}
+
+.inputField input::placeholder {
+  color: #a08b6c;
+  font-weight: 400;
+}
+
+.btn {
+  width: 150px;
+  background: linear-gradient(150deg, var(--gold-light) 0%, var(--gold) 45%, var(--gold-dark) 100%);
+  border: none;
+  outline: none;
+  height: 49px;
+  border-radius: 49px;
+  color: #2e2113;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: 0.5s;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.btn:hover {
+  background: linear-gradient(150deg, var(--gold) 0%, var(--gold-dark) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(143, 106, 58, 0.45);
+}
+
+.panelsContainer {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-around;
+  text-align: center;
+  z-index: 6;
+}
+
+.leftPanel {
+  pointer-events: all;
+  padding: 3rem 17% 2rem 12%;
+}
+
+.rightPanel {
+  pointer-events: none;
+  padding: 3rem 12% 2rem 17%;
+}
+
+.panel .content {
+  color: #fff;
+  transition: transform 0.9s ease-in-out;
+  transition-delay: 0.6s;
+}
+
+.panel h3 {
+  font-weight: 600;
+  line-height: 1;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  font-family: var(--font-serif);
+  color: #f6eeda;
+}
+
+.panel p {
+  font-size: 0.95rem;
+  padding: 0.7rem 0;
+}
+
+.transparent {
+  margin: 0;
+  background: none;
+  /* .btn now carries dark-on-gold text; restate it for the panel button. */
+  color: #f6eeda;
+  border: 2px solid #f6eeda;
+  width: 130px;
+  height: 41px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.transparent:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.rightPanel .content {
+  transform: translateX(800px);
+}
+
+/* The curved edge: a 2000px circle riding behind the card. */
+.container::before {
+  content: '';
+  position: absolute;
+  height: 2000px;
+  width: 2000px;
+  top: -10%;
+  right: 48%;
+  transform: translateY(-50%);
+  background: linear-gradient(-45deg, #6b563a 0%, #33251a 100%);
+  transition: 1.8s ease-in-out;
+  border-radius: 50%;
+  z-index: 6;
+}
+
+.signUpMode::before {
+  transform: translate(100%, -50%);
+  right: 52%;
+}
+
+/* ── Video fill for the panel ──
+   The circle above is a 2000px element, so a video inside it would be scaled
+   to 2000px and almost entirely cropped. Instead this layer covers the card
+   at its true size and is *clipped* to the same circle, so the footage stays
+   correctly scaled while the mask sweeps across.
+
+   The clip geometry is derived from the circle's own box, not eyeballed:
+     radius   = 2000px / 2                  = 1000px
+     centre x = 100% - right(48%) - 1000px  = 52% - 1000px
+     centre y = top(-10%) - 1000px + 1000px = -10%
+   and in sign-up mode `right: 52%` with translateX(100%) puts it at
+     centre x = 48% + 1000px. */
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  overflow: hidden;
+  pointer-events: none;
+  clip-path: circle(1000px at calc(52% - 1000px) -10%);
+  transition: clip-path 1.8s ease-in-out;
+}
+
+.signUpMode .media {
+  clip-path: circle(1000px at calc(48% + 1000px) -10%);
+}
+
+.mediaVideo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Grades the footage to the sepia of the reference. */
+  filter: sepia(0.75) saturate(1.25) contrast(1.05) brightness(1) hue-rotate(-8deg);
+}
+
+/* Keeps the panel copy legible over moving footage. Kept as a -45deg gradient
+   so the panel still has the original's sense of depth — black throughout,
+   with the depth carried by alpha rather than by colour.
+   Raise the alphas to mute the video further, lower them to let more through. */
+.mediaTint {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(-45deg, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0.46) 100%);
+}
+
+.signUpMode .leftPanel .content {
+  transform: translateX(-800px);
+}
+
+.signUpMode .signinSignup {
+  left: 25%;
+}
+
+.signUpMode .signUpForm {
+  opacity: 1;
+  z-index: 2;
+}
+
+.signUpMode .signInForm {
+  opacity: 0;
+  z-index: 1;
+}
+
+.signUpMode .rightPanel .content {
+  transform: translateX(0%);
+}
+
+.signUpMode .leftPanel {
+  pointer-events: none;
+}
+
+.signUpMode .rightPanel {
+  pointer-events: all;
+}
+
+.socialText {
+  padding: 0.7rem 0;
+  font-size: 1rem;
+  color: #6d5636;
+}
+
+.socialMedia {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.socialIcon {
+  height: 46px;
+  width: 46px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #cbb894;
+  border-radius: 50%;
+  background: #f7f1e2;
+  color: var(--gold-dark);
+  font-size: 1.2rem;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.socialIcon:hover {
+  border-color: var(--gold-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(90, 66, 38, 0.22);
+}
+
+.socialIcon svg {
+  transition: 0.3s;
+}
+
+@media (max-width: 870px) {
+  .container {
+    min-height: 800px;
+    height: 100vh;
+  }
+
+  .signinSignup {
+    width: 100%;
+    top: 95%;
+    transform: translate(-50%, -100%);
+    transition: 1s 0.8s ease-in-out;
+  }
+
+  .signinSignup,
+  .signUpMode .signinSignup {
+    left: 50%;
+  }
+
+  .panelsContainer {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 2fr 1fr;
+  }
+
+  .panel {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 2.5rem 8%;
+    grid-column: 1 / 2;
+  }
+
+  .rightPanel {
+    grid-row: 3 / 4;
+  }
+
+  .leftPanel {
+    grid-row: 1 / 2;
+  }
+
+  .panel .content {
+    padding-right: 15%;
+    transition: transform 0.9s ease-in-out;
+    transition-delay: 0.8s;
+  }
+
+  .panel h3 {
+    font-size: 1.2rem;
+  }
+
+  .panel p {
+    font-size: 0.7rem;
+    padding: 0.5rem 0;
+  }
+
+  .transparent {
+    width: 110px;
+    height: 35px;
+    font-size: 0.7rem;
+  }
+
+  .container::before {
+    width: 1500px;
+    height: 1500px;
+    transform: translateX(-50%);
+    left: 30%;
+    bottom: 68%;
+    right: initial;
+    top: initial;
+    transition: 2s ease-in-out;
+  }
+
+  .signUpMode::before {
+    transform: translate(-50%, 100%);
+    bottom: 32%;
+    right: initial;
+  }
+
+  /* Same derivation against the mobile circle: 1500px wide, so r = 750px,
+     centred on left:30% and driven vertically by bottom 68% → 32%. */
+  .media {
+    clip-path: circle(750px at 30% calc(32% - 750px));
+    transition: clip-path 2s ease-in-out;
+  }
+
+  .signUpMode .media {
+    clip-path: circle(750px at 30% calc(68% + 750px));
+  }
+
+  .signUpMode .leftPanel .content {
+    transform: translateY(-300px);
+  }
+
+  .signUpMode .rightPanel .content {
+    transform: translateY(0px);
+  }
+
+  .rightPanel .content {
+    transform: translateY(300px);
+  }
+
+  .signUpMode .signinSignup {
+    top: 5%;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (max-width: 570px) {
+  .signinSignup form {
+    padding: 0 1.5rem;
+  }
+
+  .panel .content {
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Drop the whole layer, not just the video — leaving the tint behind would
+   sit grey over the gradient circle and muddy it. */
+@media (prefers-reduced-motion: reduce) {
+  .media {
+    display: none;
+  }
+}

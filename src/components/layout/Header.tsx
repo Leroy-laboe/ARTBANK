@@ -30,12 +30,14 @@ export function Header() {
           <button type="button" className={styles.iconBtn} aria-label="Search">
             <Icon name="search" size={19} />
           </button>
-          <button type="button" className={styles.iconBtn} aria-label="Cart">
-            <Icon name="bag" size={19} />
-          </button>
-          <button type="button" className={styles.loginBtn}>
-            Login / Sign up
-          </button>
+          <div className={styles.authGroup}>
+            <Link to="/login" className={styles.enterBtn}>
+              Enter ArtSpace
+            </Link>
+            <Link to="/apply" className={styles.createBtn}>
+              Create JO1NID
+            </Link>
+          </div>
         </div>
       </div>
     </header>

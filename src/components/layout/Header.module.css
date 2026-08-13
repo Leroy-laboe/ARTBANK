@@ -78,7 +78,31 @@
   padding: 4px;
 }
 
-.loginBtn {
+.authGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.enterBtn {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 19px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.enterBtn:hover {
+  border-color: var(--ink);
+}
+
+.createBtn {
   display: inline-flex;
   align-items: center;
   background: var(--ink);
@@ -94,6 +118,12 @@
 
 @media (max-width: 1100px) {
   .nav {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .enterBtn {
     display: none;
   }
 }

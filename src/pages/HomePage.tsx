@@ -1,7 +1,6 @@
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { Hero } from '../components/home/Hero';
-import { StatsBar } from '../components/home/StatsBar';
 import { CuratedCollections } from '../components/home/CuratedCollections';
 import { SpotlightSection } from '../components/home/SpotlightSection';
 import { WhyArtbank } from '../components/home/WhyArtbank';
@@ -14,7 +13,6 @@ export function HomePage() {
       <Header />
       <main>
         <Hero />
-        <StatsBar />
         <CuratedCollections />
         <SpotlightSection />
         <WhyArtbank />

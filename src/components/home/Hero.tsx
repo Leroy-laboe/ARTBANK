@@ -1,6 +1,5 @@
 import { Icon } from '../ui/Icon';
 import { Button } from '../ui/Button';
-import { trustedBy, testimonialAvatars } from '../../data/homeContent';
 import heroBackground from '../../assets/images/hero_background.jpeg';
 import styles from './Hero.module.css';
 
@@ -9,42 +8,36 @@ export function Hero() {
     <section className={styles.hero}>
       <div className={`container ${styles.inner}`}>
         <div className={styles.textCol}>
-          <p className={`eyebrow ${styles.eyebrow}`}>Verified. Ranked. Remembered.</p>
-          <h1 className={styles.title}>The Global Creator Bank of Creative Value</h1>
+          <p className={`eyebrow ${styles.eyebrow}`}>Documented. Discoverable. Opportunity-Ready.</p>
+          <h1 className={styles.title}>Make Every Artwork Easier to Prove, Present and Earn From</h1>
           <p className={styles.lede}>
-            ARTBANK connects visionary creators, collectors and institutions through verified
-            identity, transparent rankings and a curated marketplace of exceptional works.
+            Artbank helps artists document their work, build a trusted professional identity,
+            discover opportunities and turn serious interest into earnings.
           </p>
 
           <div className={styles.ctaRow}>
             <Button variant="primary" icon={<Icon name="arrow-right" size={16} />}>
-              Explore Marketplace
+              Build my ArtSpace
             </Button>
-            <Button variant="secondary">Become a Creator</Button>
+            <Button variant="secondary" icon={<Icon name="search" size={16} />}>
+              Source creative work
+            </Button>
           </div>
-        </div>
 
-        <p className={styles.trustedLabel}>TRUSTED BY LEADING INSTITUTIONS WORLDWIDE</p>
-        <div className={styles.trustRow}>
-          {trustedBy.map((brand) => (
-            <span key={brand.name} className={styles.logo}>
-              {brand.icon && <Icon name={brand.icon} size={14} />}
-              {brand.name}
-            </span>
-          ))}
-
-          <div className={styles.collectorsPill}>
-            <div className={styles.avatarStack}>
-              {testimonialAvatars.slice(0, 4).map((gradient, i) => (
-                <span key={i} style={{ background: gradient }} />
-              ))}
-            </div>
-            <p className={styles.collectorsText}>
-              <strong>500K+ Collectors</strong>
-              <br />
-              and Creators worldwide
-            </p>
-          </div>
+          <ul className={styles.trustItems}>
+            <li>
+              <Icon name="shield-check" size={14} />
+              Artist keeps ownership
+            </li>
+            <li>
+              <Icon name="eye" size={14} />
+              Identity-presenting enquiries
+            </li>
+            <li>
+              <Icon name="lock" size={14} />
+              Private performance data
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -90,13 +83,6 @@ export function Hero() {
             View Artwork
             <Icon name="arrow-right" size={13} />
           </button>
-        </div>
-
-        <div className={styles.watchIntro}>
-          <span className={styles.playBtn} aria-hidden="true">
-            <Icon name="play" size={14} />
-          </span>
-          <span>Watch introduction</span>
         </div>
       </div>
     </section>

@@ -45,7 +45,14 @@ export type IconName =
   | 'bookmark'
   | 'award'
   | 'star'
-  | 'building';
+  | 'building'
+  | 'eye'
+  | 'eye-off'
+  | 'briefcase'
+  | 'upload'
+  | 'sparkles'
+  | 'close'
+  | 'lock';
 
 const paths: Record<IconName, React.ReactNode> = {
   search: (
@@ -314,6 +321,52 @@ const paths: Record<IconName, React.ReactNode> = {
       <line x1="18.5" y1="9.5" x2="18.5" y2="18.5" />
       <line x1="3.2" y1="18.5" x2="20.8" y2="18.5" />
       <line x1="2.5" y1="21" x2="21.5" y2="21" />
+    </>
+  ),
+  eye: (
+    <>
+      <path d="M2.5 12S6.3 5 12 5s9.5 7 9.5 7-3.8 7-9.5 7-9.5-7-9.5-7z" />
+      <circle cx="12" cy="12" r="3" />
+    </>
+  ),
+  upload: (
+    <>
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <path d="M17 8l-5-5-5 5" />
+      <path d="M12 3v12" />
+    </>
+  ),
+  sparkles: (
+    <>
+      <path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9L12 3z" />
+      <path d="M18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8.8-1.9z" />
+    </>
+  ),
+  close: (
+    <>
+      <path d="M18 6L6 18" />
+      <path d="M6 6l12 12" />
+    </>
+  ),
+  briefcase: (
+    <>
+      <rect x="2.5" y="7.5" width="19" height="12.5" rx="2.5" />
+      <path d="M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5" />
+      <path d="M2.5 12.5h19" />
+    </>
+  ),
+  'eye-off': (
+    <>
+      <path d="M10.7 6.2A9.9 9.9 0 0 1 12 6c5.7 0 9.5 6 9.5 6a17 17 0 0 1-2.6 3.3" />
+      <path d="M6.3 7.9A17 17 0 0 0 2.5 12S6.3 18 12 18a9.5 9.5 0 0 0 3.9-.8" />
+      <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+      <path d="M3.5 3.5l17 17" />
+    </>
+  ),
+  lock: (
+    <>
+      <rect x="5" y="11" width="14" height="9.5" rx="2" />
+      <path d="M8 11V7.5a4 4 0 0 1 8 0V11" />
     </>
   ),
 };

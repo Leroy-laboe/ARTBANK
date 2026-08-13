@@ -1,0 +1,9 @@
+/* Tailwind v4, scoped for use by the auth screens only.
+   Preflight is deliberately NOT imported: it is a global element reset that
+   would fight globals.css and restyle every existing CSS-Modules component.
+   Importing theme + utilities alone keeps Tailwind additive — utility classes
+   are available, but nothing about the existing site changes. */
+@layer theme, base, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);

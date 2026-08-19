@@ -11,4 +11,12 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  server: {
+    // Same-origin in dev, so the session cookie is first-party and no CORS
+    // or SameSite=None concessions are needed.
+    proxy: {
+      '/api': { target: 'http://localhost:8787', changeOrigin: true },
+      '/auth': { target: 'http://localhost:8787', changeOrigin: true },
+    },
+  },
 })

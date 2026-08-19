@@ -7,12 +7,18 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:server": "tsx watch server/src/index.ts",
+    "build:server": "tsc -p server/tsconfig.json --noEmit",
+    "typecheck": "tsc -b && tsc -p server/tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@fastify/cookie": "^11.1.2",
     "@supabase/supabase-js": "^2.112.1",
     "clsx": "^2.1.1",
+    "fastify": "^5.11.3",
     "framer-motion": "^12.43.0",
+    "jose": "^6.2.8",
     "lucide-react": "^1.31.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -27,6 +33,7 @@
     "@vitejs/plugin-react": "^6.0.4",
     "oxlint": "^1.75.0",
     "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.12",
     "typescript": "~6.0.2",
     "vite": "^8.2.0"
   }

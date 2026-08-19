@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import styles from './auth-switch.module.css';
 
 export type AuthMode = 'signin' | 'signup';
+export type AccountRole = 'artist' | 'buyer';
 
 export type AuthSwitchProps = {
   /** Which side the card opens on. Added so /login and /register can share it. */
@@ -10,8 +11,14 @@ export type AuthSwitchProps = {
   /** Optional footage to fill the sliding panel. Falls back to its gradient. */
   videoSrc?: string;
   onSignIn?: (values: { email: string; password: string }) => void;
-  onSignUp?: (values: { username: string; email: string; password: string }) => void;
+  onSignUp?: (values: { email: string; password: string; role: AccountRole }) => void;
   onModeChange?: (mode: AuthMode) => void;
+  /** Shown under whichever form is currently active. */
+  error?: string;
+  /** Shown under whichever form is currently active, e.g. "check your email." Ignored while `error` is set. */
+  info?: string;
+  /** Disables the active form's submit button while an auth call is in flight. */
+  loading?: boolean;
   className?: string;
 };
 
@@ -21,9 +28,13 @@ export default function AuthSwitch({
   onSignIn,
   onSignUp,
   onModeChange,
+  error,
+  info,
+  loading,
   className,
 }: AuthSwitchProps) {
   const [isSignUp, setIsSignUp] = useState(defaultMode === 'signup');
+  const [role, setRole] = useState<AccountRole>('artist');
 
   // The original toggled a class via document.querySelector('.container') in
   // an effect. Driving it from state instead avoids a global DOM query that
@@ -46,9 +57,9 @@ export default function AuthSwitch({
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     onSignUp?.({
-      username: String(data.get('username') ?? ''),
       email: String(data.get('email') ?? ''),
       password: String(data.get('password') ?? ''),
+      role: (String(data.get('role') ?? 'artist') as AccountRole),
     });
   }
 
@@ -89,7 +100,14 @@ export default function AuthSwitch({
                 autoComplete="current-password"
               />
             </div>
-            <input type="submit" value="Login" className={cn(styles.btn, styles.solid)} />
+            {!isSignUp && error && <p className={styles.errorText}>{error}</p>}
+            {!isSignUp && !error && info && <p className={styles.infoText}>{info}</p>}
+            <input
+              type="submit"
+              value={loading && !isSignUp ? 'Signing in…' : 'Login'}
+              disabled={loading}
+              className={cn(styles.btn, styles.solid)}
+            />
             <p className={styles.socialText}>Or sign in with social platforms</p>
             <div className={styles.socialMedia}>
               <SocialIcons />
@@ -98,14 +116,44 @@ export default function AuthSwitch({
 
           {/* Sign Up Form */}
           <form className={styles.signUpForm} onSubmit={handleSignUp}>
-            <h2 className={styles.title}>Sign up</h2>
-            <div className={styles.inputField}>
-              <i>👤</i>
-              <input type="text" name="username" placeholder="Username" autoComplete="username" />
+            <h2 className={styles.title}>Create your JO1N ID</h2>
+            <p className={styles.subtitle}>Start with identity. Build value as you grow.</p>
+            <p className={styles.blurb}>
+              The free foundation includes your JO1N ID, profile, three work records and public
+              contact route. Paid tools unlock expanded records, deeper intelligence, professional
+              packs and deal support.
+            </p>
+
+            <div className={styles.roleGroup} role="radiogroup" aria-label="Account type">
+              <label className={cn(styles.roleCard, role === 'artist' && styles.roleCardActive)}>
+                <input
+                  type="radio"
+                  name="role"
+                  value="artist"
+                  checked={role === 'artist'}
+                  onChange={() => setRole('artist')}
+                  className={styles.roleRadio}
+                />
+                <span className={styles.roleTitle}>Artist / Creator</span>
+                <span className={styles.roleDesc}>Build ArtSpace and import work</span>
+              </label>
+              <label className={cn(styles.roleCard, role === 'buyer' && styles.roleCardActive)}>
+                <input
+                  type="radio"
+                  name="role"
+                  value="buyer"
+                  checked={role === 'buyer'}
+                  onChange={() => setRole('buyer')}
+                  className={styles.roleRadio}
+                />
+                <span className={styles.roleTitle}>Buyer / Organization</span>
+                <span className={styles.roleDesc}>Source professional creative talent</span>
+              </label>
             </div>
+
             <div className={styles.inputField}>
               <i>📧</i>
-              <input type="email" name="email" placeholder="Email" autoComplete="email" />
+              <input type="email" name="email" placeholder="Email address" autoComplete="email" />
             </div>
             <div className={styles.inputField}>
               <i>🔒</i>
@@ -116,11 +164,14 @@ export default function AuthSwitch({
                 autoComplete="new-password"
               />
             </div>
-            <input type="submit" value="Sign up" className={styles.btn} />
-            <p className={styles.socialText}>Or sign up with social platforms</p>
-            <div className={styles.socialMedia}>
-              <SocialIcons />
-            </div>
+            {isSignUp && error && <p className={styles.errorText}>{error}</p>}
+            {isSignUp && !error && info && <p className={styles.infoText}>{info}</p>}
+            <input
+              type="submit"
+              value={loading && isSignUp ? 'Creating your JO1N ID…' : 'Continue free'}
+              disabled={loading}
+              className={styles.btn}
+            />
           </form>
         </div>
       </div>

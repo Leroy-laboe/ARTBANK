@@ -1,0 +1,93 @@
+.band {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding-top: 34px;
+  padding-bottom: 34px;
+}
+
+.pillar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 16px;
+  padding: 6px 40px;
+}
+
+/* Hairline between the two, rather than a border on each. */
+.pillar + .pillar {
+  border-left: 1px solid var(--border);
+}
+
+.index {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  line-height: 1.1;
+  color: var(--gold);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.35;
+  color: var(--ink);
+  margin: 0 0 6px;
+  font-weight: 500;
+}
+
+.desc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 44ch;
+}
+
+.stat {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.statValue {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.statLabel {
+  font-size: 12px;
+  color: var(--muted-2);
+}
+
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .pillar {
+    padding: 0;
+  }
+
+  .pillar + .pillar {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding-top: 26px;
+  }
+}
+
+@media (max-width: 620px) {
+  .pillar {
+    grid-template-columns: auto 1fr;
+  }
+
+  .stat {
+    grid-column: 2;
+    text-align: left;
+  }
+}

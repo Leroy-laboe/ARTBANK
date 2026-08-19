@@ -15,23 +15,6 @@ export function Footer() {
               The global platform for creators, collectors and institutions to build, value and
               preserve creative legacy.
             </p>
-            <div className={styles.social}>
-              <a href="#" aria-label="Instagram">
-                <Icon name="instagram" size={16} />
-              </a>
-              <a href="#" aria-label="Facebook">
-                <Icon name="facebook" size={16} />
-              </a>
-              <a href="#" aria-label="X">
-                <Icon name="x-twitter" size={15} />
-              </a>
-              <a href="#" aria-label="YouTube">
-                <Icon name="youtube" size={16} />
-              </a>
-              <a href="#" aria-label="LinkedIn">
-                <Icon name="linkedin" size={16} />
-              </a>
-            </div>
           </div>
 
           <div>

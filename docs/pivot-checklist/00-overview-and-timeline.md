@@ -40,6 +40,7 @@ Everything else in `src/pages/` (`HomePage`, `CreatorsPage` → rename concept t
 | 22 | [22-feature-artwork-action-plan.md](22-feature-artwork-action-plan.md) | Priority feature 5 (NOW) |
 | 23 | [23-feature-professional-artwork-pack.md](23-feature-professional-artwork-pack.md) | Priority feature 6 (NOW) |
 | 24 | [24-feature-basic-tier-additions.md](24-feature-basic-tier-additions.md) | Priority features 7–10 (BASIC VERSION tier) |
+| 25 | [25-database-schema-plan.md](25-database-schema-plan.md) | **Not from the PDF** — translates 09–24 into an actual DB schema plan, table by table, with open questions to settle before writing migrations |
 
 ## Deadline
 

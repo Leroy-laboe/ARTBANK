@@ -1,15 +1,15 @@
 import type { IconName } from '../components/ui/Icon';
 import type { Creator } from '../types/creator';
 
+// Marketplace, ARTCHIVE, ARTICON and ARTCADEMY are *hidden*, not deleted —
+// their routes still resolve, they're just not advertised until they're
+// functional. MRI Rankings, by contrast, was removed outright.
 export const navLinks = [
   { label: 'Home', href: '/' },
-  { label: 'Marketplace', href: '/marketplace' },
-  { label: 'Creators', href: '/creators' },
-  { label: 'MRI Rankings', href: '/mri-rankings' },
-  { label: 'ARTCHIVE', href: '/archive' },
-  { label: 'ARTICON', href: '/articon' },
-  { label: 'ARTCADEMY', href: '/academy' },
-  { label: 'Membership', href: '/membership' },
+  { label: 'How It Works', href: '/how-it-works' },
+  { label: 'Artists', href: '/artists' },
+  { label: 'For Buyers', href: '/for-buyers' },
+  { label: 'Pricing', href: '/pricing' },
 ];
 
 export const trustedBy: { name: string; icon?: IconName }[] = [
@@ -186,7 +186,7 @@ export const testimonialAvatars = [
 ];
 
 export const footerLinks = {
-  platform: ['Marketplace', 'Creators', 'MRI Rankings', 'ARTCHIVE'],
-  resources: ['ARTCADEMY', 'Membership', 'Help Center', 'Guides'],
+  platform: ['Artists', 'For Buyers'],
+  resources: ['How It Works', 'Pricing', 'Help Center', 'Guides'],
   company: ['About Us', 'Careers', 'Press', 'Contact'],
 };

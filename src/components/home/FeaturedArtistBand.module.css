@@ -1,0 +1,105 @@
+/* Full-bleed split: the image runs to the left edge, the copy column carries
+   the forest ground all the way to the right edge. The inner .copy is what
+   lines up with the page container, so text stays on the same grid as every
+   other section while the colour itself bleeds. */
+.band {
+  display: grid;
+  grid-template-columns: 42% 58%;
+  background: var(--forest);
+  color: var(--forest-text);
+}
+
+.media {
+  position: relative;
+  min-height: 420px;
+}
+
+.media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.copyCol {
+  display: flex;
+  align-items: center;
+  padding: 68px 40px 68px 64px;
+}
+
+.copy {
+  max-width: 560px;
+}
+
+.eyebrow {
+  color: var(--gold-light);
+  margin: 0 0 14px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(26px, 2.9vw, 36px);
+  line-height: 1.22;
+  color: #fff;
+  font-weight: 500;
+  margin: 0 0 16px;
+}
+
+.desc {
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--forest-muted);
+  max-width: 48ch;
+}
+
+.quote {
+  margin: 0 0 16px;
+  padding-left: 14px;
+  border-left: 2px solid var(--gold);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--forest-text);
+  max-width: 46ch;
+}
+
+.meta {
+  margin: 0 0 24px;
+  font-size: 12.5px;
+  color: var(--forest-muted);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold-light);
+  color: #22200f;
+  border-radius: var(--radius-full);
+  padding: 11px 22px;
+  font-size: 13.5px;
+  font-weight: 600;
+  transition: 0.18s;
+}
+
+.cta:hover {
+  background: var(--gold);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .band {
+    grid-template-columns: 1fr;
+  }
+
+  .media {
+    min-height: 280px;
+  }
+
+  .copyCol {
+    padding: 44px 24px 52px;
+  }
+}

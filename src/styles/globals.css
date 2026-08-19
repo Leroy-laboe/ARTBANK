@@ -20,6 +20,15 @@
   --dark-border: #33291d;
   --cream-text: #ede6d8;
 
+  /* Deep forest green — the second dark surface introduced by the pivot
+     homepage, used for the featured-artist, buyer and Jenaisis bands. */
+  --forest: #1b2b21;
+  --forest-2: #22352a;
+  --forest-3: #2c4335;
+  --forest-border: #35513f;
+  --forest-text: #d7e2d8;
+  --forest-muted: #9db3a4;
+
   --success: #2f7d4f;
   --danger: #b3453d;
 

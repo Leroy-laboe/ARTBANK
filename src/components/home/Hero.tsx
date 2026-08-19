@@ -3,6 +3,12 @@ import { Button } from '../ui/Button';
 import heroBackground from '../../assets/images/hero_background.jpeg';
 import styles from './Hero.module.css';
 
+/** Hidden, not deleted. The pivot brief drops the public MRI score, the
+ *  auction countdown and the bid from the hero, but parts of this card may be
+ *  wanted again later. Flip to `true` to bring it back — its markup below and
+ *  its styles in Hero.module.css are both left intact. */
+const SHOW_HERO_BADGE_CARD: boolean = false;
+
 export function Hero() {
   return (
     <section className={styles.hero}>
@@ -45,6 +51,7 @@ export function Hero() {
         <img src={heroBackground} alt="" className={styles.bgImage} />
         <div className={styles.bgScrim} />
 
+        {SHOW_HERO_BADGE_CARD && (
         <div className={styles.badgeCard}>
           <span className={styles.verisRow}>
             <Icon name="shield-check" size={12} />
@@ -84,6 +91,7 @@ export function Hero() {
             <Icon name="arrow-right" size={13} />
           </button>
         </div>
+        )}
       </div>
     </section>
   );

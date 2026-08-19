@@ -7,9 +7,9 @@ export function CreatorsIntro() {
     <div className={styles.wrap}>
       <div className={styles.topRow}>
         <div className={styles.headline}>
-          <h1 className={styles.title}>Creators</h1>
+          <h1 className={styles.title}>Artists</h1>
           <p className={styles.desc}>
-            Discover visionary creators shaping culture. Verified. Ranked. Remembered.
+            Discover visionary artists shaping culture. Verified. Represented. Remembered.
           </p>
         </div>
 

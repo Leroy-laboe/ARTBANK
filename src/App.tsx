@@ -3,7 +3,6 @@ import { AuthPage } from './pages/AuthPage';
 import { HomePage } from './pages/HomePage';
 import { MarketplacePage } from './pages/MarketplacePage';
 import { CreatorsPage } from './pages/CreatorsPage';
-import { MriRankingsPage } from './pages/MriRankingsPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
 
         {/* Hidden from the nav until functional — still routable by direct URL. */}
         <Route path="/marketplace" element={<MarketplacePage />} />
-        <Route path="/mri-rankings" element={<MriRankingsPage />} />
         <Route path="/archive" element={<ComingSoonPage title="ARTCHIVE" />} />
         <Route path="/articon" element={<ComingSoonPage title="ARTICON" />} />
         <Route path="/academy" element={<ComingSoonPage title="ARTCADEMY" />} />

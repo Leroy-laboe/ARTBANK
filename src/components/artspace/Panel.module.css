@@ -1,0 +1,78 @@
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 20px 22px 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.heading {
+  min-width: 0;
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+}
+
+.subtitle {
+  margin-top: 3px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.panelLink {
+  flex-shrink: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  padding-top: 2px;
+  transition: color 0.15s ease;
+}
+
+.panelLink:hover {
+  color: var(--gold-dark);
+}
+
+.panelButtonLink {
+  flex-shrink: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 7px 15px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.panelButtonLink:hover {
+  border-color: var(--ink);
+  background: var(--bg);
+}
+
+.footerLink {
+  margin-top: auto;
+  padding-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  align-self: flex-start;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  transition: gap 0.15s ease;
+}
+
+.footerLink:hover {
+  gap: 11px;
+}

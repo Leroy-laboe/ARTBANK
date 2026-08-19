@@ -1,0 +1,103 @@
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 132px;
+  gap: 18px;
+  align-items: end;
+}
+
+.figures {
+  min-width: 0;
+}
+
+.earnings {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.earningCard {
+  padding: 13px 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.earningTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.earningLabel {
+  font-size: 11.5px;
+  color: var(--muted);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.earningIcon {
+  flex-shrink: 0;
+  color: var(--gold-dark);
+}
+
+.earningValue {
+  margin-top: 8px;
+  font-family: var(--font-serif);
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.2px;
+}
+
+.earningNote {
+  margin-top: 3px;
+  font-size: 11.5px;
+  color: var(--muted-2);
+}
+
+.rights {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.rightLabel {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.rightValue {
+  margin-top: 4px;
+  font-family: var(--font-serif);
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.rightNote {
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: var(--muted-2);
+}
+
+.image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+@media (max-width: 1300px) {
+  .image {
+    display: none;
+  }
+
+  .body {
+    grid-template-columns: 1fr;
+  }
+}

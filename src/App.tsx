@@ -3,6 +3,7 @@ import { AuthPage } from './pages/AuthPage';
 import { HomePage } from './pages/HomePage';
 import { MarketplacePage } from './pages/MarketplacePage';
 import { CreatorsPage } from './pages/CreatorsPage';
+import { ArtspacePage } from './pages/ArtspacePage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
 
 function App() {
@@ -25,6 +26,21 @@ function App() {
         <Route path="/archive" element={<ComingSoonPage title="ARTCHIVE" />} />
         <Route path="/articon" element={<ComingSoonPage title="ARTICON" />} />
         <Route path="/academy" element={<ComingSoonPage title="ARTCADEMY" />} />
+        {/* ArtSpace — the private area an artist lands on after signing in.
+            Today is built; the other four destinations and the account menu
+            are placeholders until their own milestones land. */}
+        <Route path="/artspace" element={<ArtspacePage />} />
+        <Route path="/artspace/works" element={<ComingSoonPage title="My Works" />} />
+        <Route path="/artspace/works/new" element={<ComingSoonPage title="Add Artwork" />} />
+        <Route path="/artspace/interest" element={<ComingSoonPage title="Interest" />} />
+        <Route path="/artspace/opportunities" element={<ComingSoonPage title="Opportunities" />} />
+        <Route path="/artspace/messages" element={<ComingSoonPage title="Messages" />} />
+        <Route path="/artspace/profile" element={<ComingSoonPage title="Public Profile" />} />
+        <Route path="/artspace/billing" element={<ComingSoonPage title="Billing" />} />
+        <Route path="/artspace/privacy" element={<ComingSoonPage title="Privacy" />} />
+        <Route path="/artspace/security" element={<ComingSoonPage title="Security" />} />
+        <Route path="/artspace/help" element={<ComingSoonPage title="Help Center" />} />
+
         {/* One auth card, opened on the side the route names. */}
         <Route path="/login" element={<AuthPage mode="signin" />} />
         <Route path="/register" element={<AuthPage mode="signup" />} />

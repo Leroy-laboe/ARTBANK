@@ -22,7 +22,9 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
     setLoading(true);
     try {
       await signIn(values.email, values.password);
-      navigate('/');
+      // ArtSpace is the signed-in home. Buyers have no dashboard yet, so this
+      // will need to branch on role once sign-in returns one.
+      navigate('/artspace');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign in failed. Please try again.');
     } finally {
@@ -46,7 +48,7 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
     try {
       const { session } = await signUp(values.email, values.password, values.role);
       if (session) {
-        navigate('/');
+        navigate(values.role === 'artist' ? '/artspace' : '/');
       } else {
         // Email confirmation is required before a session is issued — stay on
         // the sign-up side and tell them what to do next.

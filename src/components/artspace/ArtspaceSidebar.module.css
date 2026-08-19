@@ -1,0 +1,212 @@
+.sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100svh;
+  overflow-y: auto;
+  background: var(--surface);
+  border-right: 1px solid var(--border-soft);
+  padding: 26px 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.brand {
+  font-family: var(--font-serif);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--ink);
+  padding: 0 8px;
+  line-height: 1;
+}
+
+.brand span {
+  color: var(--gold);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.groupLabel {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  padding: 0 10px;
+  margin-bottom: 8px;
+}
+
+.groupLabel:not(:first-child) {
+  margin-top: 24px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.navItem:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.navItemActive {
+  background: var(--gold-bg);
+  color: var(--gold-dark);
+  font-weight: 600;
+}
+
+.navItemActive:hover {
+  background: var(--gold-bg);
+  color: var(--gold-dark);
+}
+
+.navLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+.badge {
+  flex-shrink: 0;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
+  background: var(--gold);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addBtn {
+  margin: 16px 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--dark);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.addBtn:hover {
+  background: #000;
+  box-shadow: var(--shadow-sm);
+}
+
+.divider {
+  height: 1px;
+  background: var(--border-soft);
+  margin: 12px 10px;
+}
+
+.helpCard {
+  margin-top: auto;
+  display: flex;
+  gap: 11px;
+  padding: 16px 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+}
+
+.helpIcon {
+  flex-shrink: 0;
+  color: var(--gold-dark);
+  margin-top: 2px;
+}
+
+.helpTitle {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.helpNote {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.helpLink {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  transition: gap 0.15s ease;
+}
+
+.helpLink:hover {
+  gap: 9px;
+}
+
+/* The rail collapses to icons before it disappears entirely — see
+   ArtspacePage.module.css for where the grid column changes. */
+@media (max-width: 1100px) {
+  .sidebar {
+    padding: 22px 10px;
+    align-items: center;
+  }
+
+  .brand,
+  .groupLabel,
+  .navLabel,
+  .badge,
+  .helpCard {
+    display: none;
+  }
+
+  .navItem,
+  .addBtn {
+    justify-content: center;
+    padding: 11px;
+  }
+}
+
+@media (max-width: 720px) {
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    border-right: none;
+    border-bottom: 1px solid var(--border-soft);
+    padding: 10px;
+    overflow-x: auto;
+  }
+
+  .nav {
+    flex-direction: row;
+    gap: 4px;
+  }
+
+  .divider {
+    display: none;
+  }
+
+  .addBtn {
+    margin: 0;
+  }
+}

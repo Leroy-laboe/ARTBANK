@@ -35,6 +35,7 @@ export default function AuthSwitch({
 }: AuthSwitchProps) {
   const [isSignUp, setIsSignUp] = useState(defaultMode === 'signup');
   const [role, setRole] = useState<AccountRole>('artist');
+  const [signedUpEmail, setSignedUpEmail] = useState('');
 
   // The original toggled a class via document.querySelector('.container') in
   // an effect. Driving it from state instead avoids a global DOM query that
@@ -56,12 +57,20 @@ export default function AuthSwitch({
   function handleSignUp(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
+    const submittedEmail = String(data.get('email') ?? '');
+    setSignedUpEmail(submittedEmail);
     onSignUp?.({
-      email: String(data.get('email') ?? ''),
+      email: submittedEmail,
       password: String(data.get('password') ?? ''),
       role: (String(data.get('role') ?? 'artist') as AccountRole),
     });
   }
+
+  // Once signup succeeds but needs confirmation, `info` is set and stays set
+  // (AuthPage only clears it on mode change) — so this alone is enough to
+  // swap the form for a clear "check your email" state instead of leaving
+  // the same fields on screen with a small line of text under them.
+  const awaitingConfirmation = isSignUp && !error && Boolean(info);
 
   return (
     <div className={cn(styles.container, isSignUp && styles.signUpMode, className)}>
@@ -116,62 +125,77 @@ export default function AuthSwitch({
 
           {/* Sign Up Form */}
           <form className={styles.signUpForm} onSubmit={handleSignUp}>
-            <h2 className={styles.title}>Create your JO1N ID</h2>
-            <p className={styles.subtitle}>Start with identity. Build value as you grow.</p>
-            <p className={styles.blurb}>
-              The free foundation includes your JO1N ID, profile, three work records and public
-              contact route. Paid tools unlock expanded records, deeper intelligence, professional
-              packs and deal support.
-            </p>
+            {awaitingConfirmation ? (
+              <div className={styles.confirmPanel}>
+                <span className={styles.confirmIcon} aria-hidden="true">
+                  📬
+                </span>
+                <h2 className={styles.title}>Check your email</h2>
+                <p className={styles.confirmText}>
+                  We’ve sent a confirmation link to
+                  {signedUpEmail && <strong className={styles.confirmEmail}> {signedUpEmail}</strong>}.
+                  Click it to activate your account, then come back and sign in.
+                </p>
+              </div>
+            ) : (
+              <>
+                <h2 className={styles.title}>Create your JO1N ID</h2>
+                <p className={styles.subtitle}>Start with identity. Build value as you grow.</p>
+                <p className={styles.blurb}>
+                  The free foundation includes your JO1N ID, profile, three work records and public
+                  contact route. Paid tools unlock expanded records, deeper intelligence,
+                  professional packs and deal support.
+                </p>
 
-            <div className={styles.roleGroup} role="radiogroup" aria-label="Account type">
-              <label className={cn(styles.roleCard, role === 'artist' && styles.roleCardActive)}>
-                <input
-                  type="radio"
-                  name="role"
-                  value="artist"
-                  checked={role === 'artist'}
-                  onChange={() => setRole('artist')}
-                  className={styles.roleRadio}
-                />
-                <span className={styles.roleTitle}>Artist / Creator</span>
-                <span className={styles.roleDesc}>Build ArtSpace and import work</span>
-              </label>
-              <label className={cn(styles.roleCard, role === 'buyer' && styles.roleCardActive)}>
-                <input
-                  type="radio"
-                  name="role"
-                  value="buyer"
-                  checked={role === 'buyer'}
-                  onChange={() => setRole('buyer')}
-                  className={styles.roleRadio}
-                />
-                <span className={styles.roleTitle}>Buyer / Organization</span>
-                <span className={styles.roleDesc}>Source professional creative talent</span>
-              </label>
-            </div>
+                <div className={styles.roleGroup} role="radiogroup" aria-label="Account type">
+                  <label className={cn(styles.roleCard, role === 'artist' && styles.roleCardActive)}>
+                    <input
+                      type="radio"
+                      name="role"
+                      value="artist"
+                      checked={role === 'artist'}
+                      onChange={() => setRole('artist')}
+                      className={styles.roleRadio}
+                    />
+                    <span className={styles.roleTitle}>Artist / Creator</span>
+                    <span className={styles.roleDesc}>Build ArtSpace and import work</span>
+                  </label>
+                  <label className={cn(styles.roleCard, role === 'buyer' && styles.roleCardActive)}>
+                    <input
+                      type="radio"
+                      name="role"
+                      value="buyer"
+                      checked={role === 'buyer'}
+                      onChange={() => setRole('buyer')}
+                      className={styles.roleRadio}
+                    />
+                    <span className={styles.roleTitle}>Buyer / Organization</span>
+                    <span className={styles.roleDesc}>Source professional creative talent</span>
+                  </label>
+                </div>
 
-            <div className={styles.inputField}>
-              <i>📧</i>
-              <input type="email" name="email" placeholder="Email address" autoComplete="email" />
-            </div>
-            <div className={styles.inputField}>
-              <i>🔒</i>
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                autoComplete="new-password"
-              />
-            </div>
-            {isSignUp && error && <p className={styles.errorText}>{error}</p>}
-            {isSignUp && !error && info && <p className={styles.infoText}>{info}</p>}
-            <input
-              type="submit"
-              value={loading && isSignUp ? 'Creating your JO1N ID…' : 'Continue free'}
-              disabled={loading}
-              className={styles.btn}
-            />
+                <div className={styles.inputField}>
+                  <i>📧</i>
+                  <input type="email" name="email" placeholder="Email address" autoComplete="email" />
+                </div>
+                <div className={styles.inputField}>
+                  <i>🔒</i>
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    autoComplete="new-password"
+                  />
+                </div>
+                {isSignUp && error && <p className={styles.errorText}>{error}</p>}
+                <input
+                  type="submit"
+                  value={loading && isSignUp ? 'Creating your JO1N ID…' : 'Continue free'}
+                  disabled={loading}
+                  className={styles.btn}
+                />
+              </>
+            )}
           </form>
         </div>
       </div>

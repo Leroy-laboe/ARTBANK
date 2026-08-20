@@ -22,7 +22,12 @@ export async function signUp(email: string, password: string, role?: UserRole) {
   const { data, error } = await client.auth.signUp({
     email,
     password,
-    options: role ? { data: { role } } : undefined,
+    options: {
+      ...(role ? { data: { role } } : {}),
+      // Without this Supabase falls back to the project's default Site URL
+      // (the landing page) once the confirmation link is clicked.
+      emailRedirectTo: `${window.location.origin}/login`,
+    },
   });
   if (error) throw error;
   return data;

@@ -1,0 +1,176 @@
+<!--
+  ARTBANK — "Confirm signup" email template.
+
+  Not wired up automatically: Supabase's email templates live in its
+  dashboard, not in code, so there's nothing that reads this file at runtime.
+  Kept here as the source of truth / version history for what's pasted into
+  the dashboard.
+
+  To apply: Supabase Dashboard → Authentication → Email Templates →
+  "Confirm signup" → paste this into the HTML body → Save.
+  Suggested Subject line: "Your ArtBank ID is almost ready"
+
+  Uses Supabase's Go template variables — {{ .ConfirmationURL }} is the one
+  that matters (it carries the emailRedirectTo=/login set in
+  src/services/auth.ts). {{ .Email }} personalises the address pill below.
+  NOTE: Supabase's own template-editor preview shows these literally, as
+  "{{ .Email }}" — they only interpolate in an actual sent email, so that's
+  expected and not a bug.
+
+  The hero photo is now the full background of the top section (not a side
+  column), mirroring the site's own Hero.tsx: a full-bleed photo with a
+  left-to-right cream fade (same gradient shape as Hero.module.css's
+  .bgScrim) so dark text stays legible over it, wordmark included. The
+  section is sized to the photo's actual 520:640 ratio (738px tall at 600px
+  wide) rather than cropped into a short landscape band — cropping it would
+  have cut off the top of the frame or the floor. Text sits over the top ~35%
+  of the photo, which is the plain wall/spotlight area with the least detail,
+  not over the frame or the gold paint swirl.
+
+  Still not a single flat image overall, though — Gmail/Outlook hide images
+  until the recipient clicks "display images", so an image-only email risks
+  arriving blank with nothing clickable. The headline, button and fallback
+  link below are still real HTML, not baked into the photo.
+
+  Outlook's rendering engine (Word-based) doesn't support CSS
+  background-image on arbitrary elements, gradients, flexbox/grid, or inline
+  SVG. The hero uses the standard VML fallback (<v:rect>/<v:fill>) so Outlook
+  still shows the photo as a background — but Outlook can't render the
+  gradient scrim (no gradient support), so text there sits directly on the
+  plain photo with no fade behind it. (Earlier draft tried giving that same
+  cell a solid `bgcolor` as an Outlook-only safety net, but a bgcolor sits
+  BEHIND the gradient as an opaque backdrop in every real browser too, which
+  blocked the photo entirely instead of fading into it — removed rather than
+  fixed properly, since a correct dual version would need Outlook-only markup
+  duplicated via conditional comments, not worth it for one cell.) Worth an
+  actual test send to Outlook if that audience matters to you; every other
+  major client (Gmail, Apple Mail, Outlook.com/mobile, Yahoo) renders the
+  real gradient correctly.
+
+  The hero photo (email-hero-520x640.jpg) is custom-generated art, not stock —
+  hosted in the "email-assets" public Supabase Storage bucket, since inbox
+  images need a stable public HTTPS URL. It's also kept at
+  src/assets/images/email-hero-520x640.jpg as the source copy.
+
+  One intentional departure from the supplied reference composition: no
+  social icon row in the footer — the live site's footer had its social
+  icons removed this session (see Footer.tsx); repeating them here would
+  contradict that. Easy to add back if that changes.
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#fbfaf7;padding:32px 16px;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#ffffff;border:1px solid #e8e1d3;border-radius:16px;overflow:hidden;">
+
+        <!-- Hero: full-bleed photo background, text overlaid on the plain-wall area at the top -->
+        <tr>
+          <td style="padding:0;">
+            <!--[if gte mso 9]>
+            <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:600px;height:738px;">
+            <v:fill type="frame" src="https://uccqvrotcisbwvcceisv.supabase.co/storage/v1/object/public/email-assets/email-hero-520x640.jpg" color="#f4ecda" />
+            <v:textbox inset="0,0,0,0">
+            <![endif]-->
+            <div style="background-image:url('https://uccqvrotcisbwvcceisv.supabase.co/storage/v1/object/public/email-assets/email-hero-520x640.jpg');background-repeat:no-repeat;background-position:top center;background-size:cover;background-color:#f4ecda;height:738px;width:100%;">
+              <!--[if mso]>
+              <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;"><tr><td style="width:600px;">
+              <![endif]-->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background-image:linear-gradient(120deg, rgba(251,250,247,0.94) 0%, rgba(251,250,247,0.8) 40%, rgba(251,250,247,0.3) 66%, rgba(251,250,247,0) 84%);padding:32px 40px 26px;">
+                    <div style="font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:700;letter-spacing:0.02em;margin:0 0 22px;">
+                      <span style="color:#15110c;">ART</span><span style="color:#b9884f;">BANK</span>
+                    </div>
+
+                    <h1 style="margin:0 0 4px;font-family:Georgia,'Times New Roman',serif;font-weight:500;font-size:27px;line-height:1.28;color:#15110c;">
+                      Your creative<br>space is <span style="color:#b9884f;">ready.</span>
+                    </h1>
+                    <div style="width:40px;height:2px;background-color:#b9884f;margin:14px 0 16px;"></div>
+                    <p style="margin:0 0 22px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:13.5px;line-height:1.6;color:#4a4238;max-width:320px;">
+                      One final step and your ArtBank ID will be activated.
+                    </p>
+
+                    <!-- Email pill -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
+                      <tr>
+                        <td style="background-color:#f7f1e2;border-radius:999px;padding:10px 18px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:13px;color:#3a2a17;white-space:nowrap;">
+                          ✉ {{ .Email }}
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Button (bgcolor = Outlook fallback, gradient = everyone else) -->
+                    <table role="presentation" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td bgcolor="#b9884f" style="border-radius:999px;background-image:linear-gradient(135deg,#d8b077 0%,#8f6a3a 100%);">
+                          <a href="{{ .ConfirmationURL }}"
+                             style="display:inline-block;padding:13px 26px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:13.5px;font-weight:600;color:#ffffff;text-decoration:none;">
+                            Verify &amp; enter ArtBank &nbsp;→
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <p style="margin:18px 0 0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:12px;line-height:1.6;color:#7c7468;">
+                      ✦ Join artists. Share your work.<br>Build your creative identity.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              <!--[if mso]>
+              </td></tr></table>
+              <![endif]-->
+            </div>
+            <!--[if gte mso 9]>
+            </v:textbox>
+            </v:rect>
+            <![endif]-->
+          </td>
+        </tr>
+
+        <!-- Filmstrip -->
+        <tr>
+          <td style="padding:0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="width:20%;"><img src="https://images.unsplash.com/photo-1620121692029-d088224ddc74?w=200&h=200&fit=crop&auto=format&q=80" width="100%" alt="" style="display:block;width:100%;height:auto;"></td>
+                <td style="width:20%;"><img src="https://images.unsplash.com/photo-1577720580479-7d839d829c73?w=200&h=200&fit=crop&auto=format&q=80" width="100%" alt="" style="display:block;width:100%;height:auto;"></td>
+                <td style="width:20%;"><img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=200&h=200&fit=crop&auto=format&q=80" width="100%" alt="" style="display:block;width:100%;height:auto;"></td>
+                <td style="width:20%;"><img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=200&h=200&fit=crop&auto=format&q=80" width="100%" alt="" style="display:block;width:100%;height:auto;"></td>
+                <td style="width:20%;"><img src="https://images.unsplash.com/photo-1580136579312-94651dfd596d?w=200&h=200&fit=crop&auto=format&q=80" width="100%" alt="" style="display:block;width:100%;height:auto;"></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Tagline -->
+        <tr>
+          <td align="center" style="padding:26px 36px 24px;">
+            <p style="margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:13px;color:#4a4238;">
+              Where <span style="color:#b9884f;font-weight:600;">creativity</span> meets <span style="color:#b9884f;font-weight:600;">opportunity</span>.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Fallback link -->
+        <tr>
+          <td style="padding:0 36px 24px;border-top:1px solid #efe9dd;">
+            <p style="margin:20px 0 0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:11.5px;line-height:1.6;color:#9a9184;">
+              Button not working? Paste this link into your browser:<br>
+              <a href="{{ .ConfirmationURL }}" style="color:#8f6a3a;word-break:break-all;">{{ .ConfirmationURL }}</a>
+            </p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="padding:18px 36px 28px;background-color:#f6ecd9;">
+            <p style="margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:11px;line-height:1.6;color:#7c7468;">
+              © 2026 ARTBANK. All rights reserved. If you didn't create an ArtBank ID, you can safely ignore this email.
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>

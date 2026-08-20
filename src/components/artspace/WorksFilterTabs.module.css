@@ -1,0 +1,66 @@
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+.tab {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 13px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.tab:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* The active tab is marked by weight and an underline rather than a fill, so
+   it reads as a tab strip and not another row of buttons. */
+.tabActive {
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 var(--dark);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.tabActive:hover {
+  background: transparent;
+}
+
+.count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  padding: 1px 5px;
+  border-radius: var(--radius-full);
+  background: var(--bg);
+  border: 1px solid var(--border-soft);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.tabActive .count {
+  background: var(--gold-bg);
+  border-color: transparent;
+  color: var(--gold-dark);
+}

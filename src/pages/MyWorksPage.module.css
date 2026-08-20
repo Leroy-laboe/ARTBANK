@@ -1,0 +1,135 @@
+/* Same shell geometry as Today — see ArtspacePage.module.css. */
+.shell {
+  display: grid;
+  grid-template-columns: 187px minmax(0, 1fr);
+  min-height: 100svh;
+  background: var(--bg);
+}
+
+.body {
+  min-width: 0;
+  padding: 20px 21.5px 36px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 14.5px;
+  align-items: start;
+}
+
+.mainCol {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tableCard {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 14px 16px 14px;
+}
+
+.rightCol {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14.5px;
+}
+
+/* ── Header actions ── */
+
+.export {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 15px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.export:hover {
+  border-color: var(--ink);
+  background: var(--bg);
+}
+
+.viewToggle {
+  display: inline-flex;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.viewBtn {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.viewBtn:hover {
+  color: var(--ink);
+}
+
+.viewBtnActive,
+.viewBtnActive:hover {
+  background: var(--bg);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--border-soft);
+}
+
+@media (max-width: 1000px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rightCol {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .shell {
+    grid-template-columns: 61px minmax(0, 1fr);
+  }
+
+  .body {
+    padding: 20px 16px 32px;
+  }
+}
+
+@media (max-width: 820px) {
+  .rightCol {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .body {
+    padding: 18px 14.5px 32px;
+  }
+
+  .tableCard {
+    padding: 12px 12px 12px;
+  }
+}

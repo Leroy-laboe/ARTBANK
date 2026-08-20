@@ -10,6 +10,7 @@ import { ArtistIdentityCard } from '../components/artspace/ArtistIdentityCard';
 import { ReadinessScoreCard } from '../components/artspace/ReadinessScoreCard';
 import { QuickActionsPanel } from '../components/artspace/QuickActionsPanel';
 import { HelpResourcesPanel } from '../components/artspace/HelpResourcesPanel';
+import { quickActions } from '../data/artspaceContent';
 import styles from './ArtspacePage.module.css';
 
 /** Today — the screen an artist lands on after signing in. Unlike the public
@@ -42,7 +43,7 @@ export function ArtspacePage() {
           <aside className={styles.rightCol}>
             <ArtistIdentityCard />
             <ReadinessScoreCard />
-            <QuickActionsPanel />
+            <QuickActionsPanel actions={quickActions} />
             <HelpResourcesPanel />
           </aside>
         </div>

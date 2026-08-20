@@ -1,0 +1,278 @@
+/* Ten columns don't fit a laptop main column, so the table keeps its natural
+   width and scrolls inside this box rather than crushing the artwork column. */
+.scroller {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  padding: 0 10px 11px;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border-soft);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: middle;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.table tbody tr:hover {
+  background: var(--bg);
+}
+
+.rowSelected {
+  background: var(--gold-bg);
+}
+
+.rowSelected:hover {
+  background: var(--gold-bg);
+}
+
+.sorted {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ink);
+}
+
+/* ── Checkbox and menu columns ── */
+
+.checkCol {
+  width: 34px;
+  padding-left: 4px !important;
+  padding-right: 0 !important;
+}
+
+.check {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--dark);
+  cursor: pointer;
+}
+
+.menuCol {
+  width: 34px;
+  text-align: right;
+}
+
+.menuBtn {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.menuBtn:hover {
+  background: var(--border-soft);
+  color: var(--ink);
+}
+
+/* ── Artwork cell ── */
+
+.work {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 190px;
+}
+
+.thumb {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--bg);
+}
+
+.workCopy {
+  min-width: 0;
+}
+
+.workTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.workMeta {
+  margin-top: 2px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.workDims {
+  margin-top: 1px;
+  font-size: 10.5px;
+  color: var(--muted-2);
+}
+
+/* ── Status / availability ── */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: flex-start;
+}
+
+.labelled {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.dot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+}
+
+.dotGreen {
+  background: var(--success);
+}
+
+.dotGold {
+  background: var(--gold);
+}
+
+.dotMuted {
+  background: var(--muted-2);
+}
+
+.subNote {
+  font-size: 10.5px;
+  color: var(--muted-2);
+  white-space: nowrap;
+}
+
+/* ── Passport / COA ── */
+
+.passportTop {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.verifiedIcon {
+  color: var(--success);
+}
+
+.draftIcon {
+  color: var(--muted-2);
+}
+
+.cellLink {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.cellLink:hover {
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+/* ── Interest badge ── */
+
+.level {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  min-width: 44px;
+  padding: 5px 9px;
+  border-radius: var(--radius-sm);
+}
+
+.levelCount {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.levelLabel {
+  font-size: 9.5px;
+  font-weight: 600;
+}
+
+.levelHigh {
+  background: rgba(47, 125, 79, 0.1);
+  color: var(--success);
+}
+
+.levelMedium {
+  background: var(--gold-bg);
+  color: var(--gold-dark);
+}
+
+.levelLow {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--ink-soft);
+}
+
+.levelNone {
+  background: var(--bg);
+  color: var(--muted-2);
+}
+
+/* ── Numeric columns ── */
+
+.numeric .figure {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.numeric .subNote {
+  margin-top: 2px;
+}
+
+.updated {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}

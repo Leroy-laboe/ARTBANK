@@ -4,6 +4,7 @@ import { HomePage } from './pages/HomePage';
 import { MarketplacePage } from './pages/MarketplacePage';
 import { CreatorsPage } from './pages/CreatorsPage';
 import { ArtspacePage } from './pages/ArtspacePage';
+import { MyWorksPage } from './pages/MyWorksPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
             Today is built; the other four destinations and the account menu
             are placeholders until their own milestones land. */}
         <Route path="/artspace" element={<ArtspacePage />} />
-        <Route path="/artspace/works" element={<ComingSoonPage title="My Works" />} />
+        <Route path="/artspace/works" element={<MyWorksPage />} />
         <Route path="/artspace/works/new" element={<ComingSoonPage title="Add Artwork" />} />
         <Route path="/artspace/interest" element={<ComingSoonPage title="Interest" />} />
         <Route path="/artspace/opportunities" element={<ComingSoonPage title="Opportunities" />} />

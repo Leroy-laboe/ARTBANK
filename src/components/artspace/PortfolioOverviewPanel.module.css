@@ -1,0 +1,89 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 15.5px 16px 17px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.range {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.range select {
+  appearance: none;
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding-right: 2px;
+}
+
+.range select:focus-visible {
+  outline: 1px solid var(--gold);
+  border-radius: 4px;
+}
+
+.stats {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px 10px;
+}
+
+.value {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.3px;
+  line-height: 1.15;
+}
+
+.label {
+  margin-top: 3px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.link {
+  margin-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  transition: gap 0.15s ease;
+}
+
+.link:hover {
+  gap: 10px;
+}
+
+/* "USD 6,870" needs the full row; the two-per-row fallback keeps it readable
+   when the rail is stacked below the table on narrow screens. */
+@media (max-width: 1000px) {
+  .stats {
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  }
+}

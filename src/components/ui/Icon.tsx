@@ -65,7 +65,11 @@ export type IconName =
   | 'calendar'
   | 'download'
   | 'hourglass'
-  | 'bank';
+  | 'bank'
+  | 'more-vertical'
+  | 'arrow-down'
+  | 'circle-dashed'
+  | 'chevron-left';
 
 const paths: Record<IconName, React.ReactNode> = {
   search: (
@@ -468,6 +472,23 @@ const paths: Record<IconName, React.ReactNode> = {
       <line x1="3.5" y1="20" x2="20.5" y2="20" />
     </>
   ),
+  'more-vertical': (
+    <>
+      <circle cx="12" cy="5.2" r="1.1" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="18.8" r="1.1" fill="currentColor" stroke="none" />
+    </>
+  ),
+  'arrow-down': (
+    <>
+      <line x1="12" y1="4.5" x2="12" y2="19" />
+      <polyline points="6.5 13.5 12 19 17.5 13.5" />
+    </>
+  ),
+  'circle-dashed': (
+    <circle cx="12" cy="12" r="8.5" strokeDasharray="3.2 3" />
+  ),
+  'chevron-left': <polyline points="15 6 9 12 15 18" />,
 };
 
 export function Icon({

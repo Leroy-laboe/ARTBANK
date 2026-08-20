@@ -1,14 +1,14 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(248px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(212px, 1fr));
+  gap: 11px;
 }
 
 .card {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 13px;
-  padding: 14px 15px;
+  gap: 10px;
+  padding: 11px 11.5px;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-sm);
   background: var(--bg);
@@ -17,8 +17,8 @@
 .icon {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  width: 34px;
+  height: 34px;
   border-radius: var(--radius-sm);
   background: var(--gold-bg);
   color: var(--gold-dark);
@@ -29,27 +29,27 @@
 }
 
 .title {
-  font-size: 13.5px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--ink);
 }
 
 .detail {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--muted);
   margin-top: 2px;
 }
 
 .progressRow {
-  margin-top: 12px;
+  margin-top: 11px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
 }
 
 .track {
   flex: 1;
-  height: 5px;
+  height: 4.5px;
   border-radius: var(--radius-full);
   background: var(--border-soft);
   overflow: hidden;
@@ -64,7 +64,7 @@
 
 .percent {
   flex-shrink: 0;
-  font-size: 11.5px;
+  font-size: 10.5px;
   font-weight: 600;
   color: var(--muted);
 }

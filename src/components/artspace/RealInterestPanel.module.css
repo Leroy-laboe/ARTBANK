@@ -7,8 +7,8 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: 12px;
-  padding: 12px 0;
+  gap: 11px;
+  padding: 10px 0;
   border-bottom: 1px solid var(--border-soft);
 }
 
@@ -22,8 +22,8 @@
 }
 
 .avatar {
-  width: 38px;
-  height: 38px;
+  width: 31px;
+  height: 31px;
   border-radius: var(--radius-full);
   object-fit: cover;
 }
@@ -33,13 +33,13 @@
 }
 
 .name {
-  font-size: 13.5px;
+  font-size: 11.5px;
   font-weight: 600;
   color: var(--ink);
 }
 
 .detail {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--muted);
   margin-top: 2px;
   white-space: nowrap;
@@ -49,9 +49,9 @@
 
 .level {
   flex-shrink: 0;
-  padding: 4px 11px;
+  padding: 3.5px 10px;
   border-radius: var(--radius-full);
-  font-size: 11.5px;
+  font-size: 10.5px;
   font-weight: 600;
 }
 
@@ -72,8 +72,8 @@
 
 .time {
   flex-shrink: 0;
-  width: 52px;
+  width: 47px;
   text-align: right;
-  font-size: 11.5px;
+  font-size: 10.5px;
   color: var(--muted-2);
 }

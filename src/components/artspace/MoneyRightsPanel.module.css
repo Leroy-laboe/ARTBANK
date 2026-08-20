@@ -1,7 +1,7 @@
 .body {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 132px;
-  gap: 18px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 104px);
+  gap: 14.5px;
   align-items: end;
 }
 
@@ -12,11 +12,11 @@
 .earnings {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 11px;
 }
 
 .earningCard {
-  padding: 13px 14px;
+  padding: 11px 11.5px;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-sm);
   background: var(--bg);
@@ -26,11 +26,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 7px;
 }
 
 .earningLabel {
-  font-size: 11.5px;
+  font-size: 10.5px;
   color: var(--muted);
   min-width: 0;
   overflow: hidden;
@@ -44,43 +44,43 @@
 }
 
 .earningValue {
-  margin-top: 8px;
+  margin-top: 7px;
   font-family: var(--font-serif);
-  font-size: 21px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--ink);
   letter-spacing: -0.2px;
 }
 
 .earningNote {
-  margin-top: 3px;
-  font-size: 11.5px;
+  margin-top: 2.5px;
+  font-size: 10.5px;
   color: var(--muted-2);
 }
 
 .rights {
-  margin-top: 18px;
+  margin-top: 14.5px;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 11px;
 }
 
 .rightLabel {
-  font-size: 11.5px;
+  font-size: 10.5px;
   color: var(--muted);
 }
 
 .rightValue {
-  margin-top: 4px;
+  margin-top: 3.5px;
   font-family: var(--font-serif);
-  font-size: 21px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--ink);
 }
 
 .rightNote {
   margin-top: 2px;
-  font-size: 11.5px;
+  font-size: 10.5px;
   color: var(--muted-2);
 }
 
@@ -90,14 +90,4 @@
   object-fit: cover;
   border-radius: var(--radius-sm);
   background: var(--bg);
-}
-
-@media (max-width: 1300px) {
-  .image {
-    display: none;
-  }
-
-  .body {
-    grid-template-columns: 1fr;
-  }
 }

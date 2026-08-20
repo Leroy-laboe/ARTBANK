@@ -2,26 +2,26 @@
   background: var(--surface);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-md);
-  padding: 20px 22px 22px;
+  padding: 15.5px 16px 17px;
 }
 
 .title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
 }
 
 .body {
-  margin-top: 16px;
+  margin-top: 12.5px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12.5px;
 }
 
 .dial {
   position: relative;
   flex-shrink: 0;
-  width: 72px;
-  height: 72px;
+  width: 58px;
+  height: 58px;
   display: grid;
   place-items: center;
 }
@@ -49,7 +49,7 @@
 
 .score {
   font-family: var(--font-serif);
-  font-size: 17px;
+  font-size: 15.5px;
   font-weight: 600;
   color: var(--ink);
 }
@@ -59,28 +59,28 @@
 }
 
 .verdict {
-  font-size: 13.5px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--ink);
 }
 
 .note {
-  margin-top: 3px;
-  font-size: 12px;
+  margin-top: 2.5px;
+  font-size: 11px;
   color: var(--muted);
 }
 
 .link {
-  margin-top: 16px;
+  margin-top: 12.5px;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  font-size: 12.5px;
+  gap: 6.5px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--gold-dark);
   transition: gap 0.15s ease;
 }
 
 .link:hover {
-  gap: 11px;
+  gap: 10px;
 }

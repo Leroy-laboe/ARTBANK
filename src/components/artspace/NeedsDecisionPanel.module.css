@@ -1,15 +1,15 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(236px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+  gap: 11px;
 }
 
 .card {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 13px;
-  padding: 14px 15px;
+  gap: 10px;
+  padding: 11px 11.5px;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-sm);
   background: var(--bg);
@@ -24,8 +24,8 @@
 .icon {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  width: 34px;
+  height: 34px;
   border-radius: var(--radius-sm);
   background: var(--gold-bg);
   color: var(--gold-dark);
@@ -36,7 +36,7 @@
 }
 
 .title {
-  font-size: 13.5px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--ink);
   white-space: nowrap;
@@ -45,7 +45,7 @@
 }
 
 .context {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--muted);
   margin-top: 2px;
   white-space: nowrap;
@@ -54,9 +54,9 @@
 }
 
 .meta {
-  font-size: 11.5px;
+  font-size: 10.5px;
   color: var(--muted-2);
-  margin-top: 6px;
+  margin-top: 5.5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -65,12 +65,12 @@
 .action {
   flex-shrink: 0;
   align-self: center;
-  padding: 7px 15px;
+  padding: 5.5px 11.5px;
   border: 1px solid var(--gold);
   border-radius: var(--radius-full);
   background: transparent;
   color: var(--gold-dark);
-  font-size: 12.5px;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease;

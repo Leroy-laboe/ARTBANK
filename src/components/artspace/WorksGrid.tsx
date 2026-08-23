@@ -1,4 +1,5 @@
-import { Icon } from '../ui/Icon';
+import { RowMenu } from './RowMenu';
+import { buildWorkMenu, type WorkAction } from './workActions';
 import { type Work } from '../../data/artspaceWorks';
 import styles from './WorksGrid.module.css';
 
@@ -6,7 +7,13 @@ import styles from './WorksGrid.module.css';
  *  docs/pivot-checklist/09-my-works.md. Same private management data as the
  *  table row — no likes, no public popularity signals — with the card's
  *  View · Edit · Share · More actions. */
-export function WorksGrid({ works }: { works: Work[] }) {
+export function WorksGrid({
+  works,
+  onAction,
+}: {
+  works: Work[];
+  onAction: (work: Work, action: WorkAction) => void;
+}) {
   return (
     <div className={styles.grid}>
       {works.map((work) => (
@@ -53,18 +60,19 @@ export function WorksGrid({ works }: { works: Work[] }) {
             </dl>
 
             <div className={styles.actions}>
-              <button type="button" className={styles.action}>
+              <button type="button" className={styles.action} onClick={() => onAction(work, 'view')}>
                 View
               </button>
-              <button type="button" className={styles.action}>
+              <button type="button" className={styles.action} onClick={() => onAction(work, 'edit')}>
                 Edit
               </button>
-              <button type="button" className={styles.action}>
+              <button type="button" className={styles.action} onClick={() => onAction(work, 'share')}>
                 Share
               </button>
-              <button type="button" className={styles.more} aria-label={`More actions for ${work.title}`}>
-                <Icon name="more-vertical" size={15} />
-              </button>
+              <RowMenu
+                label={`More actions for ${work.title}`}
+                items={buildWorkMenu(work, onAction)}
+              />
             </div>
           </div>
         </article>

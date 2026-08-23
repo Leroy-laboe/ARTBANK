@@ -7,6 +7,7 @@
 // → Money and Rights → Professional Readiness.
 
 import type { IconName } from '../components/ui/Icon';
+import type { QuickAction } from '../components/artspace/QuickActionsPanel';
 
 const photo = (id: string, w: number, h: number) =>
   `https://images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format&q=80`;
@@ -265,8 +266,8 @@ export const professionalReadiness: {
 
 /* ── Right rail ── */
 
-export const quickActions: { id: string; icon: IconName; label: string }[] = [
-  { id: 'add-artwork', icon: 'plus', label: 'Add New Artwork' },
+export const quickActions: QuickAction[] = [
+  { id: 'add-artwork', icon: 'plus', label: 'Add New Artwork', to: '/artspace/works/new' },
   { id: 'upload-documents', icon: 'upload', label: 'Upload Documents' },
   { id: 'invite-collaborator', icon: 'users', label: 'Invite Collaborator' },
   { id: 'export-portfolio', icon: 'download', label: 'Export Portfolio (PDF)' },

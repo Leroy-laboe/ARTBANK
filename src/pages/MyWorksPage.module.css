@@ -25,6 +25,19 @@
   gap: 12px;
 }
 
+/* Transient confirmation after an action — copied a link, changed a status,
+   exported a file. */
+.notice {
+  margin-bottom: 12px;
+  padding: 9px 13px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
 .tableCard {
   background: var(--surface);
   border: 1px solid var(--border-soft);
@@ -130,6 +143,6 @@
   }
 
   .tableCard {
-    padding: 12px 12px 12px;
+    padding: 12px;
   }
 }

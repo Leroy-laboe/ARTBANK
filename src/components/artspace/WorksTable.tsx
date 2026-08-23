@@ -1,4 +1,6 @@
 import { Icon } from '../ui/Icon';
+import { RowMenu } from './RowMenu';
+import { buildWorkMenu, type WorkAction } from './workActions';
 import {
   type InterestLevel,
   type PassportState,
@@ -33,7 +35,7 @@ const interestClass: Record<InterestLevel, string> = {
 
 /** Passport rows carry their own follow-up action: a verified record is worth
  *  viewing, an unfinished one is worth completing. */
-function PassportCell({ state }: { state: PassportState }) {
+function PassportCell({ state, onOpen }: { state: PassportState; onOpen: () => void }) {
   if (state === 'Verified') {
     return (
       <div className={styles.stack}>
@@ -41,7 +43,7 @@ function PassportCell({ state }: { state: PassportState }) {
           <Icon name="check-circle" size={15} className={styles.verifiedIcon} />
           Verified
         </span>
-        <button type="button" className={styles.cellLink}>
+        <button type="button" className={styles.cellLink} onClick={onOpen}>
           View
         </button>
       </div>
@@ -54,7 +56,7 @@ function PassportCell({ state }: { state: PassportState }) {
         <Icon name="circle-dashed" size={15} className={styles.draftIcon} />
         {state}
       </span>
-      <button type="button" className={styles.cellLink}>
+      <button type="button" className={styles.cellLink} onClick={onOpen}>
         Continue
       </button>
     </div>
@@ -66,11 +68,13 @@ export function WorksTable({
   selected,
   onToggle,
   onToggleAll,
+  onAction,
 }: {
   works: Work[];
   selected: string[];
   onToggle: (id: string) => void;
   onToggleAll: () => void;
+  onAction: (work: Work, action: WorkAction) => void;
 }) {
   const allSelected = works.length > 0 && selected.length === works.length;
 
@@ -151,7 +155,7 @@ export function WorksTable({
               </td>
 
               <td>
-                <PassportCell state={work.passport} />
+                <PassportCell state={work.passport} onOpen={() => onAction(work, 'passport')} />
               </td>
 
               <td>
@@ -174,9 +178,10 @@ export function WorksTable({
               <td className={styles.updated}>{work.updated}</td>
 
               <td className={styles.menuCol}>
-                <button type="button" className={styles.menuBtn} aria-label={`More actions for ${work.title}`}>
-                  <Icon name="more-vertical" size={16} />
-                </button>
+                <RowMenu
+                  label={`More actions for ${work.title}`}
+                  items={buildWorkMenu(work, onAction)}
+                />
               </td>
             </tr>
           ))}

@@ -5,7 +5,7 @@
 // status, availability, passport/COA state, identified interest, opportunity
 // count and recorded earnings. No likes, no public popularity signals.
 
-import type { IconName } from '../components/ui/Icon';
+import type { QuickAction } from '../components/artspace/QuickActionsPanel';
 
 const photo = (id: string, w: number, h: number) =>
   `https://images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format&q=80`;
@@ -208,9 +208,11 @@ export const portfolioOverview: {
   ],
 };
 
-export const worksQuickActions: { id: string; icon: IconName; label: string }[] = [
-  { id: 'add-artwork', icon: 'plus', label: 'Add New Artwork' },
-  { id: 'upload-multiple', icon: 'upload', label: 'Upload Multiple Artworks' },
+/** `to` is what makes each row clickable. Actions with no destination yet
+ *  render disabled rather than looking live and doing nothing. */
+export const worksQuickActions: QuickAction[] = [
+  { id: 'add-artwork', icon: 'plus', label: 'Add New Artwork', to: '/artspace/works/new' },
+  { id: 'upload-multiple', icon: 'upload', label: 'Upload Multiple Artworks', to: '/artspace/works/new' },
   { id: 'manage-availability', icon: 'calendar', label: 'Manage Availability' },
   { id: 'manage-licences', icon: 'file-text', label: 'Manage Licences' },
   { id: 'export-portfolio', icon: 'download', label: 'Export Portfolio (PDF)' },

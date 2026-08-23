@@ -5,6 +5,9 @@ import { MarketplacePage } from './pages/MarketplacePage';
 import { CreatorsPage } from './pages/CreatorsPage';
 import { ArtspacePage } from './pages/ArtspacePage';
 import { MyWorksPage } from './pages/MyWorksPage';
+import { TermsPage } from './pages/TermsPage';
+import { PrivacyPage } from './pages/PrivacyPage';
+import { CookiePolicyPage } from './pages/CookiePolicyPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
 
 function App() {
@@ -27,9 +30,7 @@ function App() {
         <Route path="/archive" element={<ComingSoonPage title="ARTCHIVE" />} />
         <Route path="/articon" element={<ComingSoonPage title="ARTICON" />} />
         <Route path="/academy" element={<ComingSoonPage title="ARTCADEMY" />} />
-        {/* ArtSpace — the private area an artist lands on after signing in.
-            Today is built; the other four destinations and the account menu
-            are placeholders until their own milestones land. */}
+        {/* ArtSpace — the private area an artist lands on after signing in. */}
         <Route path="/artspace" element={<ArtspacePage />} />
         <Route path="/artspace/works" element={<MyWorksPage />} />
         <Route path="/artspace/works/new" element={<ComingSoonPage title="Add Artwork" />} />
@@ -41,6 +42,12 @@ function App() {
         <Route path="/artspace/privacy" element={<ComingSoonPage title="Privacy" />} />
         <Route path="/artspace/security" element={<ComingSoonPage title="Security" />} />
         <Route path="/artspace/help" element={<ComingSoonPage title="Help Center" />} />
+
+        {/* Legal — see docs/pivot-checklist/05-footer-and-legal.md, the
+            footer's biggest source of dead links before these existed. */}
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/cookies" element={<CookiePolicyPage />} />
 
         {/* One auth card, opened on the side the route names. */}
         <Route path="/login" element={<AuthPage mode="signin" />} />

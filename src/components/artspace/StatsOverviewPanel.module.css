@@ -45,18 +45,29 @@
 .stats {
   margin-top: 14px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px 10px;
+}
+
+.cols2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cols3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .value {
   margin: 0;
   font-family: var(--font-serif);
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 600;
   color: var(--ink);
   letter-spacing: -0.3px;
   line-height: 1.15;
+}
+
+.cols3 .value {
+  font-size: 19px;
 }
 
 .label {
@@ -80,10 +91,11 @@
   gap: 10px;
 }
 
-/* "USD 6,870" needs the full row; the two-per-row fallback keeps it readable
-   when the rail is stacked below the table on narrow screens. */
+/* Values like "USD 6,870" need a full row once the rail stacks below the
+   main column. */
 @media (max-width: 1000px) {
-  .stats {
+  .cols2,
+  .cols3 {
     grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   }
 }

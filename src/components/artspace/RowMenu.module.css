@@ -1,0 +1,84 @@
+.wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.trigger {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.trigger:hover,
+.trigger[aria-expanded='true'] {
+  background: var(--border-soft);
+  color: var(--ink);
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  z-index: 20;
+  min-width: 176px;
+  padding: 5px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 9px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.item:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.item svg {
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.destructive {
+  margin-top: 4px;
+  border-top: 1px solid var(--border-soft);
+  padding-top: 9px;
+  border-radius: 0 0 6px 6px;
+  color: var(--danger);
+}
+
+.destructive svg {
+  color: var(--danger);
+}
+
+.destructive:hover {
+  background: rgba(179, 69, 61, 0.08);
+  color: var(--danger);
+}

@@ -33,11 +33,22 @@ export function Panel({
   );
 }
 
-/** Quiet "View All" text link used in most panel headers. */
-export function PanelLink({ to, children = 'View All' }: { to: string; children?: ReactNode }) {
+/** Quiet "View All" text link used in most panel headers. Pass `arrow` where
+ *  the link names its destination ("View all enquiries →") rather than just
+ *  saying "View All". */
+export function PanelLink({
+  to,
+  children = 'View All',
+  arrow = false,
+}: {
+  to: string;
+  children?: ReactNode;
+  arrow?: boolean;
+}) {
   return (
-    <Link to={to} className={styles.panelLink}>
+    <Link to={to} className={[styles.panelLink, arrow && styles.panelLinkArrow].filter(Boolean).join(' ')}>
       {children}
+      {arrow && <Icon name="arrow-right" size={13} />}
     </Link>
   );
 }

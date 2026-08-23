@@ -1,11 +1,6 @@
 .tabs {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px;
-  background: var(--surface);
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-md);
   overflow-x: auto;
 }
 
@@ -14,10 +9,8 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 8px 13px;
   border: none;
   background: transparent;
-  border-radius: var(--radius-sm);
   font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 500;
@@ -28,21 +21,12 @@
 }
 
 .tab:hover {
-  background: var(--bg);
   color: var(--ink);
 }
 
-/* The active tab is marked by weight and an underline rather than a fill, so
-   it reads as a tab strip and not another row of buttons. */
 .tabActive {
   color: var(--ink);
   font-weight: 600;
-  box-shadow: inset 0 -2px 0 var(--dark);
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-}
-
-.tabActive:hover {
-  background: transparent;
 }
 
 .count {
@@ -63,4 +47,49 @@
   background: var(--gold-bg);
   border-color: transparent;
   color: var(--gold-dark);
+}
+
+/* ── Boxed: an enclosed strip that sits above a table ── */
+
+.boxed {
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+}
+
+.boxed .tab {
+  padding: 8px 13px;
+  border-radius: var(--radius-sm);
+}
+
+.boxed .tab:hover {
+  background: var(--bg);
+}
+
+.boxed .tabActive {
+  box-shadow: inset 0 -2px 0 var(--dark);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.boxed .tabActive:hover {
+  background: transparent;
+}
+
+/* ── Underline: flush tabs sharing the rule under the header row ── */
+
+.underline {
+  gap: 22px;
+}
+
+.underline .tab {
+  padding: 0 0 11px;
+  /* Sits the active rule on top of the parent row's border rather than above it. */
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+}
+
+.underline .tabActive {
+  border-bottom-color: var(--dark);
 }

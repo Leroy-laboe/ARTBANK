@@ -1,0 +1,83 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 15.5px 16px 17px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.headerIcon {
+  flex-shrink: 0;
+  color: var(--gold);
+}
+
+.list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  background: var(--gold-bg);
+  color: var(--gold-dark);
+}
+
+/* Bare glyph, no tile — used where the tips read as a checklist. */
+.iconPlain {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  color: var(--gold-dark);
+  margin-top: 1px;
+}
+
+.copy {
+  min-width: 0;
+}
+
+.tipTitle {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.detail {
+  margin-top: 2px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.link {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  transition: gap 0.15s ease;
+}
+
+.link:hover {
+  gap: 10px;
+}

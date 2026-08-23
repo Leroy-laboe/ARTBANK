@@ -44,6 +44,17 @@
   color: var(--gold-dark);
 }
 
+.panelLinkArrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap 0.15s ease, color 0.15s ease;
+}
+
+.panelLinkArrow:hover {
+  gap: 10px;
+}
+
 .panelButtonLink {
   flex-shrink: 0;
   font-size: 11px;

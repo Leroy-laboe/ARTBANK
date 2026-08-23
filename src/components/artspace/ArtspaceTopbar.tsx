@@ -1,5 +1,5 @@
 import { Icon } from '../ui/Icon';
-import { artspaceArtist } from '../../data/artspaceContent';
+import { useArtist } from '../../lib/useArtist';
 import styles from './ArtspaceTopbar.module.css';
 
 /** Search and account controls, shared by every ArtSpace screen.
@@ -14,7 +14,7 @@ export function ArtspaceTopbar({
   showGreeting?: boolean;
   searchPlaceholder?: string;
 }) {
-  const { greeting, firstName, statusLine, name, avatarUrl, unreadNotifications } = artspaceArtist;
+  const { greeting, firstName, statusLine, name, avatarUrl, unreadNotifications } = useArtist();
 
   return (
     <header className={[styles.topbar, !showGreeting && styles.topbarBare].filter(Boolean).join(' ')}>

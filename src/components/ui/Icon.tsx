@@ -69,7 +69,25 @@ export type IconName =
   | 'more-vertical'
   | 'arrow-down'
   | 'circle-dashed'
-  | 'chevron-left';
+  | 'chevron-left'
+  | 'user-plus'
+  | 'badge-check'
+  | 'x-circle'
+  | 'filter'
+  | 'paperclip'
+  | 'smile'
+  | 'check-double'
+  | 'inbox'
+  | 'send'
+  | 'archive'
+  | 'trash'
+  | 'folder'
+  | 'edit'
+  | 'info'
+  | 'map-pin'
+  | 'lightbulb'
+  | 'tag'
+  | 'check';
 
 const paths: Record<IconName, React.ReactNode> = {
   search: (
@@ -489,6 +507,111 @@ const paths: Record<IconName, React.ReactNode> = {
     <circle cx="12" cy="12" r="8.5" strokeDasharray="3.2 3" />
   ),
   'chevron-left': <polyline points="15 6 9 12 15 18" />,
+  'user-plus': (
+    <>
+      <circle cx="9.5" cy="8.2" r="3.7" />
+      <path d="M3 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6" />
+      <line x1="19" y1="6.5" x2="19" y2="12.5" />
+      <line x1="16" y1="9.5" x2="22" y2="9.5" />
+    </>
+  ),
+  /* Filled badge — the check is knocked out in white, so this one carries its
+     own second colour rather than being pure currentColor. */
+  'badge-check': (
+    <>
+      <circle cx="12" cy="12" r="9" fill="currentColor" stroke="none" />
+      <polyline points="8.2 12.2 10.7 14.7 15.8 9.4" stroke="#fff" strokeWidth="2.2" />
+    </>
+  ),
+  'x-circle': (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <line x1="9.2" y1="9.2" x2="14.8" y2="14.8" />
+      <line x1="14.8" y1="9.2" x2="9.2" y2="14.8" />
+    </>
+  ),
+  filter: (
+    <polygon points="3.5 5 20.5 5 14 12.6 14 19.5 10 17.3 10 12.6" />
+  ),
+  paperclip: (
+    <path d="M20 11.5 12.4 19a4.4 4.4 0 0 1-6.3-6.2l7.7-7.6a2.9 2.9 0 0 1 4.2 4.2l-7.7 7.6a1.5 1.5 0 0 1-2.1-2.1l7-7" />
+  ),
+  smile: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M8.6 14.2a4.3 4.3 0 0 0 6.8 0" />
+      <circle cx="9.4" cy="10" r="0.4" fill="currentColor" stroke="currentColor" strokeWidth="1.2" />
+      <circle cx="14.6" cy="10" r="0.4" fill="currentColor" stroke="currentColor" strokeWidth="1.2" />
+    </>
+  ),
+  /* Read receipt — two overlapping ticks. */
+  'check-double': (
+    <>
+      <polyline points="2.5 12.5 7 17 15 8" />
+      <polyline points="10.5 15.6 12 17 21.5 6.8" />
+    </>
+  ),
+  inbox: (
+    <>
+      <path d="M3.5 13.5 6 5.5h12l2.5 8v5a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1z" />
+      <path d="M3.5 13.5H8a4 4 0 0 0 8 0h4.5" />
+    </>
+  ),
+  send: (
+    <>
+      <polygon points="21 3.5 2.5 10.5 10 13.2 12.8 20.5" />
+      <line x1="21" y1="3.5" x2="10" y2="13.2" />
+    </>
+  ),
+  archive: (
+    <>
+      <rect x="3" y="4" width="18" height="4.5" rx="1" />
+      <path d="M4.8 8.5v10a1 1 0 0 0 1 1h12.4a1 1 0 0 0 1-1v-10" />
+      <line x1="10" y1="12.5" x2="14" y2="12.5" />
+    </>
+  ),
+  trash: (
+    <>
+      <line x1="3.8" y1="6.5" x2="20.2" y2="6.5" />
+      <path d="M6.5 6.5v12.2a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V6.5" />
+      <path d="M9.5 6.5V4.8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v1.7" />
+    </>
+  ),
+  folder: (
+    <path d="M3.5 6.5a1 1 0 0 1 1-1h4.3l2 2.4h7.7a1 1 0 0 1 1 1v9.6a1 1 0 0 1-1 1h-14a1 1 0 0 1-1-1z" />
+  ),
+  edit: (
+    <>
+      <path d="M18.5 13.5v5a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1v-11a1 1 0 0 1 1-1h5" />
+      <path d="M16.2 4.3a1.7 1.7 0 0 1 2.4 2.4l-6.7 6.7-3.2.8.8-3.2z" />
+    </>
+  ),
+  info: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <line x1="12" y1="11" x2="12" y2="16.3" />
+      <circle cx="12" cy="7.9" r="0.4" fill="currentColor" stroke="currentColor" strokeWidth="1.3" />
+    </>
+  ),
+  'map-pin': (
+    <>
+      <path d="M12 21.5s6.5-6 6.5-11a6.5 6.5 0 0 0-13 0c0 5 6.5 11 6.5 11z" />
+      <circle cx="12" cy="10.3" r="2.4" />
+    </>
+  ),
+  lightbulb: (
+    <>
+      <path d="M9 17.2a6 6 0 1 1 6 0v1.3a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z" />
+      <line x1="10" y1="21.5" x2="14" y2="21.5" />
+    </>
+  ),
+  tag: (
+    <>
+      <path d="M11.4 3.5H20a.5.5 0 0 1 .5.5v8.6a1 1 0 0 1-.3.7l-7.6 7.6a1 1 0 0 1-1.4 0l-7.9-7.9a1 1 0 0 1 0-1.4l7.4-7.8a1 1 0 0 1 .7-.3z" />
+      <circle cx="16.4" cy="7.6" r="1.1" />
+    </>
+  ),
+  check: <polyline points="4.5 12.5 9.5 17.5 19.5 6.5" />,
 };
 
 export function Icon({

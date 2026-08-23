@@ -1,6 +1,5 @@
 import { Icon } from '../ui/Icon';
-import { worksPaging } from '../../data/artspaceWorks';
-import styles from './WorksPagination.module.css';
+import styles from './ArtspacePagination.module.css';
 
 /** Builds the page list with an ellipsis once there are more pages than fit,
  *  e.g. 1 2 3 … 7. Always keeps the first pages and the last one reachable. */
@@ -16,22 +15,32 @@ function pageList(page: number, totalPages: number): (number | 'gap')[] {
   return pages;
 }
 
-export function WorksPagination({
+/** Result count plus pager, shared by the paginated ArtSpace lists. `unit` is
+ *  the plural noun for the summary line, e.g. "artworks". */
+export function ArtspacePagination({
+  from,
+  to,
+  total,
+  unit,
   page,
+  totalPages,
   onPageChange,
 }: {
+  from: number;
+  to: number;
+  total: number;
+  unit: string;
   page: number;
+  totalPages: number;
   onPageChange: (page: number) => void;
 }) {
-  const { from, to, total, totalPages } = worksPaging;
-
   return (
     <div className={styles.footer}>
       <p className={styles.summary}>
-        Showing {from} to {to} of {total} artworks
+        Showing {from} to {to} of {total} {unit}
       </p>
 
-      <nav className={styles.pager} aria-label="Artwork pages">
+      <nav className={styles.pager} aria-label={`${unit} pages`}>
         <button
           type="button"
           className={styles.step}

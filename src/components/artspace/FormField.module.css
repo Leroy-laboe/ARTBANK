@@ -1,0 +1,85 @@
+.field {
+  min-width: 0;
+}
+
+.label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.required {
+  margin-left: 3px;
+  color: var(--danger);
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  color: var(--ink);
+  transition: border-color 0.15s ease;
+}
+
+.input:hover,
+.select:hover,
+.textarea:hover {
+  border-color: var(--muted-2);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.textarea {
+  resize: vertical;
+  line-height: 1.6;
+  min-height: 62px;
+}
+
+.selectWrap {
+  position: relative;
+  display: block;
+}
+
+.select {
+  appearance: none;
+  padding-right: 30px;
+  cursor: pointer;
+}
+
+.caret {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--muted);
+}
+
+.hint {
+  margin-top: 5px;
+  font-size: 10px;
+  color: var(--muted-2);
+}
+
+.error {
+  margin-top: 5px;
+  font-size: 10px;
+  color: var(--danger);
+}
+
+.invalid,
+.invalid:hover {
+  border-color: var(--danger);
+}

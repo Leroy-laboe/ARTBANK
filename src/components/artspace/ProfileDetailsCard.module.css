@@ -1,0 +1,217 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 17px 18px 19px;
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+}
+
+.subtitle {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.viewBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.viewBtn:hover {
+  border-color: var(--ink);
+  background: var(--bg);
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 178px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+/* ── Photo ── */
+
+.photoCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-right: 20px;
+  border-right: 1px solid var(--border-soft);
+  min-height: 100%;
+}
+
+.photoLabel {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.photoWrap {
+  position: relative;
+  margin-top: 12px;
+  align-self: center;
+}
+
+.photo {
+  width: 108px;
+  height: 108px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  background: var(--bg);
+}
+
+/* Camera badge sits on the lower-right of the circle, as on the design. */
+.photoBtn {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--surface);
+  border-radius: var(--radius-full);
+  background: var(--dark);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.photoBtn:hover {
+  background: #000;
+}
+
+.photoHint {
+  margin-top: 12px;
+  align-self: center;
+  text-align: center;
+  font-size: 10px;
+  color: var(--muted-2);
+}
+
+.uploadBtn {
+  margin-top: 12px;
+  align-self: center;
+  padding: 8px 15px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.uploadBtn:hover {
+  border-color: var(--ink);
+  background: var(--bg);
+}
+
+/* ── Form ── */
+
+.formCol {
+  min-width: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px 16px;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.error {
+  font-size: 11px;
+  color: var(--danger);
+  text-align: right;
+}
+
+.saved {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--success);
+}
+
+.save:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.save {
+  padding: 9px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--forest);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.save:hover {
+  background: var(--forest-2);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 900px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .photoCol {
+    padding-right: 0;
+    padding-bottom: 18px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-soft);
+    align-items: center;
+  }
+}
+
+@media (max-width: 650px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

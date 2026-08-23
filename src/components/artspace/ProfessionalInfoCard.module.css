@@ -1,0 +1,156 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 17px 18px 19px;
+}
+
+.head {
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+}
+
+.subtitle {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px 16px;
+  align-items: start;
+}
+
+.field {
+  min-width: 0;
+}
+
+.label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+/* ── Medium chips ── */
+
+.chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-height: 36px;
+  padding: 5px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  transition: border-color 0.15s ease;
+}
+
+.chips:focus-within {
+  border-color: var(--gold);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 7px 4px 9px;
+  border-radius: var(--radius-sm);
+  background: var(--gold-bg);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  white-space: nowrap;
+}
+
+.chipRemove {
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-full);
+  color: var(--gold-dark);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.chipRemove:hover {
+  background: rgba(143, 106, 58, 0.18);
+}
+
+.addWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.add {
+  appearance: none;
+  padding: 4px 22px 4px 6px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.add:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.add:focus-visible {
+  outline: 1px solid var(--gold);
+  border-radius: 4px;
+}
+
+.caret {
+  position: absolute;
+  right: 4px;
+  pointer-events: none;
+  color: var(--muted);
+}
+
+/* ── Actions ── */
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save {
+  padding: 9px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--forest);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.save:hover {
+  background: var(--forest-2);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 650px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

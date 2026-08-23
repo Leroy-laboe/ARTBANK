@@ -1,0 +1,114 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 15.5px 16px 13px;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.subtitle {
+  margin-top: 3px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.icon {
+  color: var(--ink-soft);
+}
+
+.label {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  min-width: 0;
+}
+
+/* ── Visibility level ── */
+
+.selectWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.select {
+  appearance: none;
+  padding: 2px 20px 2px 4px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.select:focus-visible {
+  outline: 1px solid var(--gold);
+  border-radius: 4px;
+}
+
+.caret {
+  position: absolute;
+  right: 2px;
+  pointer-events: none;
+  color: var(--muted);
+}
+
+/* ── Switch ── */
+
+.switch {
+  flex-shrink: 0;
+  position: relative;
+  width: 34px;
+  height: 19px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--border);
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+}
+
+.switchOn {
+  background: var(--gold);
+}
+
+.knob {
+  position: absolute;
+  top: 2.5px;
+  left: 2.5px;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(21, 17, 12, 0.25);
+  transition: transform 0.18s ease;
+}
+
+.switchOn .knob {
+  transform: translateX(15px);
+}

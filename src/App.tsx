@@ -5,6 +5,10 @@ import { MarketplacePage } from './pages/MarketplacePage';
 import { CreatorsPage } from './pages/CreatorsPage';
 import { ArtspacePage } from './pages/ArtspacePage';
 import { MyWorksPage } from './pages/MyWorksPage';
+import { InterestPage } from './pages/InterestPage';
+import { OpportunitiesPage } from './pages/OpportunitiesPage';
+import { MessagesPage } from './pages/MessagesPage';
+import { PublicProfilePage } from './pages/PublicProfilePage';
 import { TermsPage } from './pages/TermsPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { CookiePolicyPage } from './pages/CookiePolicyPage';
@@ -34,10 +38,10 @@ function App() {
         <Route path="/artspace" element={<ArtspacePage />} />
         <Route path="/artspace/works" element={<MyWorksPage />} />
         <Route path="/artspace/works/new" element={<ComingSoonPage title="Add Artwork" />} />
-        <Route path="/artspace/interest" element={<ComingSoonPage title="Interest" />} />
-        <Route path="/artspace/opportunities" element={<ComingSoonPage title="Opportunities" />} />
-        <Route path="/artspace/messages" element={<ComingSoonPage title="Messages" />} />
-        <Route path="/artspace/profile" element={<ComingSoonPage title="Public Profile" />} />
+        <Route path="/artspace/interest" element={<InterestPage />} />
+        <Route path="/artspace/opportunities" element={<OpportunitiesPage />} />
+        <Route path="/artspace/messages" element={<MessagesPage />} />
+        <Route path="/artspace/profile" element={<PublicProfilePage />} />
         <Route path="/artspace/billing" element={<ComingSoonPage title="Billing" />} />
         <Route path="/artspace/privacy" element={<ComingSoonPage title="Privacy" />} />
         <Route path="/artspace/security" element={<ComingSoonPage title="Security" />} />

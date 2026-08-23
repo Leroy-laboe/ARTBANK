@@ -1,0 +1,302 @@
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1.9fr) minmax(128px, 0.9fr) 178px;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-soft);
+  align-items: start;
+}
+
+.row:first-child {
+  padding-top: 0;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+/* ── Media ── */
+
+.media {
+  position: relative;
+}
+
+.image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.featured {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--gold);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+
+/* ── Copy ── */
+
+.copy {
+  min-width: 0;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+}
+
+.organizer {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.verified {
+  flex-shrink: 0;
+  color: var(--gold);
+}
+
+.location {
+  margin-top: 1px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.summary {
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.tags {
+  margin-top: 11px;
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.tagLabel {
+  font-size: 10px;
+  color: var(--muted-2);
+}
+
+.tagValue {
+  margin: 2px 0 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+/* ── Terms ── */
+
+.terms {
+  min-width: 0;
+}
+
+.termLabel {
+  font-size: 10px;
+  color: var(--muted-2);
+}
+
+.budgetLabel {
+  margin-top: 14px;
+}
+
+.deadline {
+  margin-top: 3px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.daysLeft {
+  margin-top: 1px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.budget {
+  margin-top: 3px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.fee {
+  margin-top: 2px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+/* ── Stage and actions ── */
+
+.side {
+  min-width: 0;
+}
+
+.stage {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.stageName {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.stageNote {
+  margin-top: 4px;
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
+.toneNeutral {
+  background: var(--bg);
+  border: 1px solid var(--border-soft);
+  color: var(--ink-soft);
+}
+
+.toneNeutral .stageNote {
+  color: var(--muted);
+}
+
+.toneInfo {
+  background: var(--gold-bg);
+  color: var(--gold-dark);
+}
+
+.toneInfo .stageNote {
+  color: var(--gold-dark);
+  opacity: 0.85;
+}
+
+.toneGold {
+  background: var(--gold-bg);
+  color: var(--gold-dark);
+}
+
+.toneGold .stageNote {
+  color: var(--gold-dark);
+  opacity: 0.85;
+}
+
+.toneSuccess {
+  background: rgba(47, 125, 79, 0.1);
+  color: var(--success);
+}
+
+.toneSuccess .stageNote {
+  color: var(--success);
+  opacity: 0.85;
+}
+
+.toneMuted {
+  background: var(--bg);
+  border: 1px solid var(--border-soft);
+  color: var(--muted);
+}
+
+.toneMuted .stageNote {
+  color: var(--muted-2);
+}
+
+.actions {
+  margin-top: 11px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.details {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.details:hover {
+  background: var(--gold);
+  color: #fff;
+}
+
+.menu {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.menu:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.empty {
+  padding: 26px 0;
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+/* Four columns need the room; below this the terms and status move under the
+   copy rather than shrinking past legibility. */
+@media (max-width: 1100px) {
+  .row {
+    grid-template-columns: 132px minmax(0, 1fr);
+  }
+
+  .terms,
+  .side {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 650px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .terms,
+  .side {
+    grid-column: 1;
+  }
+}

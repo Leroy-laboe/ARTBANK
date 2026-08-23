@@ -11,6 +11,7 @@ import { InterestPage } from './pages/InterestPage';
 import { OpportunitiesPage } from './pages/OpportunitiesPage';
 import { MessagesPage } from './pages/MessagesPage';
 import { PublicProfilePage } from './pages/PublicProfilePage';
+import { AddArtworkPage } from './pages/AddArtworkPage';
 import { TermsPage } from './pages/TermsPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { CookiePolicyPage } from './pages/CookiePolicyPage';
@@ -43,7 +44,9 @@ function App() {
         <Route element={<RequireAuth><Outlet /></RequireAuth>}>
           <Route path="/artspace" element={<ArtspacePage />} />
           <Route path="/artspace/works" element={<MyWorksPage />} />
-          <Route path="/artspace/works/new" element={<ComingSoonPage title="Add Artwork" />} />
+          <Route path="/artspace/works/new" element={<AddArtworkPage />} />
+          {/* Artwork record / Passport — docs/pivot-checklist/11-artwork-record-passport.md */}
+          <Route path="/artspace/works/:id" element={<ComingSoonPage title="Artwork Record" />} />
           <Route path="/artspace/interest" element={<InterestPage />} />
           <Route path="/artspace/opportunities" element={<OpportunitiesPage />} />
           <Route path="/artspace/messages" element={<MessagesPage />} />

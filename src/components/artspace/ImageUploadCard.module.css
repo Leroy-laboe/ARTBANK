@@ -1,0 +1,327 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 17px 18px 19px;
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+}
+
+.subtitle {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.tipsLink {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Dropzone ── */
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 30px 20px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  text-align: center;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.dropzoneActive {
+  border-color: var(--gold);
+  background: var(--gold-bg);
+}
+
+.dropzoneFull {
+  opacity: 0.7;
+}
+
+.dropIcon {
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.dropTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.dropOr {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 2px 0 8px;
+}
+
+.fileInput {
+  display: none;
+}
+
+.chooseBtn {
+  padding: 10px 22px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--forest);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.chooseBtn:hover:not(:disabled) {
+  background: var(--forest-2);
+}
+
+.chooseBtn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.dropHint {
+  margin-top: 12px;
+  font-size: 10.5px;
+  color: var(--muted-2);
+}
+
+.error {
+  margin-top: 12px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(179, 69, 61, 0.08);
+  border: 1px solid rgba(179, 69, 61, 0.25);
+  font-size: 11px;
+  color: var(--danger);
+}
+
+/* ── Uploaded list ── */
+
+.listHead {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-soft);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.listTitle {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.listNote {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.reorderBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.reorderBtn:hover {
+  border-color: var(--ink);
+  background: var(--bg);
+}
+
+.reorderBtnActive {
+  border-color: var(--forest);
+  background: var(--gold-bg);
+  color: var(--gold-dark);
+}
+
+/* ── Tiles ── */
+
+.grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(158px, 1fr));
+  gap: 14px;
+  list-style: none;
+  padding: 0;
+}
+
+.tile {
+  min-width: 0;
+}
+
+.thumbWrap {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg);
+  border: 1px solid var(--border-soft);
+}
+
+.thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.index {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background: var(--forest);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.menu {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.role {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  padding: 3px 9px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.roleCover {
+  background: var(--forest);
+  color: #fff;
+}
+
+/* Move controls only appear while reordering, so tiles stay clean otherwise. */
+.moveBar {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.moveBar button {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.moveBar button:hover:not(:disabled) {
+  background: var(--bg);
+}
+
+.moveBar button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.fileName {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fileSize {
+  margin-top: 2px;
+  font-size: 10.5px;
+  color: var(--muted-2);
+}
+
+/* ── Recommendations ── */
+
+.recommendations {
+  margin-top: 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 13px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(47, 125, 79, 0.07);
+  border: 1px solid rgba(47, 125, 79, 0.16);
+}
+
+.recIcon {
+  flex-shrink: 0;
+  color: var(--success);
+  margin-top: 1px;
+}
+
+.recommendations strong {
+  display: block;
+  font-size: 11.5px;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+.recommendations span {
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 650px) {
+  .head,
+  .listHead {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

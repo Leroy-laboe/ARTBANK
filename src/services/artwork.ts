@@ -147,3 +147,144 @@ export async function setArtworkStatus(id: string, status: 'draft' | 'published'
     .eq('id', id);
   if (error) throw error;
 }
+
+/* ── Creating a record ───────────────────────────────────────────────── */
+
+/** A URL-safe id derived from the title, with a short suffix so two works
+ *  called "Study" don't collide. Doubles as the smart-link slug. */
+function slugFor(title: string): string {
+  const base = title
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 48);
+  const suffix = Math.random().toString(36).slice(2, 7);
+  return `${base || 'artwork'}-${suffix}`;
+}
+
+export type NewArtwork = {
+  title: string;
+  year: number | null;
+  medium: string;
+  dimensions: string;
+  height: number | null;
+  width: number | null;
+  depth: number | null;
+  dimensionUnit: 'cm' | 'in';
+  category: string;
+  tags: string[];
+  materials: string[];
+  description: string;
+  collection: string | null;
+  artworkType: string;
+  editionSize: number | null;
+  coaPromised: boolean;
+  creationLocation: string | null;
+  dateCreated: string | null;
+  isSigned: boolean;
+  ownershipStatement: string;
+};
+
+/** Saves step 1 as a draft.
+ *
+ *  Always `status: 'draft'` and `visibility: 'private'` — the record isn't
+ *  finished until the artist has been through images, availability, documents
+ *  and review, and nothing publishes itself. */
+export async function createArtworkDraft(profile: Profile, input: NewArtwork): Promise<string> {
+  if (!supabase) {
+    throw new Error('No database is configured, so this record cannot be saved yet.');
+  }
+
+  const id = slugFor(input.title);
+
+  const { error } = await supabase.from('artworks').insert({
+    id,
+    title: input.title,
+    artist: profile.displayName ?? profile.email,
+    artist_display_name: profile.displayName ?? profile.email,
+    artist_id: profile.id,
+    uploaded_by: profile.id,
+    year: input.year,
+    medium: input.medium,
+    dimensions: input.dimensions,
+    height: input.height,
+    width: input.width,
+    depth: input.depth,
+    dimension_unit: input.dimensionUnit,
+    category: input.category,
+    tags: input.tags,
+    materials: input.materials,
+    description: input.description,
+    collection: input.collection,
+    artwork_type: input.artworkType,
+    edition_size: input.editionSize,
+    coa_promised: input.coaPromised,
+    coa_status: 'not_requested',
+    creation_location: input.creationLocation,
+    date_created: input.dateCreated,
+    is_signed: input.isSigned,
+    ownership_statement: input.ownershipStatement,
+    status: 'draft',
+    visibility: 'private',
+    availability: 'unavailable',
+    smart_link_slug: id,
+  });
+
+  if (error) throw error;
+
+  // First entry in the provenance log. Best-effort: a failed history write
+  // shouldn't lose the artwork the artist just spent time on.
+  await supabase
+    .from('artwork_history_events')
+    .insert({ artwork_id: id, event_type: 'upload', description: 'Record created.' });
+
+  return id;
+}
+
+export type PricingUpdate = {
+  priceType: string;
+  currency: string;
+  price: number | null;
+  priceMax: number | null;
+  compareAtPrice: number | null;
+  availability: string;
+  readyToShipIn: string | null;
+  shipsFrom: string | null;
+  shippingRegions: string[];
+  allowInternationalShipping: boolean;
+  includesCoa: boolean;
+  isPhysical: boolean;
+  allowLayaway: boolean;
+};
+
+/** Saves step 3. Requires migration 0019, which re-adds the price columns
+ *  0011 had dropped — see that file's header for the reasoning. */
+export async function updateArtworkPricing(id: string, input: PricingUpdate): Promise<void> {
+  if (!supabase) throw new Error('No database is configured, so this cannot be saved yet.');
+
+  const { error } = await supabase
+    .from('artworks')
+    .update({
+      price_type: input.priceType,
+      currency: input.currency,
+      // "Upon request" clears any figure rather than leaving a stale one
+      // behind that nothing displays.
+      price: input.priceType === 'on_request' ? null : input.price,
+      price_max: input.priceType === 'range' ? input.priceMax : null,
+      compare_at_price: input.priceType === 'on_request' ? null : input.compareAtPrice,
+      availability: input.availability,
+      ready_to_ship_in: input.readyToShipIn,
+      ships_from: input.shipsFrom,
+      shipping_regions: input.shippingRegions,
+      allow_international_shipping: input.allowInternationalShipping,
+      includes_coa: input.includesCoa,
+      is_physical: input.isPhysical,
+      allow_layaway: input.allowLayaway,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id);
+
+  if (error) throw error;
+}

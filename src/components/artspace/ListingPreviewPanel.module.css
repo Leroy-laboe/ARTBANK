@@ -1,0 +1,65 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 15.5px 16px 17px;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.image,
+.placeholder {
+  margin-top: 12px;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.image {
+  object-fit: cover;
+  display: block;
+}
+
+.placeholder {
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--border);
+  font-size: 10.5px;
+  color: var(--muted-2);
+}
+
+.name {
+  margin-top: 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.meta {
+  margin-top: 3px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.price {
+  margin-top: 9px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The crossed-out figure is quieter than the real price, never louder. */
+.compare {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted-2);
+  text-decoration: line-through;
+}

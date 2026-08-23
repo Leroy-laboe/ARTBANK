@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { Icon } from '../ui/Icon';
-import { artspaceArtist } from '../../data/artspaceContent';
+import { useArtist } from '../../lib/useArtist';
 import styles from './ArtistIdentityCard.module.css';
 
 /** Who the artist is on Artbank, including the JO1N ID they quote when a
  *  gallery or buyer asks to verify them — hence the copy button. */
 export function ArtistIdentityCard() {
+  const artist = useArtist();
   const [copied, setCopied] = useState(false);
 
   const copyJoinId = () => {
-    void navigator.clipboard?.writeText(artspaceArtist.joinId).then(() => {
+    void navigator.clipboard?.writeText(artist.joinId).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1600);
     });
@@ -17,16 +18,16 @@ export function ArtistIdentityCard() {
 
   return (
     <section className={styles.card}>
-      <img src={artspaceArtist.avatarUrl} alt="" className={styles.avatar} />
-      <h2 className={styles.name}>{artspaceArtist.name}</h2>
-      <p className={styles.discipline}>{artspaceArtist.discipline}</p>
-      <p className={styles.location}>{artspaceArtist.location}</p>
+      <img src={artist.avatarUrl} alt="" className={styles.avatar} />
+      <h2 className={styles.name}>{artist.name}</h2>
+      <p className={styles.discipline}>{artist.discipline}</p>
+      <p className={styles.location}>{artist.location}</p>
 
       <div className={styles.meta}>
         <div>
           <p className={styles.metaLabel}>JO1N ID</p>
           <p className={styles.metaValue}>
-            {artspaceArtist.joinId}
+            {artist.joinId}
             <button
               type="button"
               className={styles.copyBtn}
@@ -39,7 +40,7 @@ export function ArtistIdentityCard() {
         </div>
         <div className={styles.metaRight}>
           <p className={styles.metaLabel}>Member Since</p>
-          <p className={styles.metaValue}>{artspaceArtist.memberSince}</p>
+          <p className={styles.metaValue}>{artist.memberSince}</p>
         </div>
       </div>
     </section>

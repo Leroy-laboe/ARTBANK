@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { SessionProvider } from './lib/session';
+import { RequireAuth } from './components/auth/RequireAuth';
 import { AuthPage } from './pages/AuthPage';
 import { HomePage } from './pages/HomePage';
 import { MarketplacePage } from './pages/MarketplacePage';
@@ -17,6 +19,7 @@ import { ComingSoonPage } from './pages/ComingSoonPage';
 function App() {
   return (
     <BrowserRouter>
+      <SessionProvider>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/artists" element={<CreatorsPage />} />
@@ -34,18 +37,22 @@ function App() {
         <Route path="/archive" element={<ComingSoonPage title="ARTCHIVE" />} />
         <Route path="/articon" element={<ComingSoonPage title="ARTICON" />} />
         <Route path="/academy" element={<ComingSoonPage title="ARTCADEMY" />} />
-        {/* ArtSpace — the private area an artist lands on after signing in. */}
-        <Route path="/artspace" element={<ArtspacePage />} />
-        <Route path="/artspace/works" element={<MyWorksPage />} />
-        <Route path="/artspace/works/new" element={<ComingSoonPage title="Add Artwork" />} />
-        <Route path="/artspace/interest" element={<InterestPage />} />
-        <Route path="/artspace/opportunities" element={<OpportunitiesPage />} />
-        <Route path="/artspace/messages" element={<MessagesPage />} />
-        <Route path="/artspace/profile" element={<PublicProfilePage />} />
-        <Route path="/artspace/billing" element={<ComingSoonPage title="Billing" />} />
-        <Route path="/artspace/privacy" element={<ComingSoonPage title="Privacy" />} />
-        <Route path="/artspace/security" element={<ComingSoonPage title="Security" />} />
-        <Route path="/artspace/help" element={<ComingSoonPage title="Help Center" />} />
+        {/* ArtSpace — the private area an artist lands on after signing in.
+            One guard covers the whole tree: anyone without a session is sent
+            to /login and returned here once they're in. */}
+        <Route element={<RequireAuth><Outlet /></RequireAuth>}>
+          <Route path="/artspace" element={<ArtspacePage />} />
+          <Route path="/artspace/works" element={<MyWorksPage />} />
+          <Route path="/artspace/works/new" element={<ComingSoonPage title="Add Artwork" />} />
+          <Route path="/artspace/interest" element={<InterestPage />} />
+          <Route path="/artspace/opportunities" element={<OpportunitiesPage />} />
+          <Route path="/artspace/messages" element={<MessagesPage />} />
+          <Route path="/artspace/profile" element={<PublicProfilePage />} />
+          <Route path="/artspace/billing" element={<ComingSoonPage title="Billing" />} />
+          <Route path="/artspace/privacy" element={<ComingSoonPage title="Privacy" />} />
+          <Route path="/artspace/security" element={<ComingSoonPage title="Security" />} />
+          <Route path="/artspace/help" element={<ComingSoonPage title="Help Center" />} />
+        </Route>
 
         {/* Legal — see docs/pivot-checklist/05-footer-and-legal.md, the
             footer's biggest source of dead links before these existed. */}
@@ -60,6 +67,7 @@ function App() {
         <Route path="/apply" element={<Navigate to="/register" replace />} />
         <Route path="*" element={<ComingSoonPage title="This page" />} />
       </Routes>
+      </SessionProvider>
     </BrowserRouter>
   );
 }

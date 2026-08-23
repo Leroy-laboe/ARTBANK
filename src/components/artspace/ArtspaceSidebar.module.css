@@ -13,17 +13,15 @@
 }
 
 .brand {
-  font-family: var(--font-serif);
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: var(--ink);
+  display: block;
   padding: 0 7px;
-  line-height: 1;
+  margin-bottom: 4px;
 }
 
-.brand span {
-  color: var(--gold);
+.brandLogo {
+  display: block;
+  height: 22px;
+  width: auto;
 }
 
 .nav {
@@ -61,6 +59,18 @@
 .navItem:hover {
   background: var(--bg);
   color: var(--ink);
+}
+
+/* Only the Log Out row is a <button> (needs to run signOut() before
+   navigating) — every other row is a plain <Link>. These undo the browser's
+   default button chrome so it matches the links exactly. */
+.logOutBtn {
+  width: 100%;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
 .navItemActive {

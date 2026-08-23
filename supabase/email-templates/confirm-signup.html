@@ -17,15 +17,18 @@
   "{{ .Email }}" — they only interpolate in an actual sent email, so that's
   expected and not a bug.
 
-  The hero photo is now the full background of the top section (not a side
+  The hero photo is the full background of the top section (not a side
   column), mirroring the site's own Hero.tsx: a full-bleed photo with a
   left-to-right cream fade (same gradient shape as Hero.module.css's
-  .bgScrim) so dark text stays legible over it, wordmark included. The
-  section is sized to the photo's actual 520:640 ratio (738px tall at 600px
-  wide) rather than cropped into a short landscape band — cropping it would
-  have cut off the top of the frame or the floor. Text sits over the top ~35%
-  of the photo, which is the plain wall/spotlight area with the least detail,
-  not over the frame or the gold paint swirl.
+  .bgScrim) so dark text stays legible over it, wordmark included. The image
+  is a square crop (600×600) of a larger reference composite — it bakes in
+  BOTH the hero artwork (gold paint swirl + framed painting) AND the 5-tile
+  filmstrip in one file, cropped from the original composite's top square and
+  dropping its blank bottom margin. That's why there's no separate filmstrip
+  <table> below anymore — it's baked into this image, not a second element.
+  Text sits over the plain cream area in the image's top-left, which is why
+  it stays clear of both the frame (right side) and the filmstrip (bottom
+  strip).
 
   Still not a single flat image overall, though — Gmail/Outlook hide images
   until the recipient clicks "display images", so an image-only email risks
@@ -47,10 +50,13 @@
   major client (Gmail, Apple Mail, Outlook.com/mobile, Yahoo) renders the
   real gradient correctly.
 
-  The hero photo (email-hero-520x640.jpg) is custom-generated art, not stock —
-  hosted in the "email-assets" public Supabase Storage bucket, since inbox
-  images need a stable public HTTPS URL. It's also kept at
-  src/assets/images/email-hero-520x640.jpg as the source copy.
+  The hero image (email-hero-filmstrip-600x600.jpg) is custom-generated art,
+  not stock — hosted in the "email-assets" public Supabase Storage bucket,
+  since inbox images need a stable public HTTPS URL. It's also kept at
+  src/assets/images/email-hero-filmstrip-600x600.jpg as the source copy, and
+  src/assets/images/email updated image.png as the uncropped original.
+  (An earlier version used a different, taller hero photo —
+  email-hero-520x640.jpg, still in that folder but no longer referenced here.)
 
   One intentional departure from the supplied reference composition: no
   social icon row in the footer — the live site's footer had its social
@@ -66,11 +72,11 @@
         <tr>
           <td style="padding:0;">
             <!--[if gte mso 9]>
-            <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:600px;height:738px;">
-            <v:fill type="frame" src="https://uccqvrotcisbwvcceisv.supabase.co/storage/v1/object/public/email-assets/email-hero-520x640.jpg" color="#f4ecda" />
+            <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:600px;height:600px;">
+            <v:fill type="frame" src="https://uccqvrotcisbwvcceisv.supabase.co/storage/v1/object/public/email-assets/email-hero-filmstrip-600x600.jpg" color="#f4ecda" />
             <v:textbox inset="0,0,0,0">
             <![endif]-->
-            <div style="background-image:url('https://uccqvrotcisbwvcceisv.supabase.co/storage/v1/object/public/email-assets/email-hero-520x640.jpg');background-repeat:no-repeat;background-position:top center;background-size:cover;background-color:#f4ecda;height:738px;width:100%;">
+            <div style="background-image:url('https://uccqvrotcisbwvcceisv.supabase.co/storage/v1/object/public/email-assets/email-hero-filmstrip-600x600.jpg');background-repeat:no-repeat;background-position:top center;background-size:cover;background-color:#f4ecda;height:600px;width:100%;">
               <!--[if mso]>
               <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;"><tr><td style="width:600px;">
               <![endif]-->
@@ -124,21 +130,6 @@
             </v:textbox>
             </v:rect>
             <![endif]-->
-          </td>
-        </tr>
-
-        <!-- Filmstrip -->
-        <tr>
-          <td style="padding:0;">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-              <tr>
-                <td style="width:20%;"><img src="https://images.unsplash.com/photo-1620121692029-d088224ddc74?w=200&h=200&fit=crop&auto=format&q=80" width="100%" alt="" style="display:block;width:100%;height:auto;"></td>
-                <td style="width:20%;"><img src="https://images.unsplash.com/photo-1577720580479-7d839d829c73?w=200&h=200&fit=crop&auto=format&q=80" width="100%" alt="" style="display:block;width:100%;height:auto;"></td>
-                <td style="width:20%;"><img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=200&h=200&fit=crop&auto=format&q=80" width="100%" alt="" style="display:block;width:100%;height:auto;"></td>
-                <td style="width:20%;"><img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=200&h=200&fit=crop&auto=format&q=80" width="100%" alt="" style="display:block;width:100%;height:auto;"></td>
-                <td style="width:20%;"><img src="https://images.unsplash.com/photo-1580136579312-94651dfd596d?w=200&h=200&fit=crop&auto=format&q=80" width="100%" alt="" style="display:block;width:100%;height:auto;"></td>
-              </tr>
-            </table>
           </td>
         </tr>
 

@@ -17,6 +17,13 @@
   padding-bottom: 12px;
 }
 
+.emptyState {
+  text-align: center;
+  padding: 48px 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
 .gridList {
   display: flex;
   flex-direction: column;

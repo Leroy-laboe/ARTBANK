@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { Icon } from '../ui/Icon';
 import type { CreatorProfile } from '../../types/creator';
 import styles from './CreatorCard.module.css';
 
 export function CreatorCard({ creator }: { creator: CreatorProfile }) {
+  const [saved, setSaved] = useState(false);
+
   return (
     <article className={styles.card}>
       <div className={styles.imageWrap}>
@@ -14,21 +17,15 @@ export function CreatorCard({ creator }: { creator: CreatorProfile }) {
           decoding="async"
         />
 
-        {creator.verified && (
-          <span className={styles.verisBadge}>
-            <Icon name="shield-check" size={11} />
-            VERIS
-          </span>
-        )}
-
-        <button type="button" className={styles.likeBtn} aria-label="Save creator">
-          <Icon name="heart" size={14} />
+        <button
+          type="button"
+          className={[styles.likeBtn, saved && styles.likeBtnSaved].filter(Boolean).join(' ')}
+          aria-label={saved ? 'Remove from saved' : 'Save creator'}
+          aria-pressed={saved}
+          onClick={() => setSaved((v) => !v)}
+        >
+          <Icon name={saved ? 'heart-filled' : 'heart'} size={14} />
         </button>
-
-        <div className={styles.mriBadge}>
-          <span className={styles.mriLabel}>MRI</span>
-          <span className={styles.mriValue}>{creator.mriScore}</span>
-        </div>
       </div>
 
       <div className={styles.body}>

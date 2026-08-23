@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
 import styles from './CreatorsCta.module.css';
 
@@ -18,10 +19,10 @@ export function CreatorsCta() {
           </div>
         </div>
 
-        <button type="button" className={styles.applyBtn}>
+        <Link to="/register" className={styles.applyBtn}>
           Apply as Creator
           <Icon name="arrow-right" size={15} />
-        </button>
+        </Link>
 
         <img
           className={styles.decorImage}

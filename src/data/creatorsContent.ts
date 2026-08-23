@@ -23,35 +23,7 @@ export const careerStages: { key: 'emerging' | 'established' | 'master'; label: 
   { key: 'master', label: 'Master', count: 1144 },
 ];
 
-export const creatorSortOptions = ['MRI Score', 'Most Followed', 'Newest', 'Most Artworks', 'Alphabetical'];
-
-export const topCreators = [
-  {
-    name: 'Wei Lun Khor',
-    mriScore: 96.8,
-    imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&auto=format&q=80',
-  },
-  {
-    name: 'Nadia Safiya',
-    mriScore: 94.2,
-    imageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&auto=format&q=80',
-  },
-  {
-    name: 'Ahmad Zaki',
-    mriScore: 92.1,
-    imageUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&auto=format&q=80',
-  },
-  {
-    name: 'Yasmin Ahmad',
-    mriScore: 91.1,
-    imageUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&auto=format&q=80',
-  },
-  {
-    name: 'Chong Fei',
-    mriScore: 90.3,
-    imageUrl: 'https://images.unsplash.com/photo-1531891437562-4301cf35b7e4?w=100&h=100&fit=crop&auto=format&q=80',
-  },
-];
+export const creatorSortOptions = ['Most Followed', 'Newest', 'Most Artworks', 'Alphabetical'];
 
 export const trendingStyles = [
   { label: 'Contemporary', count: 2540 },
@@ -61,15 +33,6 @@ export const trendingStyles = [
   { label: 'Minimalism', count: 980 },
   { label: 'Pop Art', count: 870 },
 ];
-
-export const featuredCreator = {
-  name: 'Wei Lun Khor',
-  title: 'Contemporary Painter',
-  mriScore: 96.8,
-  rankLabel: 'Top 1%',
-  rankSubLabel: 'Top Creator',
-  imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=760&fit=crop&auto=format&q=80',
-};
 
 export const creatorsCollage = [
   { imageUrl: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=400&h=520&fit=crop&auto=format&q=80' },

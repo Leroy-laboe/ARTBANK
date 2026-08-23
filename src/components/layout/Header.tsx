@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
 import { navLinks } from '../../data/homeContent';
+import logo from '../../assets/images/artbank-logo-dark.png';
 import styles from './Header.module.css';
 
 export function Header() {
@@ -8,9 +9,7 @@ export function Header() {
     <header className={styles.header}>
       <div className={`container ${styles.bar}`}>
         <Link to="/" className={styles.brand}>
-          <span className={styles.wordmark}>
-            ART<span>BANK</span>
-          </span>
+          <img src={logo} alt="ARTBANK" className={styles.wordmark} />
         </Link>
 
         <nav className={styles.nav} aria-label="Primary">

@@ -23,15 +23,9 @@
 }
 
 .wordmark {
-  font-family: var(--font-serif);
-  font-size: 21px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: var(--ink);
-}
-
-.wordmark span {
-  color: var(--gold);
+  display: block;
+  height: 26px;
+  width: auto;
 }
 
 .nav {

@@ -1,5 +1,7 @@
+import { Link } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
 import { footerLinks } from '../../data/homeContent';
+import logo from '../../assets/images/artbank-logo-light.png';
 import styles from './Footer.module.css';
 
 export function Footer() {
@@ -8,9 +10,7 @@ export function Footer() {
       <div className="container">
         <div className={styles.top}>
           <div className={styles.brandCol}>
-            <span className={styles.wordmark}>
-              ART<span>BANK</span>
-            </span>
+            <img src={logo} alt="ARTBANK" className={styles.wordmark} />
             <p>
               The global platform for creators, collectors and institutions to build, value and
               preserve creative legacy.
@@ -66,11 +66,11 @@ export function Footer() {
         </div>
 
         <div className={styles.bottom}>
-          <span>© 2025 ARTBANK. All rights reserved.</span>
+          <span>© 2026 ARTBANK. All rights reserved.</span>
           <div className={styles.bottomLinks}>
-            <a href="#">Terms of Service</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Cookie Policy</a>
+            <Link to="/terms">Terms of Service</Link>
+            <Link to="/privacy">Privacy Policy</Link>
+            <Link to="/cookies">Cookie Policy</Link>
           </div>
         </div>
       </div>

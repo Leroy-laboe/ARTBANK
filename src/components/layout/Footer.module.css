@@ -13,14 +13,9 @@
 }
 
 .brandCol .wordmark {
-  font-family: var(--font-serif);
-  font-size: 22px;
-  font-weight: 700;
-  color: #fff;
-}
-
-.brandCol .wordmark span {
-  color: var(--gold-light);
+  display: block;
+  height: 27px;
+  width: auto;
 }
 
 .brandCol p {

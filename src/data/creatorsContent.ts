@@ -1,12 +1,5 @@
 import type { IconName } from '../components/ui/Icon';
 
-export const creatorsStats: { icon: IconName; value: string; label: string }[] = [
-  { icon: 'user', value: '12,540+', label: 'Creators' },
-  { icon: 'users', value: '150+', label: 'Countries' },
-  { icon: 'palette', value: '250+', label: 'Art Styles' },
-  { icon: 'globe', value: 'RM 2.4B+', label: 'Total Artwork Value' },
-];
-
 export const creatorCategories: { icon: IconName; label: string; count: number }[] = [
   { icon: 'brush', label: 'Painters', count: 4258 },
   { icon: 'cube', label: 'Sculptors', count: 1102 },

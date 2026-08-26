@@ -1,0 +1,100 @@
+/* Same shape as CreatorCard.module.css, flag included, so a real card doesn't
+   look like a different feature sitting next to the mock grid — but as a
+   <Link>, not an <article>, since this one actually goes somewhere. */
+
+.card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  text-decoration: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  border-color: var(--gold);
+}
+
+.imageWrap {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--border-soft);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Matches CreatorCard's mock cards — the artist's real photo is uploaded
+     in color, this filter is purely the directory's editorial look. */
+  filter: grayscale(1) contrast(1.05);
+}
+
+.imageEmpty {
+  width: 100%;
+  height: 100%;
+  background: var(--border-soft);
+}
+
+.body {
+  padding: 13px 14px 15px;
+}
+
+.name {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+.title {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-bottom: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.footerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.country {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* text-overflow: ellipsis on .country itself doesn't reliably apply when a
+   flex container's overflow mixes an <img> sibling with a bare text node —
+   most browsers just hard-clip with no "…". Isolating the text in its own
+   block is what makes the ellipsis actually render. */
+.countryText {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.flag {
+  width: 15px;
+  height: 11px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.followers {
+  flex-shrink: 0;
+}

@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { CreatorFilterSidebar } from '../components/creators/CreatorFilterSidebar';
 import { CreatorsIntro } from '../components/creators/CreatorsIntro';
 import { CreatorsToolbar } from '../components/creators/CreatorsToolbar';
 import { CreatorCard } from '../components/creators/CreatorCard';
+import { RealArtistCard } from '../components/creators/RealArtistCard';
 import { CreatorsPagination } from '../components/creators/CreatorsPagination';
 import { TrendingStylesPanel } from '../components/creators/TrendingStylesPanel';
 import { CreatorsCta } from '../components/creators/CreatorsCta';
 import { creatorsListings } from '../data/creatorsListings';
+import { listPublicArtists, type PublicArtistSummary } from '../services/publicProfile';
 import { defaultCreatorFilters, type CreatorFilters } from '../types/creator';
 import styles from './CreatorsPage.module.css';
 
@@ -28,6 +30,21 @@ function applyFilters(filters: CreatorFilters) {
 export function CreatorsPage() {
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const [filters, setFilters] = useState<CreatorFilters>(defaultCreatorFilters);
+  const [realArtists, setRealArtists] = useState<PublicArtistSummary[]>([]);
+
+  // Real accounts that made their ArtSpace profile public. Separate from the
+  // filtered/paginated mock grid below: there are too few of these yet for
+  // that machinery to mean anything, and their fields (mediums, free-text
+  // location) don't map onto the mock filters (category, career stage, style).
+  useEffect(() => {
+    let active = true;
+    listPublicArtists().then((rows) => {
+      if (active) setRealArtists(rows);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const filteredCreators = applyFilters(filters);
 
@@ -44,6 +61,20 @@ export function CreatorsPage() {
 
           <div className={styles.mainCol}>
             <CreatorsIntro />
+
+            {realArtists.length > 0 && (
+              <section className={styles.realSection}>
+                <h2 className={styles.realHeading}>Artists on ArtBank</h2>
+                <p className={styles.realNote}>Real accounts — click through to their public profile and work.</p>
+                <div className={styles.grid}>
+                  {realArtists.map((artist) => (
+                    <RealArtistCard artist={artist} key={artist.handle} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {realArtists.length > 0 && <h2 className={styles.discoverHeading}>Discover Creators</h2>}
 
             <CreatorsToolbar total={filteredCreators.length} view={view} onViewChange={setView} />
 

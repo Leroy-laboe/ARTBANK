@@ -22,7 +22,7 @@ export function CreatorFilterSidebar({
   // keyboard), even though the mock dataset currently only has Malaysian
   // creators — selecting anything else will correctly show "no results"
   // rather than silently doing nothing.
-  const countries = ['All Countries', ...allCountries];
+  const countries = ['All Countries', ...allCountries.map((c) => c.name)];
   const styleOptions = ['All Styles', 'Contemporary', 'Abstract', 'Realism', 'Minimalism', 'Surrealism'];
 
   function toggleCategory(label: string) {

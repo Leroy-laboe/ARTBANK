@@ -5,6 +5,7 @@ import { AuthPage } from './pages/AuthPage';
 import { HomePage } from './pages/HomePage';
 import { MarketplacePage } from './pages/MarketplacePage';
 import { CreatorsPage } from './pages/CreatorsPage';
+import { PublicArtistPage } from './pages/PublicArtistPage';
 import { ArtspacePage } from './pages/ArtspacePage';
 import { MyWorksPage } from './pages/MyWorksPage';
 import { InterestPage } from './pages/InterestPage';
@@ -25,6 +26,9 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/artists" element={<CreatorsPage />} />
+        {/* An artist's public profile, reached by the handle they chose in
+            ArtSpace → Public Profile → Profile Settings. */}
+        <Route path="/artists/:handle" element={<PublicArtistPage />} />
         {/* "Creators" was renamed to "Artists" in the nav; keep the old path
             working for anything still pointing at it. */}
         <Route path="/creators" element={<Navigate to="/artists" replace />} />

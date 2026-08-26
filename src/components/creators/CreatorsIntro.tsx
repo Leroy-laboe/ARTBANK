@@ -1,5 +1,5 @@
 import { Icon } from '../ui/Icon';
-import { creatorsStats, creatorsCollage } from '../../data/creatorsContent';
+import { creatorsCollage } from '../../data/creatorsContent';
 import styles from './CreatorsIntro.module.css';
 
 export function CreatorsIntro() {
@@ -22,10 +22,7 @@ export function CreatorsIntro() {
             <span className={styles.badgeIcon}>
               <Icon name="check-circle" size={13} />
             </span>
-            <div>
-              <div className={styles.badgeValue}>1M+</div>
-              <div className={styles.badgeLabel}>Verified Creators</div>
-            </div>
+            <div className={styles.badgeLabel}>Verified Creators</div>
           </div>
         </div>
       </div>
@@ -41,18 +38,6 @@ export function CreatorsIntro() {
           <Icon name="sliders" size={15} />
           Advanced Search
         </button>
-      </div>
-
-      <div className={styles.stats}>
-        {creatorsStats.map((stat) => (
-          <div className={styles.stat} key={stat.label}>
-            <Icon name={stat.icon} size={18} />
-            <div>
-              <div className={styles.statValue}>{stat.value}</div>
-              <div className={styles.statLabel}>{stat.label}</div>
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );

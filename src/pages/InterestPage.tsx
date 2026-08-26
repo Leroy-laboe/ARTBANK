@@ -13,6 +13,8 @@ import { Icon } from '../components/ui/Icon';
 import { interestOverview, interestTabs, interestTips } from '../data/artspaceInterest';
 import { useSession } from '../lib/sessionContext';
 import { loadInterest, type InterestResult } from '../services/interest';
+import { exportInterestCsv } from '../lib/exportCsv';
+import { followers } from '../data/artspaceInterest';
 import styles from './InterestPage.module.css';
 
 /** Interest — the interest ledger. Everyone named on this screen is an
@@ -23,6 +25,7 @@ export function InterestPage() {
   const { profile } = useSession();
   const [data, setData] = useState<InterestResult | null>(null);
   const [tab, setTab] = useState('all');
+  const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -33,6 +36,20 @@ export function InterestPage() {
       active = false;
     };
   }, [profile]);
+
+  function handleExport() {
+    const enquiries = tab === 'following' ? [] : (data?.enquiries ?? []);
+    const people = tab === 'enquiries' ? [] : followers;
+    const viewers = tab === 'all' ? (data?.viewers ?? []) : [];
+
+    const count = exportInterestCsv({ enquiries, followers: people, viewers });
+    setNotice(
+      count === 0
+        ? 'Nothing to export in this view.'
+        : `Exported ${count} identified ${count === 1 ? 'entry' : 'entries'}. Anonymous visitors are never included.`,
+    );
+    setTimeout(() => setNotice(null), 4000);
+  }
 
   const showEnquiries = tab === 'all' || tab === 'enquiries' || tab === 'shortlisted';
   const showFollowers = tab === 'all' || tab === 'following';
@@ -59,11 +76,17 @@ export function InterestPage() {
             label="Filter interest"
           />
 
-          <button type="button" className={styles.export}>
+          <button type="button" className={styles.export} onClick={handleExport}>
             <Icon name="upload" size={15} />
             Export
           </button>
         </div>
+
+        {notice && (
+          <p className={styles.notice} role="status">
+            {notice}
+          </p>
+        )}
 
         <div className={styles.layout}>
           <div className={styles.mainCol}>

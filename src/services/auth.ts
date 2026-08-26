@@ -1,6 +1,7 @@
 import type { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabaseClient';
 import type { Profile, UserRole } from '../types/user';
+import { fetchProfileRow } from './profile';
 
 /** Interim path while JO1N ID (id.jo1n.com) isn't live — Supabase's own
  *  email/password auth, wired directly from the browser. Does not touch the
@@ -71,30 +72,7 @@ export async function getMyProfile(): Promise<Profile | null> {
   const { data: sessionData } = await client.auth.getSession();
   if (!sessionData.session) return null;
 
-  const { data, error } = await client
-    .from('users')
-    .select(
-      'id, auth_user_id, jo1n_identity_id, email, display_name, avatar_url, role, status, country, organization, collecting_interests, is_minor, created_at',
-    )
-    .eq('auth_user_id', sessionData.session.user.id)
-    .maybeSingle();
-
-  if (error) throw error;
-  if (!data) return null;
-
-  return {
-    id: data.id,
-    authUserId: data.auth_user_id,
-    jo1nIdentityId: data.jo1n_identity_id,
-    email: data.email,
-    displayName: data.display_name,
-    avatarUrl: data.avatar_url,
-    role: data.role,
-    status: data.status,
-    country: data.country,
-    organization: data.organization,
-    collectingInterests: data.collecting_interests,
-    isMinor: data.is_minor,
-    createdAt: data.created_at,
-  };
+  // One mapper, shared with the public profile reader, and it retries with the
+  // pre-0021 columns if that migration hasn't been applied yet.
+  return fetchProfileRow('auth_user_id', sessionData.session.user.id);
 }

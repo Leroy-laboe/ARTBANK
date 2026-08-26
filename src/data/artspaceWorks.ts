@@ -23,6 +23,10 @@ export type PassportState = 'Verified' | 'Draft' | 'In Review';
 
 export type InterestLevel = 'High' | 'Medium' | 'Low' | 'None';
 
+/** Who may see the record. Separate from status, which is how finished it is —
+ *  a published record can still be private. See migration 0017. */
+export type WorkVisibility = 'public' | 'unlisted' | 'private';
+
 export type Work = {
   id: string;
   title: string;
@@ -34,6 +38,7 @@ export type Work = {
   availability: WorkAvailability;
   /** Qualifier shown under the availability label, e.g. "(Gallery)". */
   availabilityNote?: string;
+  visibility: WorkVisibility;
   passport: PassportState;
   /** Identified viewers — not views, not likes. See 12-interest-ledger.md. */
   interestCount: number;
@@ -42,7 +47,11 @@ export type Work = {
   /** Recorded earnings only. null renders as an em dash, never a projection. */
   earnings: number | null;
   earningsNote: string;
+  /** Display string, e.g. "May 8, 2025". */
   updated: string;
+  /** The same moment as an ISO timestamp. Sorting needs something ordered;
+   *  `updated` is formatted for reading and doesn't sort. */
+  updatedAt: string;
 };
 
 export const works: Work[] = [
@@ -55,6 +64,7 @@ export const works: Work[] = [
     imageUrl: photo('photo-1541701494587-cb58502866ab', 120, 120),
     status: 'Published',
     availability: 'Available',
+    visibility: 'public',
     passport: 'Verified',
     interestCount: 12,
     interestLevel: 'High',
@@ -62,6 +72,7 @@ export const works: Work[] = [
     earnings: 2450,
     earningsNote: 'From 2 txns',
     updated: 'May 8, 2025',
+    updatedAt: '2025-05-08T12:00:00.000Z',
   },
   {
     id: 'fragments-of-quiet-2',
@@ -73,6 +84,7 @@ export const works: Work[] = [
     status: 'Published',
     availability: 'On View',
     availabilityNote: '(Gallery)',
+    visibility: 'public',
     passport: 'Verified',
     interestCount: 8,
     interestLevel: 'High',
@@ -80,6 +92,7 @@ export const works: Work[] = [
     earnings: 1200,
     earningsNote: 'From 1 txn',
     updated: 'May 6, 2025',
+    updatedAt: '2025-05-06T12:00:00.000Z',
   },
   {
     id: 'echoes',
@@ -90,6 +103,7 @@ export const works: Work[] = [
     imageUrl: photo('photo-1519608487953-e999c86e7455', 120, 120),
     status: 'Published',
     availability: 'Available',
+    visibility: 'public',
     passport: 'Verified',
     interestCount: 6,
     interestLevel: 'Medium',
@@ -97,6 +111,7 @@ export const works: Work[] = [
     earnings: 850,
     earningsNote: 'From 1 txn',
     updated: 'May 5, 2025',
+    updatedAt: '2025-05-05T12:00:00.000Z',
   },
   {
     id: 'golden-silence',
@@ -107,6 +122,7 @@ export const works: Work[] = [
     imageUrl: photo('photo-1549887534-1541e9326642', 120, 120),
     status: 'Published',
     availability: 'Available',
+    visibility: 'public',
     passport: 'Verified',
     interestCount: 10,
     interestLevel: 'High',
@@ -114,6 +130,7 @@ export const works: Work[] = [
     earnings: 1750,
     earningsNote: 'From 2 txns',
     updated: 'Apr 28, 2025',
+    updatedAt: '2025-04-28T12:00:00.000Z',
   },
   {
     id: 'unfolding-light',
@@ -124,6 +141,7 @@ export const works: Work[] = [
     imageUrl: photo('photo-1513519245088-0e12902e5a38', 120, 120),
     status: 'In Progress',
     availability: 'Unavailable',
+    visibility: 'private',
     passport: 'Draft',
     interestCount: 2,
     interestLevel: 'Low',
@@ -131,6 +149,7 @@ export const works: Work[] = [
     earnings: null,
     earningsNote: 'No earnings',
     updated: 'Apr 27, 2025',
+    updatedAt: '2025-04-27T12:00:00.000Z',
   },
   {
     id: 'stillness-within',
@@ -141,6 +160,7 @@ export const works: Work[] = [
     imageUrl: photo('photo-1577720580479-7d839d829c73', 120, 120),
     status: 'Published',
     availability: 'Available',
+    visibility: 'public',
     passport: 'Verified',
     interestCount: 5,
     interestLevel: 'Medium',
@@ -148,6 +168,7 @@ export const works: Work[] = [
     earnings: 620,
     earningsNote: 'From 1 txn',
     updated: 'Apr 20, 2025',
+    updatedAt: '2025-04-20T12:00:00.000Z',
   },
   {
     id: 'monochrome-study-1',
@@ -158,6 +179,7 @@ export const works: Work[] = [
     imageUrl: photo('photo-1580136579312-94651dfd596d', 120, 120),
     status: 'Archived',
     availability: 'Unavailable',
+    visibility: 'private',
     passport: 'Verified',
     interestCount: 0,
     interestLevel: 'None',
@@ -165,31 +187,17 @@ export const works: Work[] = [
     earnings: 0,
     earningsNote: 'No earnings',
     updated: 'Mar 15, 2025',
+    updatedAt: '2025-03-15T12:00:00.000Z',
   },
 ];
 
-/* ── Filter tabs ── */
-
-export type WorksTab = { id: string; label: string; count?: number };
-
-export const worksTabs: WorksTab[] = [
-  { id: 'all', label: 'All Works' },
-  { id: 'published', label: 'Published', count: 24 },
-  { id: 'on-view', label: 'On View', count: 8 },
-  { id: 'in-progress', label: 'In Progress', count: 5 },
-  { id: 'unavailable', label: 'Unavailable', count: 3 },
-  { id: 'archived', label: 'Archived', count: 7 },
-];
-
-/** The table is paginated server-side in a real build; these describe the
- *  slice the mock rows above stand for. */
-export const worksPaging = {
-  from: 1,
-  to: 7,
-  total: 47,
-  page: 1,
-  totalPages: 7,
-};
+/* ── Filter tabs ──────────────────────────────────────────────────────────
+ * The tab strip itself lives in components/artspace/worksFilters.ts, because
+ * a tab is a shortcut into the filter state rather than content. The fixed
+ * counts that used to sit here (24, 8, 5, 3, 7) and the `worksPaging` totals
+ * are gone: both were invented numbers that contradicted the rows on screen.
+ * Counts are computed from the loaded rows now.
+ */
 
 /* ── Right rail ── */
 

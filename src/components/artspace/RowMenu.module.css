@@ -27,7 +27,10 @@
   top: calc(100% + 5px);
   right: 0;
   z-index: 20;
-  min-width: 176px;
+  min-width: 186px;
+  max-height: min(420px, 70vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 5px;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -81,4 +84,27 @@
 .destructive:hover {
   background: rgba(179, 69, 61, 0.08);
   color: var(--danger);
+}
+
+/* Section label. Not focusable — it groups the options below it. */
+.heading {
+  margin: 6px 9px 3px;
+  font-size: 9.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted-2);
+}
+
+.heading:first-child {
+  margin-top: 2px;
+}
+
+.itemChecked {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.itemChecked svg {
+  color: var(--forest);
 }

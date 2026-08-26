@@ -146,3 +146,142 @@
     padding: 12px;
   }
 }
+
+/* ── Print / Save as PDF ──
+   "Export Portfolio (PDF)" calls window.print(). Without this the output is a
+   photograph of a dashboard: sidebar, search box, filter chips and all. Strip
+   the app chrome so what comes out is a portfolio document. */
+/* ── Empty state ── */
+
+.emptyState {
+  padding: 44px 20px 46px;
+  text-align: center;
+}
+
+.emptyIcon {
+  color: var(--muted-2);
+}
+
+.emptyTitle {
+  margin-top: 10px;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.emptyBody {
+  margin: 6px auto 0;
+  max-width: 54ch;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.emptyBtn {
+  margin-top: 15px;
+  padding: 9px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.emptyBtn:hover {
+  border-color: var(--ink);
+  background: var(--bg);
+}
+
+/* ── Selection bar ──────────────────────────────────────────────────────
+   Appears only when rows are selected, so the table isn't carrying a
+   permanently empty toolbar. */
+.bulkBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 9px 13px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--forest);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.bulkCount {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
+.bulkCount strong {
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.bulkActions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.bulkActions button {
+  padding: 7px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.bulkActions button:hover {
+  border-color: var(--ink);
+  background: var(--bg);
+}
+
+.bulkClear {
+  border-color: transparent !important;
+  color: var(--muted) !important;
+}
+
+@media print {
+  .shell {
+    display: block;
+    background: #fff;
+  }
+
+  .body {
+    padding: 0;
+  }
+
+  /* Navigation, filters, the rail and anything interactive have no meaning on
+     paper. :global reaches the shell components, which own their own classes. */
+  .shell :global(aside),
+  .shell :global(header),
+  .rightCol,
+  .bulkBar,
+  .notice {
+    display: none !important;
+  }
+
+  .tableCard {
+    border: none;
+    padding: 0;
+  }
+
+  /* Keep an artwork and its details on one page rather than splitting a card
+     across the fold. */
+  .tableCard :global(article),
+  .tableCard :global(tr) {
+    break-inside: avoid;
+  }
+}

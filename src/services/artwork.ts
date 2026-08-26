@@ -6,6 +6,7 @@ import {
   type Work,
   type WorkAvailability,
   type WorkStatus,
+  type WorkVisibility,
 } from '../data/artspaceWorks';
 import type { Profile } from '../types/user';
 
@@ -25,6 +26,7 @@ type ArtworkRow = {
   status: string;
   availability: string;
   availability_note: string | null;
+  visibility: string;
   coa_status: string;
   image_url: string | null;
   updated_at: string | null;
@@ -39,7 +41,7 @@ type ArtworkRow = {
 
 const SELECT = `
   id, title, year, medium, dimensions, status, availability, availability_note,
-  coa_status, image_url, updated_at, created_at,
+  visibility, coa_status, image_url, updated_at, created_at,
   artwork_images(url, is_primary),
   interest_entries(id, is_identified),
   artwork_deals(amount),
@@ -102,6 +104,7 @@ function fromRow(row: ArtworkRow): Work {
     status: statusLabel[row.status] ?? 'Draft',
     availability: availabilityLabel[row.availability] ?? 'Unavailable',
     availabilityNote: row.availability_note ?? undefined,
+    visibility: (row.visibility as Work['visibility']) ?? 'private',
     passport: passportLabel[row.coa_status] ?? 'Draft',
     interestCount,
     interestLevel: bandFor(interestCount),
@@ -118,6 +121,7 @@ function fromRow(row: ArtworkRow): Work {
       day: 'numeric',
       year: 'numeric',
     }),
+    updatedAt: row.updated_at ?? row.created_at,
   };
 }
 
@@ -282,6 +286,167 @@ export async function updateArtworkPricing(id: string, input: PricingUpdate): Pr
       includes_coa: input.includesCoa,
       is_physical: input.isPhysical,
       allow_layaway: input.allowLayaway,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id);
+
+  if (error) throw error;
+}
+
+export type PublishInput = {
+  visibility: 'public' | 'private' | 'unlisted';
+  permittedUses: string[];
+  rightsNote: string | null;
+  /** false saves the record as a draft with its rights and visibility set. */
+  publish: boolean;
+};
+
+/** Saves step 5 and, if asked, publishes.
+ *
+ *  Publishing is always an explicit act: `publish` comes from the button the
+ *  artist pressed, never inferred from the record looking complete. Requires
+ *  migration 0020. */
+export async function publishArtwork(id: string, input: PublishInput): Promise<void> {
+  if (!supabase) throw new Error('No database is configured, so this cannot be saved yet.');
+
+  const now = new Date().toISOString();
+
+  const { error } = await supabase
+    .from('artworks')
+    .update({
+      permitted_uses: input.permittedUses,
+      rights_note: input.rightsNote,
+      visibility: input.visibility,
+      status: input.publish ? 'published' : 'draft',
+      published_at: input.publish ? now : null,
+      updated_at: now,
+    })
+    .eq('id', id);
+
+  if (error) throw error;
+
+  if (input.publish) {
+    // Best-effort, same as the creation event: a failed log entry shouldn't
+    // undo a publish the artist just confirmed.
+    await supabase.from('artwork_history_events').insert({
+      artwork_id: id,
+      event_type: 'publish',
+      description: `Record published with ${input.visibility} visibility.`,
+    });
+  }
+}
+
+/* ── Managing an existing record ─────────────────────────────────────────── */
+
+/** UI availability → the column's value. `licensing_available` is deliberately
+ *  absent: it maps to "Available" on the way in, so offering it here would let
+ *  a round trip silently rewrite it. It stays settable from Add Artwork. */
+const availabilityValue: Record<WorkAvailability, string> = {
+  Available: 'available',
+  'On View': 'on_view',
+  Reserved: 'reserved',
+  Sold: 'sold',
+  Unavailable: 'unavailable',
+};
+
+export async function setArtworkAvailability(id: string, availability: WorkAvailability) {
+  if (!supabase) throw new Error('No database is configured, so changes cannot be saved yet.');
+  const { error } = await supabase
+    .from('artworks')
+    .update({
+      availability: availabilityValue[availability],
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id);
+  if (error) throw error;
+}
+
+export async function setArtworkVisibility(id: string, visibility: WorkVisibility) {
+  if (!supabase) throw new Error('No database is configured, so changes cannot be saved yet.');
+  const { error } = await supabase
+    .from('artworks')
+    .update({ visibility, updated_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) throw error;
+}
+
+/** Permanently removes a record.
+ *
+ *  Cascades to its images, evidence and history — which is why Archive is the
+ *  default action everywhere and this is offered only for records with nothing
+ *  recorded against them (see `canDelete` below). Deleting a work that has
+ *  provenance destroys that provenance. */
+export async function deleteArtwork(id: string) {
+  const client = supabase;
+  if (!client) throw new Error('No database is configured, so this cannot be deleted yet.');
+
+  // The row cascade removes artwork_images and artwork_evidence_files, but the
+  // files themselves live in storage and would be orphaned. Collect their
+  // paths first — after the cascade there is nothing left to read them from.
+  const [images, documents] = await Promise.all([
+    client.from('artwork_images').select('storage_path').eq('artwork_id', id),
+    client.from('artwork_evidence_files').select('storage_path').eq('artwork_id', id),
+  ]);
+
+  const imagePaths = (images.data ?? [])
+    .map((row) => (row as { storage_path: string | null }).storage_path)
+    .filter((p): p is string => Boolean(p));
+  const documentPaths = (documents.data ?? [])
+    .map((row) => (row as { storage_path: string | null }).storage_path)
+    .filter((p): p is string => Boolean(p));
+
+  const { error } = await client.from('artworks').delete().eq('id', id);
+  if (error) throw error;
+
+  // Best-effort, and after the record is gone: a storage hiccup should not
+  // resurrect an artwork the artist has already confirmed deleting.
+  if (imagePaths.length > 0) {
+    await client.storage.from('artwork-images').remove(imagePaths);
+  }
+  if (documentPaths.length > 0) {
+    await client.storage.from('artwork-documents').remove(documentPaths);
+  }
+}
+
+/** A record is safe to delete only while nothing has happened to it: no
+ *  identified interest, no opportunities, no recorded earnings. Anything else
+ *  gets archived instead, so a history can't be erased by a menu click. */
+export function canDelete(work: Work): boolean {
+  return work.interestCount === 0 && work.opportunities === 0 && !work.earnings;
+}
+
+export type ArtworkDetailsUpdate = {
+  title: string;
+  year: number | null;
+  medium: string;
+  dimensions: string;
+  category: string;
+  description: string;
+  materials: string[];
+  creationLocation: string | null;
+  availabilityNote: string | null;
+};
+
+/** Saves the editable fields on the artwork record page.
+ *
+ *  Deliberately narrow: this edits what the artist described, not what the
+ *  record has become. Availability, visibility and status have their own
+ *  actions, and evidence and rights are edited where they were captured. */
+export async function updateArtworkDetails(id: string, input: ArtworkDetailsUpdate) {
+  if (!supabase) throw new Error('No database is configured, so changes cannot be saved yet.');
+
+  const { error } = await supabase
+    .from('artworks')
+    .update({
+      title: input.title,
+      year: input.year,
+      medium: input.medium,
+      dimensions: input.dimensions,
+      category: input.category,
+      description: input.description,
+      materials: input.materials,
+      creation_location: input.creationLocation,
+      availability_note: input.availabilityNote,
       updated_at: new Date().toISOString(),
     })
     .eq('id', id);

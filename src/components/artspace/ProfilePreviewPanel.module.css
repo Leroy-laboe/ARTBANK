@@ -93,6 +93,14 @@
   flex-shrink: 0;
 }
 
+.flag {
+  width: 15px;
+  height: 11px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
 .bio {
   margin-top: 9px;
   font-size: 10.5px;
@@ -122,4 +130,17 @@
   margin-top: 2px;
   font-size: 9.5px;
   color: var(--muted);
+}
+
+/* Shown when the preview isn't what a visitor would actually get. */
+.privateNote {
+  margin-top: 11px;
+  padding: 9px 11px;
+  border: 1px solid var(--border-soft);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  font-size: 10.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
 }

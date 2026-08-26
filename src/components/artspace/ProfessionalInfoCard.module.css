@@ -128,7 +128,18 @@
 .actions {
   margin-top: 16px;
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 12px;
+}
+
+.saved {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--success);
 }
 
 .save {

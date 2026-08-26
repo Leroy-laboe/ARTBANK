@@ -1,0 +1,138 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: rgba(20, 16, 10, 0.55);
+  padding: 20px;
+}
+
+.panel {
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 20px 22px 22px;
+  box-shadow: var(--shadow-lg);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.hint {
+  margin-top: 3px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+/* ── Crop viewport ── */
+
+.viewport {
+  position: relative;
+  margin: 16px auto 0;
+  overflow: hidden;
+  background: #000;
+  border-radius: var(--radius-sm);
+  cursor: grab;
+  touch-action: none;
+}
+
+.viewport:active {
+  cursor: grabbing;
+}
+
+.viewportCircle {
+  border-radius: 50%;
+}
+
+.image {
+  position: absolute;
+  max-width: none;
+  max-height: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.error {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--danger);
+  text-align: center;
+}
+
+/* ── Zoom ── */
+
+.zoomRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.zoomLabel {
+  flex-shrink: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.zoomRow input[type='range'] {
+  flex: 1;
+  accent-color: var(--gold);
+}
+
+/* ── Actions ── */
+
+.actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel {
+  padding: 9px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.cancel:hover {
+  border-color: var(--ink);
+  background: var(--bg);
+}
+
+.confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--forest);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.confirm:hover:not(:disabled) {
+  background: var(--forest-2);
+}
+
+.confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

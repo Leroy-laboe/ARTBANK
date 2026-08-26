@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArtspaceSidebar } from '../components/artspace/ArtspaceSidebar';
 import { ArtspaceTopbar } from '../components/artspace/ArtspaceTopbar';
 import { ArtspacePageHeader } from '../components/artspace/ArtspacePageHeader';
@@ -60,6 +60,7 @@ function describeError(err: unknown, fallback: string): string {
 export function MyWorksPage() {
   const navigate = useNavigate();
   const { profile } = useSession();
+  const [params, setParams] = useSearchParams();
   const [notice, setNotice] = useState<string | null>(null);
   const [allRows, setAllRows] = useState<Work[]>(demoWorks);
   const [view, setView] = useState<'table' | 'grid'>('table');
@@ -67,6 +68,21 @@ export function MyWorksPage() {
   const [showArchived, setShowArchived] = useState(false);
   const [filters, setFilters] = useState<WorksFilters>(defaultFilters);
   const [page, setPage] = useState(1);
+
+  // ?q= is how the topbar search box reaches this screen — either typed here
+  // directly, or arriving from another page that submitted a search and had
+  // nowhere of its own to search against. Kept in the URL so a search is
+  // shareable and survives a refresh.
+  const search = params.get('q') ?? '';
+  const setSearch = useCallback(
+    (value: string) => {
+      const next = new URLSearchParams(params);
+      if (value) next.set('q', value);
+      else next.delete('q');
+      setParams(next, { replace: true });
+    },
+    [params, setParams],
+  );
 
   // Real rows once migration 0011 has run and the artist owns artworks;
   // the demo set until then, so the screen never renders empty.
@@ -102,7 +118,16 @@ export function MyWorksPage() {
       rows = rows.filter((w) => w.status !== 'Archived');
     }
 
-    // 3. The sort. Copied first — sort mutates, and `rows` can still be
+    // 3. The search box. Title and medium — the two things a search for
+    //    "acrylic" or a work's name should actually match.
+    const q = search.trim().toLowerCase();
+    if (q) {
+      rows = rows.filter(
+        (w) => w.title.toLowerCase().includes(q) || w.medium.toLowerCase().includes(q),
+      );
+    }
+
+    // 4. The sort. Copied first — sort mutates, and `rows` can still be
     //    `allRows` itself when nothing above filtered.
     const sorted = [...rows];
     switch (filters.sort) {
@@ -125,7 +150,7 @@ export function MyWorksPage() {
     }
 
     return sorted;
-  }, [allRows, showArchived, filters]);
+  }, [allRows, showArchived, filters, search]);
 
   /** The tab the current filters correspond to — '' when the combination is
    *  one no tab describes, e.g. Status: Sold. */
@@ -145,13 +170,14 @@ export function MyWorksPage() {
   /** The filters currently narrowing the list, named for the empty state. */
   const activeFilters = useMemo(() => {
     const active: string[] = [];
+    if (search.trim()) active.push(`the search "${search.trim()}"`);
     if (filters.status !== defaultFilters.status) active.push(`status ${filters.status}`);
     if (filters.availability !== defaultFilters.availability) {
       active.push(`availability ${filters.availability}`);
     }
     if (filters.passport !== defaultFilters.passport) active.push(`passport ${filters.passport}`);
     return active.length > 0 ? active : ['the current view'];
-  }, [filters]);
+  }, [filters, search]);
 
   const totalPages = Math.max(1, Math.ceil(visible.length / PER_PAGE));
   const pageRows = visible.slice((page - 1) * PER_PAGE, page * PER_PAGE);
@@ -351,7 +377,16 @@ export function MyWorksPage() {
       <ArtspaceSidebar />
 
       <main className={styles.body}>
-        <ArtspaceTopbar showGreeting={false} searchPlaceholder="Search artworks..." />
+        <ArtspaceTopbar
+          showGreeting={false}
+          searchPlaceholder="Search artworks..."
+          searchValue={search}
+          onSearchChange={(value) => {
+            setSearch(value);
+            setPage(1);
+          }}
+          onSearchSubmit={() => setPage(1)}
+        />
 
         <ArtspacePageHeader
           title="My Works"
@@ -468,6 +503,7 @@ export function MyWorksPage() {
                       onClick={() => {
                         setFilters(defaultFilters);
                         setShowArchived(false);
+                        setSearch('');
                         setPage(1);
                       }}
                     >
@@ -524,6 +560,7 @@ export function MyWorksPage() {
                 setFilters(defaultFilters);
                 setShowArchived(false);
                 setSelected([]);
+                setSearch('');
                 setPage(1);
               }}
             />

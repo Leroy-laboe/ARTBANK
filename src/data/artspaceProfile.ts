@@ -9,9 +9,6 @@
 
 import type { IconName } from '../components/ui/Icon';
 
-const photo = (id: string, w: number, h: number) =>
-  `https://images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format&q=80`;
-
 /* ── Tabs ── */
 
 export const profileTabs = [
@@ -22,26 +19,23 @@ export const profileTabs = [
   { id: 'social', label: 'Social Links' },
 ];
 
-/* ── Profile Details ── */
+/* ── Profile Details ──────────────────────────────────────────────────────
+ * Option lists and copy only. The sample identity that used to live here
+ * ("Maya Tan" and her details) is deliberately gone: it was being rendered as
+ * the default value of a real account's form, which is how it once got saved
+ * into somebody's profile. Every field now reads the signed-in profile, and
+ * blanks stay blank. */
 
 export const profileDetails = {
-  photoUrl: photo('photo-1494790108377-be9c29b29330', 240, 240),
   photoHint: 'JPG, PNG or WebP. Max 5MB.',
-  displayName: 'Maya Tan',
-  artistName: 'Maya Tan',
-  location: 'Kuala Lumpur, Malaysia',
-  nationality: 'Malaysian',
   nationalities: ['Malaysian', 'Singaporean', 'Indonesian', 'Thai', 'Filipino', 'Other'],
-  website: 'www.mayatanart.com',
-  email: 'hello@mayatanart.com',
-  shortBio:
-    'Contemporary artist exploring the relationship between memory, identity and place through texture, form and subtle color.',
 };
 
 /* ── Professional Information ── */
 
+/** The medium list to choose from. What the artist actually practises lives on
+ *  their profile row, not here. */
 export const professionalInfo = {
-  mediums: ['Acrylic Painting', 'Mixed Media', 'Oil on Canvas'],
   mediumOptions: [
     'Acrylic Painting',
     'Mixed Media',
@@ -52,73 +46,13 @@ export const professionalInfo = {
     'Printmaking',
     'Digital',
   ],
-  yearsActive: '2018 - Present',
-  education: [
-    'Diploma in Fine Arts, LASALLE College of the Arts, Singapore (2017)',
-    'BFA (Hons) Fine Arts, LASALLE College of the Arts, Singapore (2020)',
-  ].join('\n'),
-  awards: [
-    '2023 – Finalist, Sovereign Asian Art Prize',
-    '2022 – Selected Artist, Art Dubai Digital',
-    '2021 – UOB Painting of the Year, Top 20',
-  ].join('\n'),
 };
 
-/* ── Profile Completion ── */
-
-export const profileCompletion: {
-  percent: number;
-  note: string;
-  steps: { id: string; label: string; done: boolean }[];
-} = {
-  percent: 80,
-  note: 'Complete the remaining sections to reach 100%',
-  steps: [
-    { id: 'details', label: 'Profile Details', done: true },
-    { id: 'statement', label: 'Artist Statement', done: true },
-    { id: 'featured', label: 'Featured Artworks', done: true },
-    { id: 'social', label: 'Social Links', done: false },
-    { id: 'settings', label: 'Profile Settings', done: false },
-  ],
-};
-
-/* ── Public preview ── */
-
-/** What the outside world sees. Deliberately credentials only — the counts
- *  here describe the body of work, never money or private interest. */
-export const publicPreview = {
-  coverUrl: photo('photo-1502920917128-1aa500764cbd', 640, 240),
-  avatarUrl: photo('photo-1494790108377-be9c29b29330', 160, 160),
-  name: 'Maya Tan',
-  verified: true,
-  location: 'Kuala Lumpur, Malaysia',
-  bio: 'Contemporary artist exploring the relationship between memory, identity and place through texture, form and subtle color.',
-  stats: [
-    { id: 'artworks', value: '24', label: 'Artworks' },
-    { id: 'exhibitions', value: '8', label: 'Exhibitions' },
-    { id: 'opportunities', value: '12', label: 'Opportunities' },
-  ],
-};
-
-/* ── Visibility ── */
-
-export type VisibilityToggle = {
-  id: string;
-  icon: IconName;
-  label: string;
-  enabled: boolean;
-};
-
-export const profileVisibility = {
-  levels: ['Public', 'Artbank members only', 'Private'],
-  current: 'Public',
-};
-
-export const visibilityToggles: VisibilityToggle[] = [
-  { id: 'contact', icon: 'mail', label: 'Show Contact Information', enabled: true },
-  { id: 'enquiries', icon: 'message', label: 'Allow Enquiries', enabled: true },
-  { id: 'prices', icon: 'tag', label: 'Show Artwork Prices', enabled: false },
-];
+/* ── Profile Completion, preview and visibility ───────────────────────────
+ * All three were fixed sample values — 80% complete over a checklist showing
+ * three of five, a preview of another artist, and toggles that reset on
+ * reload. They are computed from the profile now, in ProfileCompletionCard,
+ * ProfilePreviewPanel and the users columns added in migration 0021. */
 
 /* ── Tips ── */
 
@@ -140,5 +74,43 @@ export const profileTips: { id: string; icon: IconName; title: string; detail: s
     icon: 'check-circle',
     title: 'Keep your profile updated',
     detail: 'Active profiles get more visibility',
+  },
+];
+
+/* ── Social links ────────────────────────────────────────────────────────
+ * Spec 16 reorders the public profile: Contact first, Follow second, social
+ * links third. These are that third rank — they no longer dominate the page. */
+
+export const socialPlatforms: { id: string; label: string; icon: IconName; placeholder: string }[] = [
+  { id: 'instagram', label: 'Instagram', icon: 'instagram', placeholder: 'instagram.com/yourname' },
+  { id: 'facebook', label: 'Facebook', icon: 'facebook', placeholder: 'facebook.com/yourpage' },
+  { id: 'youtube', label: 'YouTube', icon: 'youtube', placeholder: 'youtube.com/@yourname' },
+  { id: 'linkedin', label: 'LinkedIn', icon: 'linkedin', placeholder: 'linkedin.com/in/yourname' },
+];
+
+/* ── Artist statement ── */
+
+export const statementGuidance = {
+  hint: 'What you make, why you make it, and what a viewer should look for.',
+  limit: 2000,
+};
+
+/* ── Profile settings ── */
+
+export const visibilityLevels: { id: 'public' | 'members' | 'private'; label: string; detail: string }[] = [
+  {
+    id: 'public',
+    label: 'Public',
+    detail: 'Anyone can find and view your profile.',
+  },
+  {
+    id: 'members',
+    label: 'ARTBANK members only',
+    detail: 'Signed-in members can view it. It stays out of search.',
+  },
+  {
+    id: 'private',
+    label: 'Private',
+    detail: 'Only you can see it. Your public URL returns nothing.',
   },
 ];

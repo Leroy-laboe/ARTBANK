@@ -453,3 +453,61 @@ export async function updateArtworkDetails(id: string, input: ArtworkDetailsUpda
 
   if (error) throw error;
 }
+
+/* ── Featured artworks (public profile) ──────────────────────────────────── */
+
+export type FeaturableWork = {
+  id: string;
+  title: string;
+  year: number | null;
+  imageUrl: string;
+  status: string;
+  featuredPosition: number | null;
+};
+
+/** The artist's works, with their featured position. Published works only:
+ *  featuring a draft on a public profile would publish it by the back door. */
+export async function listFeaturableWorks(profile: Profile): Promise<FeaturableWork[]> {
+  const client = supabase;
+  if (!client) return [];
+
+  const { data, error } = await client
+    .from('artworks')
+    .select('id, title, year, image_url, status, featured_position, artwork_images(url, is_primary)')
+    .or(`artist_id.eq.${profile.id},uploaded_by.eq.${profile.id}`)
+    .eq('status', 'published')
+    .order('updated_at', { ascending: false });
+
+  if (error || !data) return [];
+
+  return (data as unknown as (ArtworkRow & { featured_position: number | null })[]).map((row) => ({
+    id: row.id,
+    title: row.title,
+    year: row.year,
+    imageUrl: primaryImage(row),
+    status: row.status,
+    featuredPosition: row.featured_position,
+  }));
+}
+
+/** Rewrites the featured set. Positions come from the array index, so they
+ *  stay contiguous, and everything absent is cleared in one pass rather than
+ *  left behind as a stale position. Requires migration 0021. */
+export async function setFeaturedArtworks(profile: Profile, ids: string[]): Promise<void> {
+  const client = supabase;
+  if (!client) throw new Error('No database is configured, so changes cannot be saved yet.');
+
+  const { error: clearError } = await client
+    .from('artworks')
+    .update({ featured_position: null })
+    .or(`artist_id.eq.${profile.id},uploaded_by.eq.${profile.id}`)
+    .not('featured_position', 'is', null);
+
+  if (clearError) throw clearError;
+
+  await Promise.all(
+    ids.map((id, index) =>
+      client.from('artworks').update({ featured_position: index }).eq('id', id),
+    ),
+  );
+}

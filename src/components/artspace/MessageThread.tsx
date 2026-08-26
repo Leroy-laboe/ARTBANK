@@ -1,3 +1,4 @@
+import { useState, type FormEvent } from 'react';
 import { Icon } from '../ui/Icon';
 import { thread as demoThread, type Conversation, type MessageDay } from '../../data/artspaceMessages';
 import type { MonogramTone } from '../../data/artspaceInterest';
@@ -17,13 +18,33 @@ const toneClass: Record<MonogramTone, string> = {
 export function MessageThread({
   conversation,
   days,
+  onSend,
 }: {
   conversation: Conversation;
   /** The loaded thread. Falls back to the demo exchange so the panel is
    *  never blank while the tables are still empty. */
   days?: MessageDay[];
+  /** Given, the composer sends. Omitted, it stays a preview — which is what
+   *  a demo thread is, and posting into one would go nowhere. */
+  onSend?: (body: string) => Promise<void> | void;
 }) {
   const thread = days && days.length > 0 ? days : demoThread;
+  const [draft, setDraft] = useState('');
+  const [sending, setSending] = useState(false);
+
+  async function submit(event: FormEvent) {
+    event.preventDefault();
+    const body = draft.trim();
+    if (!onSend || !body || sending) return;
+
+    setSending(true);
+    try {
+      await onSend(body);
+      setDraft('');
+    } finally {
+      setSending(false);
+    }
+  }
   return (
     <div className={styles.pane}>
       <header className={styles.head}>
@@ -117,12 +138,15 @@ export function MessageThread({
         ))}
       </div>
 
-      <form className={styles.composer} onSubmit={(e) => e.preventDefault()}>
+      <form className={styles.composer} onSubmit={submit}>
         <input
           type="text"
           className={styles.input}
           placeholder="Type your message..."
           aria-label="Type your message"
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          disabled={!onSend || sending}
         />
 
         <div className={styles.composerBar}>
@@ -141,8 +165,12 @@ export function MessageThread({
             </button>
           </div>
 
-          <button type="submit" className={styles.send}>
-            Send
+          <button
+            type="submit"
+            className={styles.send}
+            disabled={!onSend || sending || draft.trim() === ''}
+          >
+            {sending ? 'Sending…' : 'Send'}
           </button>
         </div>
       </form>

@@ -1,0 +1,152 @@
+.sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100svh;
+  overflow-y: auto;
+  background: var(--surface);
+  border-right: 1px solid var(--border-soft);
+  padding: 20px 12.5px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.brand {
+  display: block;
+  padding: 0 7px;
+  margin-bottom: 4px;
+}
+
+.brandLogo {
+  display: block;
+  height: 22px;
+  width: auto;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 9px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.navItem:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.navIcon {
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+/* The buyer rail marks its active row in forest rather than ArtSpace's gold.
+   Gold is the artist's accent throughout the app and reads as "your work";
+   the collector side is the forest surface the homepage already uses for the
+   buyer band, so the two workspaces stay visually distinct at a glance. */
+.navItemActive,
+.navItemActive:hover {
+  background: var(--border-soft);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.navItemActive .navIcon {
+  color: var(--forest);
+}
+
+.navLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+.badge {
+  flex-shrink: 0;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 5.5px;
+  border-radius: var(--radius-full);
+  background: var(--forest);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gap {
+  height: 21.5px;
+}
+
+/* ── Account ── */
+
+.accountWrap {
+  position: relative;
+  margin-top: auto;
+  padding-top: 11px;
+  border-top: 1px solid var(--border-soft);
+}
+
+/* The rail collapses to icons before it disappears entirely — the grid column
+   changes in each page's own module, matching the ArtSpace shell. */
+@media (max-width: 1000px) {
+  .sidebar {
+    padding: 20px 9px;
+    align-items: center;
+  }
+
+  .brand,
+  .navLabel,
+  .badge {
+    display: none;
+  }
+
+  .navItem {
+    justify-content: center;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 650px) {
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    border-right: none;
+    border-bottom: 1px solid var(--border-soft);
+    padding: 9px;
+    gap: 9px;
+    overflow-x: auto;
+  }
+
+  .nav {
+    flex-direction: row;
+    gap: 3.5px;
+  }
+
+  .gap {
+    height: auto;
+    width: 9px;
+  }
+
+  .accountWrap {
+    margin-top: 0;
+    margin-left: auto;
+    padding-top: 0;
+    border-top: none;
+  }
+}

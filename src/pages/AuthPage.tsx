@@ -12,9 +12,14 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
 
   /** Where to land after signing in. RequireAuth passes the page the user was
    *  trying to reach; only same-site paths are honoured so the query string
-   *  can't be used to bounce someone off to another host. */
+   *  can't be used to bounce someone off to another host.
+   *
+   *  With nothing requested, /workspace decides: artists go to ArtSpace,
+   *  buyers to /collect. It has to be a route rather than a branch here,
+   *  because the role lives on the profile row and that has not loaded at the
+   *  moment sign-in returns. */
   const next = searchParams.get('next');
-  const destination = next && next.startsWith('/') && !next.startsWith('//') ? next : '/artspace';
+  const destination = next && next.startsWith('/') && !next.startsWith('//') ? next : '/workspace';
   const [error, setError] = useState('');
   const [info, setInfo] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,8 +35,6 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
     setLoading(true);
     try {
       await signIn(values.email, values.password);
-      // ArtSpace is the signed-in home. Buyers have no dashboard yet, so this
-      // will need to branch on role once sign-in returns one.
       navigate(destination);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign in failed. Please try again.');
@@ -56,7 +59,9 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
     try {
       const { session } = await signUp(values.email, values.password, values.role);
       if (session) {
-        navigate(values.role === 'artist' ? destination : '/');
+        // Both roles now have somewhere to arrive, so neither is sent back to
+        // the marketing homepage.
+        navigate(destination);
       } else {
         // Email confirmation is required before a session is issued — stay on
         // the sign-up side and tell them what to do next.

@@ -1,0 +1,259 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 21.5px;
+  margin-bottom: 18px;
+}
+
+/* Keeps the controls hard right on screens with no search box. */
+.spacer {
+  flex: 1;
+}
+
+/* Discover's box is the widest control on the screen and sits centred in the
+   main column, unlike ArtSpace's, which is a compact rail beside a greeting. */
+.search {
+  flex: 1;
+  max-width: 470px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px 0 13px;
+  height: 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  transition: border-color 0.15s ease;
+}
+
+.search:focus-within {
+  border-color: var(--forest);
+}
+
+.searchIcon {
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 12.5px;
+  color: var(--ink);
+}
+
+.search input::placeholder {
+  color: var(--muted-2);
+}
+
+.search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.clear {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: var(--border-soft);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.clear:hover {
+  background: var(--border);
+  color: var(--ink);
+}
+
+.filterBtn {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--bg);
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.filterBtn:hover {
+  background: var(--border-soft);
+  color: var(--ink);
+}
+
+.filterBtnOn,
+.filterBtnOn:hover {
+  background: var(--forest);
+  color: #fff;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12.5px;
+}
+
+.menuWrap {
+  position: relative;
+}
+
+.bell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.bell:hover {
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+.bellCount {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--radius-full);
+  background: var(--forest);
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + 9px);
+  right: 0;
+  z-index: 30;
+  width: 296px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.panelTitle {
+  padding: 2px 4px 9px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 6px;
+}
+
+.panelEmpty {
+  padding: 14px 4px;
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.notifList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.notifItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 9px;
+  padding: 8px 6px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease;
+}
+
+.notifItem:hover {
+  background: var(--bg);
+}
+
+.notifDot {
+  margin-top: 5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--forest);
+}
+
+.notifBody {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.notifName {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.notifPreview {
+  margin-top: 1px;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notifTime {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--muted-2);
+}
+
+.panelFooter {
+  display: block;
+  margin-top: 6px;
+  padding: 9px 6px 2px;
+  border-top: 1px solid var(--border-soft);
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--forest);
+}
+
+.panelFooter:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 650px) {
+  .search {
+    max-width: none;
+  }
+
+  .spacer {
+    display: none;
+  }
+}

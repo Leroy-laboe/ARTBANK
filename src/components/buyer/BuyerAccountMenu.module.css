@@ -1,0 +1,179 @@
+.wrap {
+  position: relative;
+}
+
+.wrapRow {
+  width: 100%;
+}
+
+/* ── Trigger: the sidebar's name-and-role row ── */
+
+.rowTrigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.rowTrigger:hover {
+  background: var(--bg);
+}
+
+/* ── Trigger: the top bar's bare photo ── */
+
+.avatarTrigger {
+  display: flex;
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.avatarTrigger:hover .avatar,
+.avatarTrigger:hover .avatarEmpty {
+  border-color: var(--border);
+}
+
+.avatar,
+.avatarEmpty {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 1px solid var(--border-soft);
+}
+
+.avatarEmpty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--muted);
+}
+
+.copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.role {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.caret {
+  flex-shrink: 0;
+  color: var(--muted-2);
+}
+
+/* ── The menu ── */
+
+.menu {
+  position: absolute;
+  z-index: 30;
+  width: 210px;
+  padding: 7px;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+/* The sidebar sits at the bottom of the viewport, so its menu opens upward;
+   the top bar's opens downward and right-aligned. */
+.wrapRow .menu {
+  bottom: calc(100% + 7px);
+  left: 0;
+  width: auto;
+  right: 0;
+}
+
+.wrapAvatar .menu {
+  top: calc(100% + 9px);
+  right: 0;
+}
+
+.email {
+  padding: 5px 9px 9px;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 5px;
+  font-size: 11px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 9px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-align: left;
+  cursor: pointer;
+}
+
+.item:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.danger,
+.danger:hover {
+  color: var(--danger);
+}
+
+@media (max-width: 1000px) {
+  .wrapRow .copy,
+  .wrapRow .caret {
+    display: none;
+  }
+
+  .rowTrigger {
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .wrapRow .menu {
+    left: 0;
+    right: auto;
+    width: 190px;
+  }
+}
+
+@media (max-width: 650px) {
+  .wrapRow .menu {
+    bottom: auto;
+    top: calc(100% + 7px);
+    right: 0;
+    left: auto;
+  }
+}

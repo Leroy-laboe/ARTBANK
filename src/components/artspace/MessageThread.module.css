@@ -317,9 +317,17 @@
   transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.send:hover {
+.send:hover:not(:disabled) {
   background: var(--forest-2);
   box-shadow: var(--shadow-sm);
+}
+
+/* Disabled covers two different states that should look the same: an empty
+   draft, and a thread with nowhere to send to (the demo exchange). */
+.send:disabled,
+.input:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 @media (max-width: 820px) {

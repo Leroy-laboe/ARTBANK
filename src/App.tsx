@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { SessionProvider } from './lib/session';
 import { RequireAuth } from './components/auth/RequireAuth';
+import { WorkspaceHome } from './components/auth/WorkspaceHome';
 import { AuthPage } from './pages/AuthPage';
 import { HomePage } from './pages/HomePage';
 import { MarketplacePage } from './pages/MarketplacePage';
@@ -14,6 +15,13 @@ import { MessagesPage } from './pages/MessagesPage';
 import { PublicProfilePage } from './pages/PublicProfilePage';
 import { AddArtworkPage } from './pages/AddArtworkPage';
 import { ArtworkRecordPage } from './pages/ArtworkRecordPage';
+import { DiscoverPage } from './pages/DiscoverPage';
+import { BuyerArtistsPage } from './pages/BuyerArtistsPage';
+import { BuyerArtworkPage } from './pages/BuyerArtworkPage';
+import { SavedWorksPage } from './pages/SavedWorksPage';
+import { MyEnquiriesPage } from './pages/MyEnquiriesPage';
+import { BuyerMessagesPage } from './pages/BuyerMessagesPage';
+import { ViewingRoomsPage } from './pages/ViewingRoomsPage';
 import { TermsPage } from './pages/TermsPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { CookiePolicyPage } from './pages/CookiePolicyPage';
@@ -60,6 +68,19 @@ function App() {
           <Route path="/artspace/privacy" element={<ComingSoonPage title="Privacy" />} />
           <Route path="/artspace/security" element={<ComingSoonPage title="Security" />} />
           <Route path="/artspace/help" element={<ComingSoonPage title="Help Center" />} />
+
+          {/* The buyer workspace — the other side of ArtSpace. Same guard,
+              same session; which of the two an account belongs in is decided
+              by WorkspaceHome from users.role. */}
+          <Route path="/workspace" element={<WorkspaceHome />} />
+          <Route path="/collect" element={<DiscoverPage />} />
+          <Route path="/collect/artists" element={<BuyerArtistsPage />} />
+          <Route path="/collect/artworks/:id" element={<BuyerArtworkPage />} />
+          <Route path="/collect/saved" element={<SavedWorksPage />} />
+          <Route path="/collect/enquiries" element={<MyEnquiriesPage />} />
+          <Route path="/collect/messages" element={<BuyerMessagesPage />} />
+          <Route path="/collect/rooms" element={<ViewingRoomsPage />} />
+          <Route path="/collect/help" element={<ComingSoonPage title="Help Center" />} />
         </Route>
 
         {/* Legal — see docs/pivot-checklist/05-footer-and-legal.md, the

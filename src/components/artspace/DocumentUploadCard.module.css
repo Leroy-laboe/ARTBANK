@@ -1,0 +1,346 @@
+/* Shares the geometry of ImageUploadCard — step 4 is the same job with a
+   different payload, so the two steps shouldn't look unrelated. */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 17px 18px 19px;
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+}
+
+.subtitle {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.privateTag {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: var(--bg);
+  border: 1px solid var(--border-soft);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+/* ── Document type ── */
+
+.typeField {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.typeLabel {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.selectWrap {
+  position: relative;
+  display: block;
+}
+
+.select {
+  width: 100%;
+  appearance: none;
+  padding: 9px 32px 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.select:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+
+.caret {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--muted);
+}
+
+.typeHint {
+  margin-bottom: 14px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+/* ── Dropzone ── */
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 30px 20px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  text-align: center;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.dropzoneActive {
+  border-color: var(--gold);
+  background: var(--gold-bg);
+}
+
+.dropzoneFull {
+  opacity: 0.7;
+}
+
+.dropIcon {
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.dropTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.dropOr {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 2px 0 8px;
+}
+
+.fileInput {
+  display: none;
+}
+
+.chooseBtn {
+  padding: 10px 22px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--forest);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.chooseBtn:hover:not(:disabled) {
+  background: var(--forest-2);
+}
+
+.chooseBtn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.dropHint {
+  margin-top: 12px;
+  font-size: 10.5px;
+  color: var(--muted-2);
+}
+
+.error {
+  margin-top: 12px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(179, 69, 61, 0.08);
+  border: 1px solid rgba(179, 69, 61, 0.25);
+  font-size: 11px;
+  color: var(--danger);
+}
+
+/* ── Attached list ── */
+
+.listHead {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.listTitle {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.list {
+  margin-top: 12px;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 190px auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.fileIcon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  color: var(--ink-soft);
+}
+
+.rowCopy {
+  min-width: 0;
+}
+
+.fileName {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fileMeta {
+  margin-top: 2px;
+  font-size: 10.5px;
+  color: var(--muted-2);
+}
+
+.rowType {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.rowType select {
+  width: 100%;
+  appearance: none;
+  padding: 7px 28px 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.rowType svg {
+  position: absolute;
+  right: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--muted);
+}
+
+.rowActions {
+  display: flex;
+  gap: 4px;
+}
+
+.rowBtn {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.rowBtn:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.rowBtnDanger:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* ── Assurance ── */
+
+.assurance {
+  margin-top: 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 13px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(47, 125, 79, 0.07);
+  border: 1px solid rgba(47, 125, 79, 0.16);
+}
+
+.assuranceIcon {
+  flex-shrink: 0;
+  color: var(--success);
+  margin-top: 1px;
+}
+
+.assurance strong {
+  display: block;
+  font-size: 11.5px;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+.assurance span {
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 720px) {
+  .row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .rowType {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 650px) {
+  .head {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

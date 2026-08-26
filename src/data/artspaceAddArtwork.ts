@@ -172,3 +172,106 @@ export const supportNote = {
   body: 'Our support team is here to help you with any questions.',
   linkLabel: 'Visit Help Center',
 };
+
+/* ── Step 4: Documents ──────────────────────────────────────────────────── */
+
+export const documentGuidelines: { id: string; icon: IconName; title: string }[] = [
+  { id: 'legible', icon: 'check-circle', title: 'Make sure text is legible, not blurred' },
+  { id: 'full', icon: 'check-circle', title: 'Include the whole document, edge to edge' },
+  { id: 'names', icon: 'check-circle', title: 'Keep names and dates visible' },
+  { id: 'original', icon: 'check-circle', title: 'Scans and clear photos are both fine' },
+];
+
+/** Documents are optional, and saying so plainly matters: the brief bans
+ *  pressure tactics, so this explains the benefit rather than implying the
+ *  record is broken without them. */
+export const evidenceNote = {
+  title: 'Why add documents?',
+  body:
+    'Evidence is what a Passport review looks at. A record without documents is ' +
+    'still a complete record — adding them is what lets the certificate and ' +
+    'provenance trail be verified later.',
+  linkLabel: 'About Passports',
+};
+
+/* ── Step 5: Rights, visibility and publishing ──────────────────────────── */
+
+/** Permitted uses, per step 6 of the spec.
+ *
+ *  Every one starts unticked. Nothing is permitted because a default said so —
+ *  the artist grants each use, and can withdraw it later. */
+export const permittedUses: { id: string; label: string; detail: string }[] = [
+  {
+    id: 'display',
+    label: 'Show on my ARTBANK profile',
+    detail: 'The record appears in your public portfolio.',
+  },
+  {
+    id: 'editorial',
+    label: 'Editorial and press use',
+    detail: 'Publications may reproduce the image when writing about the work.',
+  },
+  {
+    id: 'exhibition',
+    label: 'Exhibition loan enquiries',
+    detail: 'Curators may approach you about showing the work.',
+  },
+  {
+    id: 'print',
+    label: 'Print reproduction',
+    detail: 'Licensed prints or reproductions, agreed case by case.',
+  },
+  {
+    id: 'commercial',
+    label: 'Commercial licensing',
+    detail: 'Brand and product use, always under a separate agreement.',
+  },
+  {
+    id: 'digital',
+    label: 'Digital and screen use',
+    detail: 'Screens, digital galleries and online exhibitions.',
+  },
+];
+
+/** The rights statement shown above the permitted uses. Like the ownership
+ *  statement, this is placeholder wording pending review — see
+ *  `ownershipStatement.needsLegalReview` above. */
+export const rightsStatement = {
+  heading: 'You grant each use, one at a time',
+  body:
+    'Nothing is permitted unless you tick it here, and you can withdraw any ' +
+    'permission later. Every use still has to be agreed with you individually — ' +
+    'ticking a box opens a conversation, it does not license the work.',
+  confirmLabel: 'I understand these are the only uses I am permitting',
+  needsLegalReview: true,
+};
+
+/** Step 8 of the spec: Public, Private or Unlisted. */
+export const visibilityOptions: { id: 'public' | 'unlisted' | 'private'; icon: IconName; label: string; detail: string }[] = [
+  {
+    id: 'public',
+    icon: 'globe',
+    label: 'Public',
+    detail: 'Appears on your profile and can be found in search.',
+  },
+  {
+    id: 'unlisted',
+    icon: 'external-link',
+    label: 'Unlisted',
+    detail: 'Only reachable by your smart link. Not listed or searchable.',
+  },
+  {
+    id: 'private',
+    icon: 'lock',
+    label: 'Private',
+    detail: 'Only you can see this record. Nothing is shared.',
+  },
+];
+
+export const publishNote = {
+  title: 'Nothing publishes itself',
+  body:
+    'This record stays a private draft until you press Publish. You can come ' +
+    'back and finish it at any time, and unpublish it whenever you want.',
+  linkLabel: 'Visit Help Center',
+};

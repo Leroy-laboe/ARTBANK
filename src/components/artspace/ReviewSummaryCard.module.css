@@ -1,0 +1,217 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 17px 18px 19px;
+}
+
+.head {
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+}
+
+.subtitle {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Checklist ── */
+
+.checklist {
+  padding: 14px 15px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.checklistHead {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.checkList {
+  margin-top: 10px;
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 18px;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.checkDone {
+  flex-shrink: 0;
+  color: var(--success);
+}
+
+.checkOpen {
+  flex-shrink: 0;
+  color: var(--muted-2);
+}
+
+.checkOpenLabel {
+  color: var(--muted);
+}
+
+.checkLink {
+  margin-left: auto;
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+/* ── Record preview ── */
+
+.preview {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 13px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+}
+
+.cover,
+.coverEmpty {
+  flex-shrink: 0;
+  width: 62px;
+  height: 62px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--bg);
+  border: 1px solid var(--border-soft);
+}
+
+.coverEmpty {
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  color: var(--muted-2);
+  font-size: 9px;
+}
+
+.previewCopy {
+  min-width: 0;
+}
+
+.previewTitle {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.previewMeta {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.previewCounts {
+  margin-top: 5px;
+  font-size: 10.5px;
+  color: var(--muted-2);
+}
+
+/* ── Groups ── */
+
+.group {
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.groupHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 9px;
+}
+
+.groupTitle {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.edit {
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.rows {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 20px;
+}
+
+.row {
+  min-width: 0;
+}
+
+.row dt {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+  color: var(--muted-2);
+}
+
+.row dd {
+  margin-top: 2px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+/* "Not set" is information, not an error — muted, never red. */
+.unset {
+  color: var(--muted);
+}
+
+.description {
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 78ch;
+}
+
+@media (max-width: 820px) {
+  .checkList,
+  .rows {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

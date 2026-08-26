@@ -41,6 +41,14 @@ export type ArtworkDraft = {
   includesCoa: boolean;
   isPhysical: boolean;
   allowLayaway: boolean;
+
+  /* ── Step 5: rights, visibility and publishing ── */
+  /** Ids from `permittedUses` in data/artspaceAddArtwork. Empty means no use
+   *  is permitted beyond displaying the record — see 0020's column comment. */
+  permittedUses: string[];
+  rightsNote: string;
+  visibility: 'public' | 'private' | 'unlisted';
+  rightsConfirmed: boolean;
 };
 
 export type DraftErrors = Partial<Record<keyof ArtworkDraft | 'dimensions', string>>;
@@ -81,6 +89,14 @@ export const emptyDraft: ArtworkDraft = {
   // artwork", so an unchecked default would mis-describe most work.
   isPhysical: true,
   allowLayaway: false,
+
+  // Nothing is permitted by default, and a new record starts private. Both
+  // are permission-first defaults: the artist opens the record up, rather
+  // than discovering it was already open.
+  permittedUses: [],
+  rightsNote: '',
+  visibility: 'private',
+  rightsConfirmed: false,
 };
 
 /** Composes the display string every other screen shows, e.g. "80 × 60 cm"
@@ -166,4 +182,44 @@ export function validatePricing(draft: ArtworkDraft): DraftErrors {
   }
 
   return errors;
+}
+
+/** Validates step 5. Visibility always has a value, so the only thing that can
+ *  block a publish is the rights confirmation — which the brief requires to be
+ *  an explicit act, not a pre-ticked box. */
+export function validateReview(draft: ArtworkDraft): DraftErrors {
+  const errors: DraftErrors = {};
+
+  if (!draft.rightsConfirmed) {
+    errors.rightsConfirmed =
+      'Confirm the rights statement before publishing.';
+  }
+
+  return errors;
+}
+
+/** Where the record has got to, against the nine required steps in
+ *  docs/pivot-checklist/10-add-artwork.md.
+ *
+ *  The spec asks that the Artwork Readiness Scan be able to point at exactly
+ *  which step is incomplete, so the checklist is computed here rather than
+ *  described in the Review screen's markup — one source both can use. */
+export type ReviewItem = { id: string; label: string; done: boolean; step: string };
+
+export function reviewChecklist(
+  draft: ArtworkDraft,
+  counts: { images: number; documents: number },
+): ReviewItem[] {
+  return [
+    { id: 'images', label: 'Artwork images uploaded', done: counts.images > 0, step: 'images' },
+    { id: 'basics', label: 'Title, year, medium and dimensions', done: Boolean(draft.title.trim() && draft.year.trim() && draft.medium && formatDimensions(draft)), step: 'details' },
+    { id: 'story', label: 'Description and story', done: Boolean(draft.description.trim()), step: 'details' },
+    { id: 'ownership', label: 'Creator and ownership statement', done: draft.ownershipConfirmed, step: 'details' },
+    { id: 'availability', label: 'Availability and earning routes', done: Boolean(draft.availabilityStatus), step: 'availability' },
+    { id: 'rights', label: 'Rights and permitted uses', done: draft.rightsConfirmed, step: 'review' },
+    // Evidence is genuinely optional — a record without documents is still a
+    // record, it just won't support a Passport review yet.
+    { id: 'evidence', label: 'Evidence and supporting files', done: counts.documents > 0, step: 'documents' },
+    { id: 'visibility', label: 'Visibility chosen', done: Boolean(draft.visibility), step: 'review' },
+  ];
 }

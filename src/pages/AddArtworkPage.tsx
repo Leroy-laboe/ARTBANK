@@ -10,6 +10,10 @@ import { ImageUploadCard } from '../components/artspace/ImageUploadCard';
 import { PricingCard } from '../components/artspace/PricingCard';
 import { AvailabilityCard } from '../components/artspace/AvailabilityCard';
 import { AdditionalOptionsCard } from '../components/artspace/AdditionalOptionsCard';
+import { DocumentUploadCard } from '../components/artspace/DocumentUploadCard';
+import { RightsCard } from '../components/artspace/RightsCard';
+import { VisibilityCard } from '../components/artspace/VisibilityCard';
+import { ReviewSummaryCard } from '../components/artspace/ReviewSummaryCard';
 import { ListingPreviewPanel } from '../components/artspace/ListingPreviewPanel';
 import { ArtworkImagePreview } from '../components/artspace/ArtworkImagePreview';
 import { GuidelinesPanel } from '../components/artspace/GuidelinesPanel';
@@ -18,13 +22,24 @@ import { NotePanel } from '../components/artspace/NotePanel';
 import {
   emptyDraft,
   formatDimensions,
+  reviewChecklist,
   validateDetails,
   validatePricing,
+  validateReview,
   type ArtworkDraft,
   type DraftErrors,
 } from '../components/artspace/artworkDraft';
 import { useSession } from '../lib/sessionContext';
-import { createArtworkDraft, updateArtworkPricing } from '../services/artwork';
+import { createArtworkDraft, publishArtwork, updateArtworkPricing } from '../services/artwork';
+import {
+  deleteArtworkDocument,
+  documentRejectionReason,
+  documentUrl,
+  setDocumentType,
+  uploadArtworkDocument,
+  type ArtworkDocument,
+  type DocumentType,
+} from '../services/artworkDocuments';
 import {
   deleteArtworkImage,
   rejectionReason,
@@ -36,11 +51,13 @@ import {
   type ImageRole,
 } from '../services/artworkImages';
 import {
-  addArtworkSteps,
+  documentGuidelines,
+  evidenceNote,
   imageGuidelines,
   imageHelpNote,
   ownershipStatement,
   pricingTips,
+  publishNote,
   shippingTips,
   supportNote,
   visibilityTips,
@@ -49,11 +66,39 @@ import styles from './AddArtworkPage.module.css';
 
 type SaveState = { kind: 'idle' | 'saving' } | { kind: 'error'; message: string };
 
+/** Turns a failed write into something actionable.
+ *
+ *  A generic "could not save" hides the one fact that matters — usually a
+ *  column or table that a migration hasn't created yet. Postgres names it, so
+ *  pass that through rather than swallowing it. */
+function describeSaveError(err: unknown): string {
+  const raw = err as { message?: string; code?: string; details?: string } | null;
+  const message = raw?.message ?? '';
+
+  // 42703 undefined_column, 42P01 undefined_table.
+  if (raw?.code === '42703' || raw?.code === '42P01' || /does not exist/i.test(message)) {
+    return `The database is missing something this form needs — ${message}. Run the outstanding migrations in supabase/migrations.`;
+  }
+  if (raw?.code === '42501' || /row-level security/i.test(message)) {
+    return 'The database refused the write for this account. Check the artist owns this record.';
+  }
+  if (/violates check constraint/i.test(message)) {
+    return `A value was rejected by the database: ${message}`;
+  }
+  if (message) return message;
+  return 'Could not save this artwork. Check your connection and try again.';
+}
+
 /** Add Artwork — the guided flow from docs/pivot-checklist/10-add-artwork.md.
  *
- *  Details and Images are built. Step 1 saves a real draft and hands its id to
- *  step 2, which uploads real files against it. Nothing is auto-populated and
- *  nothing publishes itself: the record stays a private draft throughout. */
+ *  All five steps are built, covering the spec's nine requirements. Step 1
+ *  saves a real draft and hands its id to everything after it, which writes
+ *  against that record: images, pricing, evidence files, then rights and
+ *  visibility.
+ *
+ *  Two rules hold throughout. Nothing is auto-populated — the artist confirms
+ *  every fact. And nothing publishes itself: the record stays a private draft
+ *  until the Publish button in step 5 is pressed. */
 export function AddArtworkPage() {
   const navigate = useNavigate();
   const { profile } = useSession();
@@ -73,6 +118,11 @@ export function AddArtworkPage() {
   const [images, setImages] = useState<ArtworkImage[]>([]);
   const [uploading, setUploading] = useState(false);
   const [imageError, setImageError] = useState<string | null>(null);
+
+  // Step 4
+  const [documents, setDocuments] = useState<ArtworkDocument[]>([]);
+  const [uploadingDoc, setUploadingDoc] = useState(false);
+  const [documentError, setDocumentError] = useState<string | null>(null);
 
   const update = (patch: Partial<ArtworkDraft>) => {
     setDraft((prev) => ({ ...prev, ...patch }));
@@ -133,11 +183,8 @@ export function AddArtworkPage() {
       setSave({ kind: 'idle' });
       setStep('images');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch {
-      setSave({
-        kind: 'error',
-        message: 'Could not save this artwork. Check your connection and try again.',
-      });
+    } catch (err) {
+      setSave({ kind: 'error', message: describeSaveError(err) });
     }
   }
 
@@ -176,11 +223,8 @@ export function AddArtworkPage() {
       setSave({ kind: 'idle' });
       setStep('documents');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch {
-      setSave({
-        kind: 'error',
-        message: 'Could not save pricing. Check your connection and try again.',
-      });
+    } catch (err) {
+      setSave({ kind: 'error', message: describeSaveError(err) });
     }
   }
 
@@ -270,8 +314,108 @@ export function AddArtworkPage() {
     }
   };
 
+  /* ── Step 4: documents ── */
+
+  const addDocuments = useCallback(
+    async (files: FileList | File[], type: DocumentType) => {
+      if (!artworkId) return;
+      setDocumentError(null);
+
+      const accepted: File[] = [];
+      for (const file of Array.from(files)) {
+        const reason = documentRejectionReason(file, documents.length + accepted.length);
+        if (reason) {
+          setDocumentError(reason);
+          break;
+        }
+        accepted.push(file);
+      }
+      if (accepted.length === 0) return;
+
+      setUploadingDoc(true);
+      try {
+        let next = documents;
+        for (const file of accepted) {
+          const uploaded = await uploadArtworkDocument(artworkId, file, type);
+          next = [...next, uploaded];
+          setDocuments(next);
+        }
+      } catch (err) {
+        setDocumentError(describeSaveError(err));
+      } finally {
+        setUploadingDoc(false);
+      }
+    },
+    [artworkId, documents],
+  );
+
+  const removeDocument = async (doc: ArtworkDocument) => {
+    setDocuments((prev) => prev.filter((d) => d.id !== doc.id));
+    try {
+      await deleteArtworkDocument(doc);
+    } catch {
+      setDocumentError('Could not remove that document.');
+    }
+  };
+
+  const changeDocumentType = async (doc: ArtworkDocument, type: DocumentType) => {
+    setDocuments((prev) => prev.map((d) => (d.id === doc.id ? { ...d, documentType: type } : d)));
+    try {
+      await setDocumentType(doc.id, type);
+    } catch {
+      setDocumentError('Could not update that label.');
+    }
+  };
+
+  /** The bucket is private, so opening a document means minting a signed URL
+   *  first. It expires in five minutes — see artworkDocuments.ts. */
+  const openDocument = async (doc: ArtworkDocument) => {
+    const url = await documentUrl(doc);
+    if (!url) {
+      setDocumentError('Could not open that document.');
+      return;
+    }
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  /* ── Step 5: rights, visibility, publish ── */
+
+  /** Saves step 5. `publish` is the button the artist pressed — the record
+   *  never publishes itself, per the brief. */
+  async function finish(publish: boolean) {
+    if (publish) {
+      const found = validateReview(draft);
+      setErrors(found);
+      if (Object.keys(found).length > 0) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+    }
+    if (!artworkId) {
+      setSave({ kind: 'error', message: 'Save the details step first.' });
+      return;
+    }
+
+    setSave({ kind: 'saving' });
+    try {
+      await publishArtwork(artworkId, {
+        visibility: draft.visibility,
+        permittedUses: draft.permittedUses,
+        rightsNote: draft.rightsNote.trim() || null,
+        publish,
+      });
+      setSave({ kind: 'idle' });
+      navigate('/artspace/works');
+    } catch (err) {
+      setSave({ kind: 'error', message: describeSaveError(err) });
+    }
+  }
+
   const cover = images.find((i) => i.isPrimary) ?? images[0];
-  const stepMeta = addArtworkSteps.find((s) => s.id === step);
+  const checklist = reviewChecklist(draft, {
+    images: images.length,
+    documents: documents.length,
+  });
 
   return (
     <div className={styles.shell}>
@@ -397,31 +541,142 @@ export function AddArtworkPage() {
               </>
             )}
 
-            {step !== 'details' && step !== 'images' && step !== 'availability' && (
-              <section className={styles.pending}>
-                <h2 className={styles.pendingTitle}>{stepMeta?.label}</h2>
-                <p className={styles.pendingNote}>
-                  This step hasn’t been designed yet. It covers: {stepMeta?.covers}.
-                </p>
-                <button
-                  type="button"
-                  className={styles.backBtn}
-                  onClick={() => setStep('availability')}
-                >
-                  Back to Pricing &amp; Availability
-                </button>
-              </section>
+            {step === 'documents' && (
+              <>
+                <DocumentUploadCard
+                  documents={documents}
+                  uploading={uploadingDoc}
+                  error={documentError}
+                  onAdd={addDocuments}
+                  onRemove={removeDocument}
+                  onSetType={changeDocumentType}
+                  onOpen={openDocument}
+                />
+
+                <div className={styles.actions}>
+                  <button
+                    type="button"
+                    className={styles.cancel}
+                    onClick={() => setStep('availability')}
+                  >
+                    Back
+                  </button>
+
+                  <div className={styles.actionsRight}>
+                    <button
+                      type="button"
+                      className={styles.cancel}
+                      onClick={() => navigate('/artspace/works')}
+                    >
+                      Save Draft
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.continue}
+                      onClick={() => {
+                        // Documents are optional, so this step completes
+                        // whether or not anything was attached.
+                        setCompleted((prev) => [...new Set([...prev, 'documents'])]);
+                        setStep('review');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                    >
+                      Next: Review
+                      <span aria-hidden="true"> →</span>
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {step === 'review' && (
+              <>
+                <RightsCard draft={draft} errors={errors} onChange={update} />
+                <VisibilityCard draft={draft} onChange={update} />
+                <ReviewSummaryCard
+                  draft={draft}
+                  checklist={checklist}
+                  imageCount={images.length}
+                  documentCount={documents.length}
+                  coverUrl={cover?.url}
+                  onGoToStep={(next) => {
+                    setStep(next);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                />
+
+                <div className={styles.actions}>
+                  <button
+                    type="button"
+                    className={styles.cancel}
+                    onClick={() => setStep('documents')}
+                  >
+                    Back
+                  </button>
+
+                  <div className={styles.actionsRight}>
+                    {save.kind === 'error' && <p className={styles.error}>{save.message}</p>}
+                    <button
+                      type="button"
+                      className={styles.cancel}
+                      onClick={() => finish(false)}
+                      disabled={save.kind === 'saving'}
+                    >
+                      Save Draft
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.continue}
+                      onClick={() => finish(true)}
+                      disabled={save.kind === 'saving'}
+                    >
+                      {save.kind === 'saving' ? 'Saving…' : 'Publish Artwork'}
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
           </div>
 
           <aside className={styles.rightCol}>
-            {step === 'availability' ? (
+            {step === 'availability' || step === 'review' ? (
               <ListingPreviewPanel draft={draft} imageUrl={cover?.url} />
             ) : (
               <ArtworkImagePreview imageUrl={cover?.url} />
             )}
 
-            {step === 'availability' ? (
+            {step === 'review' ? (
+              <>
+                <NotePanel
+                  title={publishNote.title}
+                  body={publishNote.body}
+                  linkLabel={publishNote.linkLabel}
+                  linkTo="/artspace/help"
+                />
+                <NotePanel
+                  title={supportNote.title}
+                  body={supportNote.body}
+                  linkLabel={supportNote.linkLabel}
+                  linkTo="/artspace/help"
+                />
+              </>
+            ) : step === 'documents' ? (
+              <>
+                <TipsPanel
+                  title="Document Guidelines"
+                  tips={documentGuidelines}
+                  variant="plain"
+                  linkTo="/artspace/help"
+                  linkLabel="View evidence guide"
+                />
+                <NotePanel
+                  title={evidenceNote.title}
+                  body={evidenceNote.body}
+                  linkLabel={evidenceNote.linkLabel}
+                  linkTo="/artspace/help"
+                />
+              </>
+            ) : step === 'availability' ? (
               <>
                 <TipsPanel
                   title="Pricing Tips"

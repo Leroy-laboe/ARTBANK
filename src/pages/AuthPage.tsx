@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import AuthSwitch, { type AuthMode } from '@/components/ui/auth-switch';
 import panelVideo from '@/video.mp4';
+import { Icon } from '../components/ui/Icon';
 import { signIn, signUp } from '../services/auth';
 import styles from './AuthPage.module.css';
 
@@ -70,6 +71,14 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
 
   return (
     <main className={styles.page}>
+      {/* Left in AuthPage rather than auth-switch.tsx — that component is a
+          verbatim port of a supplied design, so anything not in the original
+          bundle stays out of it. */}
+      <Link to="/" className={styles.backLink}>
+        <Icon name="chevron-left" size={15} />
+        Back to ARTBANK
+      </Link>
+
       <AuthSwitch
         defaultMode={mode}
         videoSrc={panelVideo}

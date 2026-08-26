@@ -91,6 +91,183 @@
   padding: 1px 5.5px;
 }
 
+.searchClear {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: var(--border-soft);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.searchClear:hover {
+  background: var(--border);
+  color: var(--ink);
+}
+
+/* Anchors the notification and account dropdowns to their trigger. */
+.menuWrap {
+  position: relative;
+}
+
+/* Shared shell for both dropdown panels. */
+.panel {
+  position: absolute;
+  top: calc(100% + 9px);
+  left: 0;
+  z-index: 30;
+  width: 296px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.panelRight {
+  left: auto;
+  right: 0;
+  width: 240px;
+}
+
+.panelTitle {
+  padding: 2px 4px 9px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 6px;
+}
+
+.panelEmpty {
+  padding: 14px 4px;
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.notifList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.notifItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 9px;
+  padding: 8px 6px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.notifItem:hover {
+  background: var(--bg);
+}
+
+.notifDot {
+  margin-top: 5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.notifBody {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.notifName {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.notifPreview {
+  margin-top: 1px;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notifTime {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--muted-2);
+}
+
+.panelFooter {
+  display: block;
+  margin-top: 6px;
+  padding: 9px 6px 2px;
+  border-top: 1px solid var(--border-soft);
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-decoration: none;
+}
+
+.panelFooter:hover {
+  text-decoration: underline;
+}
+
+.panelEmail {
+  padding: 2px 4px 9px;
+  font-size: 11px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 6px;
+  overflow-wrap: anywhere;
+}
+
+.panelItem {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 7px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.panelItem:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.panelDanger {
+  color: var(--danger);
+}
+
+.panelDanger:hover {
+  background: rgba(179, 69, 61, 0.08);
+  color: var(--danger);
+}
+
 .bell {
   position: relative;
   display: grid;

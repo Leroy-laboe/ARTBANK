@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { cn } from '@/lib/utils';
+import { Icon } from './Icon';
 import styles from './auth-switch.module.css';
 
 export type AuthMode = 'signin' | 'signup';
@@ -36,6 +37,11 @@ export default function AuthSwitch({
   const [isSignUp, setIsSignUp] = useState(defaultMode === 'signup');
   const [role, setRole] = useState<AccountRole>('artist');
   const [signedUpEmail, setSignedUpEmail] = useState('');
+  // Separate per form: showing the sign-in field shouldn't reveal the
+  // sign-up one too, and each stays password-masked again if the panel
+  // switches sides.
+  const [showSignInPassword, setShowSignInPassword] = useState(false);
+  const [showSignUpPassword, setShowSignUpPassword] = useState(false);
 
   // The original toggled a class via document.querySelector('.container') in
   // an effect. Driving it from state instead avoids a global DOM query that
@@ -100,14 +106,23 @@ export default function AuthSwitch({
               <i>📧</i>
               <input type="email" name="email" placeholder="Email" autoComplete="email" />
             </div>
-            <div className={styles.inputField}>
+            <div className={cn(styles.inputField, styles.passwordField)}>
               <i>🔒</i>
               <input
-                type="password"
+                type={showSignInPassword ? 'text' : 'password'}
                 name="password"
                 placeholder="Password"
                 autoComplete="current-password"
               />
+              <button
+                type="button"
+                className={styles.toggleVisibility}
+                aria-label={showSignInPassword ? 'Hide password' : 'Show password'}
+                aria-pressed={showSignInPassword}
+                onClick={() => setShowSignInPassword((v) => !v)}
+              >
+                <Icon name={showSignInPassword ? 'eye-off' : 'eye'} size={17} />
+              </button>
             </div>
             {!isSignUp && error && <p className={styles.errorText}>{error}</p>}
             {!isSignUp && !error && info && <p className={styles.infoText}>{info}</p>}
@@ -178,14 +193,23 @@ export default function AuthSwitch({
                   <i>📧</i>
                   <input type="email" name="email" placeholder="Email address" autoComplete="email" />
                 </div>
-                <div className={styles.inputField}>
+                <div className={cn(styles.inputField, styles.passwordField)}>
                   <i>🔒</i>
                   <input
-                    type="password"
+                    type={showSignUpPassword ? 'text' : 'password'}
                     name="password"
                     placeholder="Password"
                     autoComplete="new-password"
                   />
+                  <button
+                    type="button"
+                    className={styles.toggleVisibility}
+                    aria-label={showSignUpPassword ? 'Hide password' : 'Show password'}
+                    aria-pressed={showSignUpPassword}
+                    onClick={() => setShowSignUpPassword((v) => !v)}
+                  >
+                    <Icon name={showSignUpPassword ? 'eye-off' : 'eye'} size={17} />
+                  </button>
                 </div>
                 {isSignUp && error && <p className={styles.errorText}>{error}</p>}
                 <input

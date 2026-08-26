@@ -24,7 +24,7 @@
 
 .wordmark {
   display: block;
-  height: 26px;
+  height: 34px;
   width: auto;
 }
 
@@ -59,17 +59,6 @@
   align-items: center;
   gap: 18px;
   flex-shrink: 0;
-}
-
-.iconBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ink);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
 }
 
 .authGroup {

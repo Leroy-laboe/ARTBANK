@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { ArtspaceSidebar } from '../components/artspace/ArtspaceSidebar';
 import { ArtspaceTopbar } from '../components/artspace/ArtspaceTopbar';
 import { ArtspacePageHeader } from '../components/artspace/ArtspacePageHeader';
@@ -26,6 +27,7 @@ import styles from './MessagesPage.module.css';
  *  See docs/pivot-checklist/15-messages.md. */
 export function MessagesPage() {
   const { profile } = useSession();
+  const [params] = useSearchParams();
   const [rows, setRows] = useState<Conversation[]>(conversations);
   const [threads, setThreads] = useState<Record<string, MessageDay[]>>({});
   const [tab, setTab] = useState('all');
@@ -38,12 +40,21 @@ export function MessagesPage() {
       if (!active) return;
       setRows(result.conversations);
       setThreads(result.threads);
-      if (result.conversations[0]) setActiveId(result.conversations[0].id);
     });
     return () => {
       active = false;
     };
   }, [profile]);
+
+  // ?c=<conversationId> is how the topbar's notification dropdown opens a
+  // specific thread. Falls back to the first conversation once rows have
+  // loaded and nothing in the URL points anywhere in particular.
+  useEffect(() => {
+    if (rows.length === 0) return;
+    const requested = params.get('c');
+    const match = requested && rows.some((c) => c.id === requested) ? requested : rows[0].id;
+    setActiveId(match);
+  }, [rows, params]);
 
   const visible = useMemo(() => {
     if (tab === 'unread') return rows.filter((c) => c.unread > 0);

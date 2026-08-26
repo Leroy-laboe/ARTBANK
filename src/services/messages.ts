@@ -53,7 +53,7 @@ function monogram(name: string): string {
     .join('');
 }
 
-function shortTime(iso: string): string {
+export function shortTime(iso: string): string {
   const date = new Date(iso);
   const hours = (Date.now() - date.getTime()) / 3_600_000;
   if (hours < 24) return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });

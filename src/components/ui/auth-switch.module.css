@@ -241,6 +241,44 @@
   font-weight: 400;
 }
 
+/* The eye button sits inside the input's own grid cell rather than adding a
+   third grid column, so the icon/input two-column layout above is untouched. */
+.passwordField {
+  position: relative;
+}
+
+.passwordField input {
+  padding-right: 34px;
+}
+
+.toggleVisibility {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #8a6a44;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.toggleVisibility:hover {
+  color: #3a2a17;
+  background-color: rgba(138, 106, 68, 0.12);
+}
+
+.toggleVisibility:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+
 .btn {
   width: 150px;
   background: linear-gradient(150deg, var(--gold-light) 0%, var(--gold) 45%, var(--gold-dark) 100%);

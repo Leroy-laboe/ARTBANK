@@ -1,5 +1,4 @@
 import { Link, NavLink } from 'react-router-dom';
-import { Icon } from '../ui/Icon';
 import { navLinks } from '../../data/homeContent';
 import logo from '../../assets/images/artbank-logo-dark.png';
 import styles from './Header.module.css';
@@ -26,9 +25,6 @@ export function Header() {
         </nav>
 
         <div className={styles.actions}>
-          <button type="button" className={styles.iconBtn} aria-label="Search">
-            <Icon name="search" size={19} />
-          </button>
           <div className={styles.authGroup}>
             <Link to="/login" className={styles.enterBtn}>
               Enter ArtSpace

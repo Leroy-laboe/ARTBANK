@@ -16,14 +16,20 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
 
   const loadProfile = useCallback(async () => {
+    // Set before the first await, so a caller that fires this and renders in
+    // the same tick sees "in flight" rather than "no profile".
+    setProfileLoading(true);
     try {
       setProfile(await getMyProfile());
     } catch {
       // A missing or unreadable profile row shouldn't sign the user out —
       // they're still authenticated, just without a local record yet.
       setProfile(null);
+    } finally {
+      setProfileLoading(false);
     }
   }, []);
 
@@ -49,9 +55,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     const { data } = onAuthStateChange((_event, session) => {
       setAuthenticated(Boolean(session));
       if (session) {
+        // Marked in flight synchronously here as well as inside loadProfile:
+        // this callback runs before signInWithPassword resolves, so the flag
+        // is already up by the time the sign-in form navigates away.
+        setProfileLoading(true);
         void loadProfile();
       } else {
         setProfile(null);
+        setProfileLoading(false);
       }
     });
 
@@ -65,18 +76,20 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     if (isSupabaseConfigured) await signOutService();
     setAuthenticated(false);
     setProfile(null);
+    setProfileLoading(false);
   }, []);
 
   const value = useMemo<SessionValue>(
     () => ({
       loading,
       isAuthenticated,
+      profileLoading,
       profile,
       configured: isSupabaseConfigured,
       signOut,
       refresh: loadProfile,
     }),
-    [loading, isAuthenticated, profile, signOut, loadProfile],
+    [loading, isAuthenticated, profileLoading, profile, signOut, loadProfile],
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;

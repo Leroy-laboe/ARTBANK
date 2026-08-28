@@ -13,11 +13,18 @@ import styles from './RequireAuth.module.css';
  *
  *  Artists keep the historical destination when the role can't be read at
  *  all — a profile that failed to load is a broken read, not a signal, and
- *  ArtSpace is where every existing account already expected to arrive. */
+ *  ArtSpace is where every existing account already expected to arrive.
+ *
+ *  `profileLoading` matters as much as `loading` here, and missing it was a
+ *  real bug: `loading` only covers the identity check at mount, which has
+ *  long since settled by the time someone signs in. The sign-in form then
+ *  navigates here while the profile row is still in flight, so this saw
+ *  `profile: null` — indistinguishable from a failed read — and sent buyers
+ *  to ArtSpace. Waiting on both means the role is known before we choose. */
 export function WorkspaceHome() {
-  const { loading, profile } = useSession();
+  const { loading, profileLoading, profile } = useSession();
 
-  if (loading) {
+  if (loading || profileLoading) {
     return (
       <div className={styles.pending} role="status" aria-live="polite">
         <span className={styles.spinner} aria-hidden="true" />

@@ -19,7 +19,10 @@ export function StatsOverviewPanel({
   stats: OverviewStat[];
   ranges?: string[];
   columns?: 2 | 3;
-  linkTo: string;
+  /** Omit where there is nowhere further to go. A "View full insights" link
+   *  pointing at the page you are already on is a dead control wearing an
+   *  arrow. */
+  linkTo?: string;
   linkLabel?: string;
 }) {
   return (
@@ -48,10 +51,12 @@ export function StatsOverviewPanel({
         ))}
       </dl>
 
-      <Link to={linkTo} className={styles.link}>
-        {linkLabel}
-        <Icon name="arrow-right" size={13} />
-      </Link>
+      {linkTo && (
+        <Link to={linkTo} className={styles.link}>
+          {linkLabel}
+          <Icon name="arrow-right" size={13} />
+        </Link>
+      )}
     </section>
   );
 }

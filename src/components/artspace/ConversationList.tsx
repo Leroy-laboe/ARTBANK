@@ -1,5 +1,5 @@
 import { Icon } from '../ui/Icon';
-import { conversations, messagesPaging, type Conversation } from '../../data/artspaceMessages';
+import { conversations, type Conversation } from '../../data/artspaceMessages';
 import type { MonogramTone } from '../../data/artspaceInterest';
 import styles from './ConversationList.module.css';
 
@@ -67,8 +67,10 @@ export function ConversationList({
         ))}
       </ul>
 
+      {/* The real number. This used to read "Showing 1 to 7 of 28" from a
+          literal, which stayed 28 however many conversations there were. */}
       <p className={styles.footer}>
-        Showing {messagesPaging.from} to {messagesPaging.to} of {messagesPaging.total} conversations
+        {items.length} {items.length === 1 ? 'conversation' : 'conversations'}
       </p>
     </div>
   );

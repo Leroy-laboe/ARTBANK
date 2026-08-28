@@ -107,11 +107,16 @@ export async function loadInterest(profile: Profile | null): Promise<InterestRes
     .order('created_at', { ascending: false })
     .limit(24);
 
-  if (error || !data || data.length === 0) {
+  // A read that FAILED and a ledger that is EMPTY are not the same thing.
+  // The first means we cannot see the data — no migrations, no permission —
+  // and standing in demo content is the kind thing to do. The second is a
+  // real answer, and dressing it up as someone else's enquiries tells a
+  // signed-in artist they have interest they do not have.
+  if (error) {
     return { enquiries: demoEnquiries, viewers: demoViewers, anonymousCount: 412, isDemo: true };
   }
 
-  const rows = data as unknown as EntryRow[];
+  const rows = (data ?? []) as unknown as EntryRow[];
 
   const { count } = await supabase
     .from('interest_entries')

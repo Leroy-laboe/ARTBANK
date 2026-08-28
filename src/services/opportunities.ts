@@ -127,9 +127,13 @@ export async function loadOpportunities(profile: Profile | null): Promise<Opport
     .eq('artist_id', profile.id)
     .order('match_score', { ascending: false });
 
-  if (error || !data || data.length === 0) {
-    return { opportunities: demoOpportunities, isDemo: true };
-  }
+  // A read that FAILED and a match list that is EMPTY are not the same thing.
+  // The first means we cannot see the data — no migrations, no permission —
+  // and standing in demo content is the kind thing to do. The second is a
+  // real answer, and dressing it up as someone else's matches tells a
+  // signed-in artist they have been shortlisted when they have not.
+  if (error) return { opportunities: demoOpportunities, isDemo: true };
+  if (data.length === 0) return { opportunities: [], isDemo: false };
 
   // Applications are a separate table; one extra read keeps the join simple.
   const { data: apps } = await supabase

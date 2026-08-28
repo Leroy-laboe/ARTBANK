@@ -10,6 +10,7 @@ import { ArtspacePagination } from '../components/artspace/ArtspacePagination';
 import { StatsOverviewPanel } from '../components/artspace/StatsOverviewPanel';
 import { QuickActionsPanel } from '../components/artspace/QuickActionsPanel';
 import { WorksFiltersPanel } from '../components/artspace/WorksFiltersPanel';
+import { RecordSaleDialog } from '../components/artspace/RecordSaleDialog';
 import {
   activeTabId,
   applyTab,
@@ -68,6 +69,11 @@ export function MyWorksPage() {
   const [showArchived, setShowArchived] = useState(false);
   const [filters, setFilters] = useState<WorksFilters>(defaultFilters);
   const [page, setPage] = useState(1);
+  /** The work whose sale is being recorded, if any. Choosing Sold opens this
+   *  rather than only relabelling the row — a work marked sold with nothing
+   *  recorded against it is exactly the state that leaves "Earnings to Date"
+   *  permanently empty. */
+  const [selling, setSelling] = useState<Work | null>(null);
 
   // ?q= is how the topbar search box reaches this screen — either typed here
   // directly, or arriving from another page that submitted a search and had
@@ -203,16 +209,20 @@ export function MyWorksPage() {
       // the switch over the constant actions.
       if (typeof action === 'object') {
         if (action.kind === 'availability') {
+          // Sold is the one availability that has money behind it, so it asks
+          // for the figure instead of silently setting a label. The dialog
+          // marks the work sold itself once the deal is recorded.
+          if (action.value === 'Sold') {
+            setSelling(work);
+            return;
+          }
+
           setAllRows((rows) =>
             rows.map((w) => (w.id === work.id ? { ...w, availability: action.value } : w)),
           );
           try {
             await setArtworkAvailability(work.id, action.value);
-            say(
-              action.value === 'Sold'
-                ? `“${work.title}” is marked sold. Recorded earnings only change when a transaction is recorded.`
-                : `“${work.title}” is now ${action.value.toLowerCase()}.`,
-            );
+            say(`“${work.title}” is now ${action.value.toLowerCase()}.`);
           } catch (err) {
             say(describeError(err, `Could not update “${work.title}”.`));
           }
@@ -567,6 +577,31 @@ export function MyWorksPage() {
           </aside>
         </div>
       </main>
+
+      {selling && (
+        <RecordSaleDialog
+          artworkId={selling.id}
+          artworkTitle={selling.title}
+          // Reached from the portfolio rather than from a conversation, so
+          // there is no buyer in hand. The deal is still worth recording —
+          // artwork_deals.buyer_id is nullable precisely for a sale agreed
+          // off-platform.
+          buyerId={null}
+          buyerName={null}
+          onClose={() => setSelling(null)}
+          onRecorded={(summary) => {
+            const sold = selling;
+            setSelling(null);
+            setAllRows((rows) =>
+              rows.map((w) => (w.id === sold.id ? { ...w, availability: 'Sold' } : w)),
+            );
+            say(summary);
+            // Earnings and the interest count are computed from other tables,
+            // so re-read rather than patching a figure in place.
+            void listMyWorks(profile).then((result) => setAllRows(result.works));
+          }}
+        />
+      )}
     </div>
   );
 }

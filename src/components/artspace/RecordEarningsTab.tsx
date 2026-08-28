@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import { Icon } from '../ui/Icon';
+import { useSession } from '../../lib/sessionContext';
+import { confirmPayment, dealStatusCopy, describeDealError, isSettled, type DealStatus } from '../../services/deals';
 import type { ArtworkRecord } from '../../services/artworkRecord';
 import styles from './recordTabs.module.css';
 
@@ -14,10 +17,48 @@ const dealLabel: Record<string, string> = {
  *  outright, and an empty list here means nothing has been recorded — which
  *  is not the same as the work being worth nothing, so the empty state says
  *  so rather than printing a zero. */
-export function RecordEarningsTab({ record }: { record: ArtworkRecord }) {
+export function RecordEarningsTab({
+  record,
+  onChanged,
+}: {
+  record: ArtworkRecord;
+  /** Called after a confirmation, so the page can re-read the record. */
+  onChanged?: () => void;
+}) {
   const { deals, artwork } = record;
-  const total = deals.reduce((sum, d) => sum + d.amount, 0);
+  const { profile } = useSession();
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+
+  // Settled only. A deal awaiting payment is listed — the artist needs to see
+  // it and act on it — but it is not money, and adding it to the total would
+  // be the invented figure this screen exists to avoid.
+  const settled = deals.filter((d) => isSettled(d.status));
+  const total = settled.reduce((sum, d) => sum + d.amount, 0);
   const currency = deals[0]?.currency ?? artwork.currency;
+
+  async function handleConfirm(deal: (typeof deals)[number]) {
+    if (!profile) return;
+    setBusyId(deal.id);
+    setNotice(null);
+    try {
+      const result = await confirmPayment(profile, {
+        id: deal.id,
+        artworkId: artwork.id,
+        dealType: deal.dealType,
+        amount: deal.amount,
+        currency: deal.currency,
+      });
+      setNotice(
+        `Payment confirmed.${result.markedSold ? ' This work is now marked sold.' : ''}`,
+      );
+      onChanged?.();
+    } catch (err) {
+      setNotice(describeDealError(err));
+    } finally {
+      setBusyId(null);
+    }
+  }
 
   return (
     <section className={styles.panel}>
@@ -30,6 +71,12 @@ export function RecordEarningsTab({ record }: { record: ArtworkRecord }) {
         </div>
       </div>
 
+      {notice && (
+        <p className={styles.notice} role="status">
+          {notice}
+        </p>
+      )}
+
       {deals.length > 0 ? (
         <>
           <div className={styles.total}>
@@ -37,7 +84,9 @@ export function RecordEarningsTab({ record }: { record: ArtworkRecord }) {
               {currency} {total.toLocaleString('en-US')}
             </span>
             <span className={styles.totalLabel}>
-              from {deals.length} transaction{deals.length === 1 ? '' : 's'}
+              from {settled.length} settled transaction{settled.length === 1 ? '' : 's'}
+              {settled.length !== deals.length &&
+                ` · ${deals.length - settled.length} awaiting payment`}
             </span>
           </div>
 
@@ -59,7 +108,24 @@ export function RecordEarningsTab({ record }: { record: ArtworkRecord }) {
                     day: 'numeric',
                     year: 'numeric',
                   })}
+                  {' · '}
+                  {dealStatusCopy[deal.status as DealStatus]?.artist ?? deal.status}
                 </p>
+
+                {/* Only a `request` deal can be confirmed here. An `offline`
+                    one is already settled, and a `gateway` one is settled by a
+                    verified webhook — 0025's policy refuses either from a
+                    browser, so offering a button would offer a refusal. */}
+                {deal.status === 'awaiting_payment' && deal.paymentRoute === 'request' && (
+                  <button
+                    type="button"
+                    className={styles.confirmBtn}
+                    disabled={busyId === deal.id}
+                    onClick={() => handleConfirm(deal)}
+                  >
+                    {busyId === deal.id ? 'Confirming…' : 'Confirm receipt'}
+                  </button>
+                )}
               </li>
             ))}
           </ul>

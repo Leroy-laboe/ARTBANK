@@ -33,15 +33,16 @@ type ConversationRow = {
   category: string;
   purpose: string | null;
   last_message_at: string;
+  artwork_id: string | null;
   artworks: { title: string } | null;
-  users: { display_name: string | null; country: string | null; organization: string | null } | null;
+  users: { id: string; display_name: string | null; country: string | null; organization: string | null } | null;
   messages: { id: string; body: string; created_at: string; read_at: string | null; sender_id: string }[] | null;
 };
 
 const selectFor = (side: MessageSide) => `
-  id, category, purpose, last_message_at,
+  id, category, purpose, last_message_at, artwork_id,
   artworks(title),
-  users!${sides[side].other}(display_name, country, organization),
+  users!${sides[side].other}(id, display_name, country, organization),
   messages(id, body, created_at, read_at, sender_id)
 `;
 
@@ -95,6 +96,10 @@ function toConversation(row: ConversationRow, index: number, selfId: string): Co
     starred: false,
     category: categoryLabel[row.category] ?? 'New Enquiry',
     artwork: row.artworks?.title ?? null,
+    // Ids as well as names: recording a deal from inside the thread needs the
+    // artwork record and the other party, not their labels.
+    artworkId: row.artwork_id,
+    counterpartId: row.users?.id ?? null,
     purpose: row.purpose ?? '—',
   };
 }
@@ -152,9 +157,14 @@ export async function loadMessages(
     .eq(sides[side].self, profile.id)
     .order('last_message_at', { ascending: false });
 
-  if (error || !data || data.length === 0) return demo;
+  // A read that FAILED and a mailbox that is EMPTY are not the same thing.
+  // The first means we cannot see the data — no migrations, no permission —
+  // and standing in demo content is the kind thing to do. The second is a
+  // real answer, and dressing it up as someone else's conversations tells a
+  // signed-in artist they have mail they do not have.
+  if (error) return demo;
 
-  const rows = data as unknown as ConversationRow[];
+  const rows = (data ?? []) as unknown as ConversationRow[];
 
   return {
     conversations: rows.map((row, i) => toConversation(row, i, profile.id)),

@@ -68,6 +68,12 @@ export type RecordDeal = {
   dealType: string;
   amount: number;
   currency: string;
+  /** Lifecycle state (0024). The Earnings tab shows every deal, settled or
+   *  not, but only settled ones are money — see `isSettled`. */
+  status: string;
+  /** offline · request · gateway (0025). Only a `request` deal can be
+   *  confirmed by the artist. */
+  paymentRoute: string;
   agreedAt: string;
   buyer: string | null;
 };
@@ -268,6 +274,8 @@ type DealRowRaw = {
   deal_type: string;
   amount: number | string;
   currency: string;
+  status: string;
+  payment_route: string;
   agreed_at: string;
   users: { display_name: string | null } | null;
 };
@@ -316,7 +324,7 @@ export async function getArtworkRecord(id: string): Promise<ArtworkRecord | null
         .order('created_at', { ascending: false }),
       client
         .from('artwork_deals')
-        .select('id, deal_type, amount, currency, agreed_at, users!artwork_deals_buyer_id_fkey(display_name)')
+        .select('id, deal_type, amount, currency, status, payment_route, agreed_at, users!artwork_deals_buyer_id_fkey(display_name)')
         .eq('artwork_id', id)
         .order('agreed_at', { ascending: false }),
       client
@@ -358,6 +366,8 @@ export async function getArtworkRecord(id: string): Promise<ArtworkRecord | null
     dealType: row.deal_type,
     amount: Number(row.amount),
     currency: row.currency,
+    status: row.status ?? 'agreed',
+    paymentRoute: row.payment_route ?? 'offline',
     agreedAt: row.agreed_at,
     buyer: row.users?.display_name ?? null,
   }));

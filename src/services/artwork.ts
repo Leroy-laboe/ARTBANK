@@ -8,6 +8,7 @@ import {
   type WorkStatus,
   type WorkVisibility,
 } from '../data/artspaceWorks';
+import { isSettled } from './deals';
 import type { Profile } from '../types/user';
 
 /** Reads and writes public.artworks for the signed-in artist.
@@ -35,7 +36,7 @@ type ArtworkRow = {
   // Counted, not summarised by the database, because these sets are small and
   // one round trip beats four.
   interest_entries: { id: string; is_identified: boolean }[] | null;
-  artwork_deals: { amount: number }[] | null;
+  artwork_deals: { amount: number; status: string }[] | null;
   opportunity_matches: { opportunity_id: string }[] | null;
 };
 
@@ -44,7 +45,7 @@ const SELECT = `
   visibility, coa_status, image_url, updated_at, created_at,
   artwork_images(url, is_primary),
   interest_entries(id, is_identified),
-  artwork_deals(amount),
+  artwork_deals(amount, status),
   opportunity_matches(opportunity_id)
 `;
 
@@ -90,7 +91,9 @@ function fromRow(row: ArtworkRow): Work {
   // here as well as in the UI — see docs/pivot-checklist/12-interest-ledger.md.
   const interestCount = (row.interest_entries ?? []).filter((e) => e.is_identified).length;
 
-  const deals = row.artwork_deals ?? [];
+  // Settled only. A deal awaiting payment is a promise, not an earning, and
+  // showing it as one would be the invented figure the brief bans.
+  const deals = (row.artwork_deals ?? []).filter((d) => isSettled(d.status));
   const earned = deals.reduce((sum, d) => sum + Number(d.amount), 0);
   const opportunities = (row.opportunity_matches ?? []).length;
 
@@ -136,11 +139,14 @@ export async function listMyWorks(profile: Profile | null): Promise<WorksResult>
     .or(`artist_id.eq.${profile.id},uploaded_by.eq.${profile.id}`)
     .order('updated_at', { ascending: false });
 
-  // A missing table (migrations not run yet) lands here too — fall back rather
+  // A missing table (migrations not run yet) lands here — fall back rather
   // than showing an empty portfolio the artist might mistake for data loss.
-  if (error || !data || data.length === 0) return { works: demoWorks, isDemo: true };
+  // An artist who genuinely has no works is a different case: they get the
+  // real empty answer, and the screen's own empty state invites them to add
+  // one. Handing them a stranger's portfolio would be worse than nothing.
+  if (error) return { works: demoWorks, isDemo: true };
 
-  return { works: (data as unknown as ArtworkRow[]).map(fromRow), isDemo: false };
+  return { works: ((data ?? []) as unknown as ArtworkRow[]).map(fromRow), isDemo: false };
 }
 
 export async function setArtworkStatus(id: string, status: 'draft' | 'published' | 'archived') {

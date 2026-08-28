@@ -85,3 +85,59 @@
     padding: 18px 14.5px 32px;
   }
 }
+
+/* Confirmation after recording a deal. Matches InterestPage's notice — both
+   report something that happened elsewhere on the screen. */
+.notice {
+  margin-bottom: 12px;
+  padding: 9px 13px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
+/* Shown when a signed-in account genuinely has no conversations. Previously
+   unreachable, because loadMessages substituted demo threads for an empty
+   inbox — which told people they had mail they did not have. */
+.emptyMailbox {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  padding: 64px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.emptyIcon {
+  color: var(--muted-2);
+  margin-bottom: 6px;
+}
+
+.emptyTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.emptyNote {
+  max-width: 400px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.emptyLink {
+  margin-top: 10px;
+  padding: 9px 19px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--ink);
+  border-radius: var(--radius-full);
+  text-decoration: none;
+}

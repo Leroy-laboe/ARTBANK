@@ -1,0 +1,104 @@
+/* Sits directly under the thread header, above the messages — the first thing
+   read on opening a conversation that has a deal against it. */
+
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Three tones, one per outcome. Settled is the only one that reads as good
+   news; pending is waiting on someone; ended is neither. */
+.settled {
+  background: #f1f6f2;
+}
+
+.pending {
+  background: var(--gold-bg);
+}
+
+.ended {
+  background: var(--bg);
+}
+
+.icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+
+.settled .icon {
+  color: var(--success);
+}
+
+.pending .icon {
+  color: var(--gold-dark);
+}
+
+.ended .icon {
+  color: var(--muted);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.money {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sep {
+  color: var(--muted-2);
+}
+
+.status {
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.meta {
+  margin-top: 1px;
+  font-size: 10.5px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pay {
+  flex-shrink: 0;
+  padding: 8px 15px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--ink);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pay:hover {
+  background: var(--dark-2);
+}
+
+@media (max-width: 560px) {
+  .banner {
+    flex-wrap: wrap;
+  }
+
+  .pay {
+    width: 100%;
+  }
+}

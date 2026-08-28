@@ -72,6 +72,30 @@
   color: var(--muted);
 }
 
+/* The one action in this header that changes anything outside the thread, so
+   it is the only one carrying a label rather than an icon alone. */
+.recordBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-light);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+.recordBtn:hover {
+  background: var(--gold-light);
+  color: var(--dark);
+}
+
 .headBtn {
   flex-shrink: 0;
   display: grid;

@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Icon } from '../ui/Icon';
+import { DealBanner } from './DealBanner';
+import type { DealSummary } from '../../services/deals';
 import { thread as demoThread, type Conversation, type MessageDay } from '../../data/artspaceMessages';
 import type { MonogramTone } from '../../data/artspaceInterest';
 import styles from './MessageThread.module.css';
@@ -19,6 +21,12 @@ export function MessageThread({
   conversation,
   days,
   onSend,
+  onRecordSale,
+  deal,
+  side = 'artist',
+  onReport,
+  onConfirm,
+  busy,
 }: {
   conversation: Conversation;
   /** The loaded thread. Falls back to the demo exchange so the panel is
@@ -27,6 +35,22 @@ export function MessageThread({
   /** Given, the composer sends. Omitted, it stays a preview — which is what
    *  a demo thread is, and posting into one would go nowhere. */
   onSend?: (body: string) => Promise<void> | void;
+  /** Given, the header offers "Record a Sale". Only the artist's side passes
+   *  this: 0012's RLS lets the artist record a deal and nobody else, so
+   *  showing the button to a buyer would offer them a refusal. */
+  onRecordSale?: () => void;
+  /** The deal recorded against this conversation's artwork, if any. Shown as
+   *  a banner so the thread reflects what happened rather than reading like
+   *  an open negotiation forever. */
+  deal?: DealSummary | null;
+  /** Which end is reading. Only changes the banner's wording. */
+  side?: 'artist' | 'buyer';
+  /** Passed straight to the banner — the payment handshake on a `request`
+   *  deal. The thread does not act on them, it just hosts the banner that
+   *  does. */
+  onReport?: () => void;
+  onConfirm?: () => void;
+  busy?: boolean;
 }) {
   const thread = days && days.length > 0 ? days : demoThread;
   const [draft, setDraft] = useState('');
@@ -69,6 +93,15 @@ export function MessageThread({
           <p className={styles.descriptor}>{conversation.descriptor}</p>
         </div>
 
+        {/* Only where there is an artwork to record against — a general
+            enquiry has no record to attach a figure to. */}
+        {onRecordSale && conversation.artworkId && !deal && (
+          <button type="button" className={styles.recordBtn} onClick={onRecordSale}>
+            <Icon name="handshake" size={15} />
+            Record a Sale
+          </button>
+        )}
+
         <button
           type="button"
           className={[styles.headBtn, conversation.starred && styles.headBtnActive].filter(Boolean).join(' ')}
@@ -80,6 +113,16 @@ export function MessageThread({
           <Icon name="more-vertical" size={17} />
         </button>
       </header>
+
+      {deal && (
+        <DealBanner
+          deal={deal}
+          side={side}
+          onReport={onReport}
+          onConfirm={onConfirm}
+          busy={busy}
+        />
+      )}
 
       <div className={styles.scroll}>
         {thread.map((day) => (

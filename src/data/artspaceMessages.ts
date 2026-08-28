@@ -6,7 +6,6 @@
 // never surfaced in a thread — all contact stays inside Artbank.
 
 import type { IconName } from '../components/ui/Icon';
-import type { QuickAction } from '../components/artspace/QuickActionsPanel';
 import type { MonogramTone } from './artspaceInterest';
 
 const photo = (id: string, w: number, h: number) =>
@@ -43,6 +42,13 @@ export type Conversation = {
   /** The artwork this conversation is about. The spec requires every message
    *  to carry its artwork context rather than floating free. */
   artwork: string | null;
+  /** The same artwork's id. Carried alongside the title because recording a
+   *  deal from inside the thread needs the record, not its name. Null on a
+   *  general enquiry, and on every demo row. */
+  artworkId?: string | null;
+  /** The other party's public.users id — the buyer when read from ArtSpace,
+   *  the artist when read from /collect. Null on demo rows. */
+  counterpartId?: string | null;
   /** Why they got in touch. */
   purpose: string;
 };
@@ -226,47 +232,20 @@ export const thread: MessageDay[] = [
 
 /* ── Tabs, paging and rail ── */
 
+/** Counts are deliberately absent: MessagesPage fills them from the
+ *  conversations it actually loaded. Baking a number in here is how the strip
+ *  ended up claiming three unread beside an empty inbox. */
 export const messageTabs = [
-  { id: 'all', label: 'All Messages', count: 3 },
-  { id: 'unread', label: 'Unread', count: 3 },
+  { id: 'all', label: 'All Messages' },
+  { id: 'unread', label: 'Unread' },
   { id: 'starred', label: 'Starred' },
   { id: 'archive', label: 'Archive' },
 ];
 
-export const messagesPaging = { from: 1, to: 7, total: 28 };
-
-export const messageOverview: {
-  ranges: string[];
-  stats: { id: string; value: string; label: string }[];
-} = {
-  ranges: ['All time', 'This year', 'Last 90 days'],
-  stats: [
-    { id: 'total', value: '86', label: 'Total Conversations' },
-    { id: 'unread', value: '24', label: 'Unread Messages' },
-    { id: 'awaiting', value: '5', label: 'Awaiting Reply' },
-    { id: 'starred', value: '3', label: 'Starred Messages' },
-  ],
-};
-
-export const messageQuickActions: QuickAction[] = [
-  { id: 'new-message', icon: 'edit', label: 'New Message' },
-  { id: 'manage-folders', icon: 'folder', label: 'Manage Folders' },
-  { id: 'saved-replies', icon: 'bookmark', label: 'Saved Replies' },
-  { id: 'templates', icon: 'file-text', label: 'Message Templates' },
-];
-
-export const messageFolders: { id: string; icon: IconName; label: string; count?: number }[] = [
-  { id: 'inbox', icon: 'inbox', label: 'Inbox', count: 3 },
-  { id: 'starred', icon: 'star', label: 'Starred', count: 3 },
-  { id: 'sent', icon: 'send', label: 'Sent' },
-  { id: 'archive', icon: 'archive', label: 'Archive' },
-  { id: 'trash', icon: 'trash', label: 'Trash' },
-];
 
 export const messageTip = {
   title: 'Message Tips',
   body: 'Keep all communication on ArtBank to protect your privacy and track opportunities effectively.',
-  linkLabel: 'Learn more',
 };
 
 /** Safety controls the spec requires on every conversation. Surfaced from the

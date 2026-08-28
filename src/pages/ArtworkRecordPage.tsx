@@ -276,7 +276,7 @@ export function ArtworkRecordPage() {
             {tab === 'interest' && <RecordInterestTab record={record} />}
             {tab === 'opportunities' && <RecordOpportunitiesTab record={record} />}
             {tab === 'rights' && <RecordRightsTab record={record} />}
-            {tab === 'earnings' && <RecordEarningsTab record={record} />}
+            {tab === 'earnings' && <RecordEarningsTab record={record} onChanged={load} />}
             {tab === 'history' && <RecordHistoryTab record={record} />}
           </div>
 

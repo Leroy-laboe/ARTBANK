@@ -1,0 +1,269 @@
+/* Deliberately matched to buyer/IntentDialog.module.css — the two are the
+   same kind of object (a focused form over a dimmed page), one on each side
+   of the deal, and they should not look like different products. */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(21, 17, 12, 0.45);
+  overflow-y: auto;
+}
+
+.dialog {
+  width: min(520px, 100%);
+  max-height: calc(100svh - 40px);
+  overflow-y: auto;
+  padding: 21.5px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14.5px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.close {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--bg);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.close:hover {
+  background: var(--border-soft);
+  color: var(--ink);
+}
+
+/* What this deal is about, shown rather than asked — both facts arrive from
+   the screen that opened the dialog. */
+.context {
+  margin-top: 15px;
+  padding: 11px 13px;
+  background: var(--bg);
+  border-radius: var(--radius-md);
+}
+
+.contextRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.contextRow + .contextRow {
+  margin-top: 6px;
+}
+
+.contextRow dt {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.contextRow dd {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: right;
+}
+
+.muted {
+  font-weight: 400;
+  color: var(--muted-2);
+}
+
+.field {
+  display: block;
+  margin-top: 15px;
+  border: none;
+  padding: 0;
+}
+
+.label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.types {
+  display: grid;
+  gap: 7px;
+}
+
+.type {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'radio label'
+    'radio hint';
+  align-items: center;
+  column-gap: 9px;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.type:hover {
+  border-color: var(--muted-2);
+}
+
+.typeOn {
+  border-color: var(--gold);
+  background: var(--gold-bg);
+}
+
+.radio {
+  grid-area: radio;
+  accent-color: var(--gold-dark);
+}
+
+.typeLabel {
+  grid-area: label;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.typeHint {
+  grid-area: hint;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+}
+
+.amountRow {
+  display: flex;
+  gap: 7px;
+}
+
+.input,
+.currency {
+  width: 100%;
+  padding: 9px 11px;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.currency {
+  width: auto;
+  flex-shrink: 0;
+  padding-right: 7px;
+}
+
+.input:focus-visible,
+.currency:focus-visible {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.error {
+  margin-top: 11px;
+  font-size: 11.5px;
+  color: #a3271f;
+}
+
+.note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 15px;
+  padding: 10px 12px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--muted);
+  background: var(--bg);
+  border-radius: var(--radius-md);
+}
+
+.note svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 17px;
+}
+
+.cancel,
+.submit {
+  padding: 9px 17px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.cancel {
+  background: none;
+  color: var(--ink-soft);
+  border: 1px solid var(--border);
+}
+
+.cancel:hover:not(:disabled) {
+  border-color: var(--ink);
+}
+
+.submit {
+  background: var(--ink);
+  color: #fff;
+  border: none;
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--dark-2);
+}
+
+.cancel:disabled,
+.submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Explains why an option is unavailable, under the field it affects. */
+.hint {
+  display: block;
+  margin-top: 5px;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}

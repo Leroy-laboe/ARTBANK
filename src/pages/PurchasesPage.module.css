@@ -1,0 +1,207 @@
+.state {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.empty {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  padding: 54px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.emptyIcon {
+  color: var(--muted-2);
+  margin-bottom: 6px;
+}
+
+.emptyTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.emptyNote {
+  max-width: 380px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.emptyLink {
+  margin-top: 10px;
+  padding: 9px 19px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--ink);
+  border-radius: var(--radius-full);
+  text-decoration: none;
+}
+
+.list {
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 17px;
+}
+
+.row + .row {
+  border-top: 1px solid var(--border-soft);
+}
+
+.thumb,
+.thumbEmpty {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--bg);
+}
+
+.thumbEmpty {
+  display: grid;
+  place-items: center;
+  color: var(--muted-2);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+a.title:hover {
+  color: var(--forest);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.meta {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.note {
+  margin-top: 3px;
+  font-size: 10.5px;
+  color: var(--muted-2);
+}
+
+.right {
+  flex-shrink: 0;
+  display: grid;
+  justify-items: end;
+  gap: 5px;
+}
+
+.amount {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.status {
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* The three tones match DealBanner, so a purchase reads the same wherever it
+   appears. */
+.settled {
+  background: var(--success);
+  color: #fff;
+}
+
+.pending {
+  background: var(--gold-bg);
+  color: var(--gold-dark);
+}
+
+.ended {
+  background: var(--border-soft);
+  color: var(--muted);
+}
+
+.footnote {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 14px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.footnote svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+@media (max-width: 600px) {
+  .row {
+    flex-wrap: wrap;
+  }
+
+  .right {
+    justify-items: start;
+    grid-auto-flow: column;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+/* The one action on this page: a request the buyer has not yet reported. */
+.report {
+  margin-top: 2px;
+  padding: 6px 13px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--ink);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.report:hover {
+  background: var(--dark-2);
+}
+
+.notice {
+  margin-top: 12px;
+  padding: 9px 13px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}

@@ -87,6 +87,20 @@
   color: var(--forest);
 }
 
+/* The strongest of the states, and deliberately the only filled one — a
+   completed purchase should not look like just another pipeline stage. */
+.purchased {
+  background: var(--success);
+  color: #fff;
+}
+
+/* Waiting on the buyer, so it borrows the same gold as "Awaiting Response"
+   waits on the artist. */
+.due {
+  background: var(--gold-bg);
+  color: var(--gold-dark);
+}
+
 .closed {
   background: var(--border-soft);
   color: var(--muted);

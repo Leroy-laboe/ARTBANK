@@ -30,6 +30,7 @@ export const buyerPrimaryNav: BuyerNavItem[] = [
   { icon: 'home', label: 'Discover', to: '/collect' },
   { icon: 'users', label: 'Artists', to: '/collect/artists' },
   { icon: 'bookmark', label: 'Saved Works', to: '/collect/saved' },
+  { icon: 'handshake', label: 'Purchases', to: '/collect/purchases' },
   { icon: 'mail', label: 'My Enquiries', to: '/collect/enquiries' },
   { icon: 'message', label: 'Messages', to: '/collect/messages' },
 ];
@@ -314,7 +315,16 @@ export const demoArtworkDetail: BuyerArtworkDetail = {
 /** Where an enquiry has got to. Read from interest_entries.pipeline_stage,
  *  which is the artist's ledger — the buyer sees the same row, so the two
  *  sides can never disagree about what was asked or when. */
-export type EnquiryStatus = 'Awaiting Response' | 'In Conversation' | 'Viewing Room' | 'Closed';
+export type EnquiryStatus =
+  | 'Awaiting Response'
+  | 'In Conversation'
+  | 'Viewing Room'
+  /** A deal was recorded and settled. Distinct from 'Closed', which is what an
+   *  enquiry that went nowhere looks like — telling a buyer their purchase was
+   *  "Closed" reads as a rejection. */
+  | 'Purchased'
+  | 'Payment Due'
+  | 'Closed';
 
 export type BuyerEnquiry = {
   id: string;

@@ -8,6 +8,8 @@ const statusClass: Record<EnquiryStatus, string> = {
   'Awaiting Response': styles.awaiting,
   'In Conversation': styles.talking,
   'Viewing Room': styles.room,
+  Purchased: styles.purchased,
+  'Payment Due': styles.due,
   Closed: styles.closed,
 };
 

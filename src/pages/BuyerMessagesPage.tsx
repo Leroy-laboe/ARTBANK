@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { BuyerShell } from '../components/buyer/BuyerShell';
 import { BuyerTopbar } from '../components/buyer/BuyerTopbar';
 import { ConversationList } from '../components/artspace/ConversationList';
@@ -8,6 +8,8 @@ import { ArtspacePageHeader } from '../components/artspace/ArtspacePageHeader';
 import { Icon } from '../components/ui/Icon';
 import { useSession } from '../lib/sessionContext';
 import { loadMessages, sendMessage } from '../services/messages';
+import { getArtworkDeal, type DealSummary } from '../services/deals';
+import { ReportPaymentDialog } from '../components/artspace/ReportPaymentDialog';
 import { conversations as demoConversations } from '../data/artspaceMessages';
 import type { Conversation, MessageDay } from '../data/artspaceMessages';
 import styles from './BuyerMessagesPage.module.css';
@@ -31,6 +33,9 @@ export function BuyerMessagesPage() {
   const [threads, setThreads] = useState<Record<string, MessageDay[]>>({});
   const [isDemo, setIsDemo] = useState(true);
   const [activeId, setActiveId] = useState(demoConversations[0].id);
+  const [deal, setDeal] = useState<DealSummary | null>(null);
+  const [reporting, setReporting] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
 
   const reload = useCallback(async () => {
     const result = await loadMessages(profile, 'buyer');
@@ -62,6 +67,24 @@ export function BuyerMessagesPage() {
 
   const active = rows.find((c) => c.id === activeId) ?? rows[0];
 
+  // The deal on this conversation's artwork, read from the buyer's end. RLS
+  // returns it only because this account is the buyer on it — the same query
+  // from a stranger gets nothing.
+  useEffect(() => {
+    let live = true;
+    const artworkId = active?.artworkId;
+    if (!artworkId || isDemo) {
+      setDeal(null);
+      return;
+    }
+    getArtworkDeal(artworkId, 'buyer').then((found) => {
+      if (live) setDeal(found);
+    });
+    return () => {
+      live = false;
+    };
+  }, [active?.artworkId, isDemo]);
+
   async function handleSend(body: string) {
     if (!profile || !active) return;
     await sendMessage(active.id, profile.id, body);
@@ -79,14 +102,50 @@ export function BuyerMessagesPage() {
         </p>
       )}
 
+      {notice && (
+        <p className={styles.demoNote} role="status">
+          <Icon name="info" size={14} />
+          {notice}
+        </p>
+      )}
+
+      {!active ? (
+        <section className={styles.emptyMailbox}>
+          <Icon name="message" size={26} className={styles.emptyIcon} />
+          <p className={styles.emptyTitle}>No messages yet</p>
+          <p className={styles.emptyNote}>
+            A thread opens the moment you send an enquiry about an artwork. Everything you asked
+            travels with it, so the artist already knows what you want.
+          </p>
+          <Link to="/collect" className={styles.emptyLink}>
+            Browse artworks
+          </Link>
+        </section>
+      ) : (
       <section className={styles.mailbox}>
         <ConversationList items={rows} activeId={active.id} onSelect={setActiveId} />
         <MessageThread
           conversation={active}
+          side="buyer"
+          deal={deal}
+          onReport={deal ? () => setReporting(true) : undefined}
           days={threads[active.id]}
           onSend={isDemo ? undefined : handleSend}
         />
       </section>
+      )}
+
+      {reporting && deal && (
+        <ReportPaymentDialog
+          deal={deal}
+          onClose={() => setReporting(false)}
+          onReported={async (summary) => {
+            setReporting(false);
+            setNotice(summary);
+            if (active?.artworkId) setDeal(await getArtworkDeal(active.artworkId, 'buyer'));
+          }}
+        />
+      )}
     </BuyerShell>
   );
 }

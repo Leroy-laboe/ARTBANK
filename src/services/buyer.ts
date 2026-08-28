@@ -13,6 +13,7 @@ import {
   type EnquiryStatus,
   type IntentPurpose,
 } from '../data/buyerContent';
+import { isSettled } from './deals';
 import type { Profile } from '../types/user';
 
 /** Everything the buyer workspace at /collect reads and writes.
@@ -193,6 +194,16 @@ export async function listDiscoverArtworks(
     .select(ARTWORK_SELECT)
     .eq('status', 'published')
     .eq('visibility', 'public')
+    // Records with no account behind them are excluded. The competition
+    // entries (0003) were uploaded on the entrants' behalf and have a name but
+    // no artist_id, which means nobody can be followed, contacted or enquired
+    // with — BuyerArtworkPage already has to say "this record has no ArtBank
+    // account behind it". A feed of works whose whole purpose is to start a
+    // conversation should not be mostly works that cannot hold one.
+    //
+    // Excluded from the listing, not deleted: the rows still exist and stay
+    // reachable by direct link, exactly like an `unlisted` work.
+    .not('artist_id', 'is', null)
     .order('published_at', { ascending: false, nullsFirst: false })
     .limit(limit);
 
@@ -412,7 +423,22 @@ const purposeShort: Record<string, string> = Object.fromEntries(
  *  the Interest Ledger says. "In Conversation" is the one case the stage
  *  can't answer on its own: it means the artist has actually replied, which
  *  only the message thread knows. */
-function statusFor(stage: string, nextAction: string | null, artistReplied: boolean): EnquiryStatus {
+function statusFor(
+  stage: string,
+  nextAction: string | null,
+  artistReplied: boolean,
+  deal: { status: string } | null,
+): EnquiryStatus {
+  // A deal outranks the stage. An enquiry that ended in a purchase and one
+  // that was declined both land on pipeline_stage 'completed', and calling
+  // the first of those "Closed" tells a buyer their purchase fell through.
+  if (deal) {
+    if (isSettled(deal.status)) return 'Purchased';
+    if (deal.status === 'awaiting_payment') return 'Payment Due';
+    // Cancelled or refunded genuinely is closed.
+    return 'Closed';
+  }
+
   if (stage === 'completed' || nextAction === 'decline' || nextAction === 'block') return 'Closed';
   if (stage === 'viewing_room') return 'Viewing Room';
   if (artistReplied || stage === 'qualified' || stage === 'negotiation') return 'In Conversation';
@@ -442,7 +468,7 @@ export type EnquiryFeed = { enquiries: BuyerEnquiry[]; isDemo: boolean };
 export async function listMyEnquiries(profile: Profile | null): Promise<EnquiryFeed> {
   if (!supabase || !profile) return { enquiries: demoEnquiries, isDemo: true };
 
-  const [entries, threads] = await Promise.all([
+  const [entries, threads, deals] = await Promise.all([
     supabase
       .from('interest_entries')
       .select(
@@ -455,6 +481,14 @@ export async function listMyEnquiries(profile: Profile | null): Promise<EnquiryF
       .from('conversations')
       .select('id, artwork_id, artist_id, messages(sender_id)')
       .eq('buyer_id', profile.id),
+    // What this buyer has actually bought. Read separately rather than
+    // embedded: artwork_deals hangs off the artwork, not off the enquiry, and
+    // a deal can exist for a work enquired about more than once.
+    supabase
+      .from('artwork_deals')
+      .select('artwork_id, status, agreed_at')
+      .eq('buyer_id', profile.id)
+      .order('agreed_at', { ascending: false }),
   ]);
 
   if (entries.error || !entries.data) return { enquiries: demoEnquiries, isDemo: true };
@@ -466,6 +500,15 @@ export async function listMyEnquiries(profile: Profile | null): Promise<EnquiryF
     messages: { sender_id: string }[] | null;
   };
   const conversations = (threads.data ?? []) as unknown as ThreadRow[];
+
+  // Newest first from the query, so the first hit per artwork is the current
+  // one and later rows for the same work are ignored.
+  const dealByArtwork = new Map<string, { status: string }>();
+  for (const row of (deals.data ?? []) as { artwork_id: string | null; status: string }[]) {
+    if (row.artwork_id && !dealByArtwork.has(row.artwork_id)) {
+      dealByArtwork.set(row.artwork_id, { status: row.status });
+    }
+  }
 
   const enquiries = (entries.data as unknown as EnquiryRow[]).map((row): BuyerEnquiry => {
     const work = row.artworks;
@@ -490,7 +533,12 @@ export async function listMyEnquiries(profile: Profile | null): Promise<EnquiryF
       imageUrl: images.find((i) => i.is_primary)?.url ?? images[0]?.url ?? work?.image_url ?? '',
       purposeLabel: purposeShort[row.purpose ?? ''] ?? 'Enquiry',
       enquiredOn: row.created_at,
-      status: statusFor(row.pipeline_stage, row.next_action, artistReplied),
+      status: statusFor(
+        row.pipeline_stage,
+        row.next_action,
+        artistReplied,
+        row.artwork_id ? (dealByArtwork.get(row.artwork_id) ?? null) : null,
+      ),
       conversationId: thread?.id ?? null,
     };
   });

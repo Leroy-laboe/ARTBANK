@@ -118,6 +118,22 @@
   color: var(--muted);
 }
 
+/* Only rendered when the artist has a public handle. Deliberately quieter
+   than .title — the work is what the card is about; the artist is the way
+   through to who made it. */
+.artistLink {
+  composes: artist;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.artistLink:hover,
+.artistLink:focus-visible {
+  color: var(--forest);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .meta {
   margin-top: 3px;
   font-size: 10.5px;

@@ -84,7 +84,17 @@ export function BuyerArtworkCard({
         <Link to={`/collect/artworks/${artwork.id}`} className={styles.title}>
           {artwork.title}
         </Link>
-        <p className={styles.artist}>{artwork.artistName}</p>
+        {/* Clickable only when the artist chose a public handle — that is what
+            makes /artists/{handle} reachable. Records uploaded on someone's
+            behalf (the competition entries) have no account behind them at
+            all, so their name stays plain text rather than a link to nowhere. */}
+        {artwork.artistHandle ? (
+          <Link to={`/artists/${artwork.artistHandle}`} className={styles.artistLink}>
+            {artwork.artistName}
+          </Link>
+        ) : (
+          <p className={styles.artist}>{artwork.artistName}</p>
+        )}
 
         <p className={styles.meta}>
           {[artwork.medium, artwork.dimensions].filter(Boolean).join(' · ') || '—'}

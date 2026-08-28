@@ -99,6 +99,20 @@
   white-space: nowrap;
 }
 
+/* Shown instead of the two auth buttons once someone is signed in. Same
+   weight as .createBtn — it is the one action in this slot, so it should not
+   read as secondary. */
+.workspaceBtn {
+  composes: createBtn;
+  gap: 7px;
+}
+
+.workspaceBtn::after {
+  content: '→';
+  font-size: 12px;
+  line-height: 1;
+}
+
 @media (max-width: 1100px) {
   .nav {
     display: none;

@@ -27,6 +27,7 @@ import { TermsPage } from './pages/TermsPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { CookiePolicyPage } from './pages/CookiePolicyPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
+import { PricingPage } from './pages/PricingPage';
 
 function App() {
   return (
@@ -43,7 +44,7 @@ function App() {
         <Route path="/creators" element={<Navigate to="/artists" replace />} />
         <Route path="/how-it-works" element={<ComingSoonPage title="How It Works" />} />
         <Route path="/for-buyers" element={<ComingSoonPage title="For Buyers" />} />
-        <Route path="/pricing" element={<ComingSoonPage title="Pricing" />} />
+        <Route path="/pricing" element={<PricingPage />} />
         {/* "Membership" became "Pricing" in the nav. */}
         <Route path="/membership" element={<Navigate to="/pricing" replace />} />
 

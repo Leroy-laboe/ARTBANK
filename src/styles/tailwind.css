@@ -1,9 +1,67 @@
-/* Tailwind v4, scoped for use by the auth screens only.
-   Preflight is deliberately NOT imported: it is a global element reset that
-   would fight globals.css and restyle every existing CSS-Modules component.
-   Importing theme + utilities alone keeps Tailwind additive — utility classes
-   are available, but nothing about the existing site changes. */
+/* Tailwind v4, scoped for use by Tailwind/shadcn pages only (auth screens,
+   pricing). Preflight is deliberately NOT imported: it is a global element
+   reset that would fight globals.css and restyle every existing CSS-Modules
+   component. Importing theme + utilities alone keeps Tailwind additive —
+   utility classes are available, but nothing about the existing site changes. */
 @layer theme, base, components, utilities;
 
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css' layer(utilities);
+
+/* shadcn's semantic color tokens (style: new-york, baseColor: neutral per
+   components.json), mapped onto ARTBANK's own brand palette from globals.css
+   instead of generic shadcn defaults — so shadcn components (Button, Switch,
+   Pricing, etc.) render in the site's actual gold/ink/cream identity rather
+   than looking like an unstyled drop-in. Light-only: the rest of the site has
+   no dark mode, so neither does this. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  /* Reuses globals.css's Playfair Display stack so Tailwind pages can match
+     the serif headings used everywhere else (`font-display` utility). */
+  --font-display: var(--font-serif);
+}
+
+:root {
+  --radius: 0.875rem;
+  --background: #fbfaf7;
+  --foreground: #15110c;
+  --card: #ffffff;
+  --card-foreground: #15110c;
+  --popover: #ffffff;
+  --popover-foreground: #15110c;
+  --primary: #b9884f;
+  --primary-foreground: #ffffff;
+  --secondary: #f6ecd9;
+  --secondary-foreground: #8f6a3a;
+  --muted: #efe9dd;
+  --muted-foreground: #7c7468;
+  --accent: #f6ecd9;
+  --accent-foreground: #8f6a3a;
+  --destructive: #c8433f;
+  --destructive-foreground: #ffffff;
+  --border: #e8e1d3;
+  --input: #e8e1d3;
+  --ring: #b9884f;
+}

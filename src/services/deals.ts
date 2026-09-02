@@ -367,6 +367,25 @@ export async function listMyPurchases(profile: Profile | null): Promise<DealSumm
   return (data as unknown as DealRow[]).map((row) => toSummary(row, 'buyer'));
 }
 
+/** The same list from the selling side — every deal this artist has agreed.
+ *
+ *  Returns null on a failed read so callers can tell "cannot see the deals"
+ *  apart from "has no deals". An empty array is a real answer; null is not,
+ *  and the dashboard shows different things for each. */
+export async function listMyDeals(profile: Profile | null): Promise<DealSummary[] | null> {
+  const client = supabase;
+  if (!client || !profile) return null;
+
+  const { data, error } = await client
+    .from('artwork_deals')
+    .select(DEAL_SELECT)
+    .eq('artist_id', profile.id)
+    .order('agreed_at', { ascending: false });
+
+  if (error || !data) return null;
+  return (data as unknown as DealRow[]).map((row) => toSummary(row, 'artist'));
+}
+
 /* ── The payment handshake ───────────────────────────────────────────────── */
 
 /** The buyer saying "I have sent this."

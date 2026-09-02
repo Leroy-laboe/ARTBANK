@@ -28,6 +28,33 @@
   object-fit: cover;
 }
 
+/* Initials stand in when an enquirer has no photo, which most real ones
+   don't — same treatment as New Enquiries on the Interest screen. */
+.monogram {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 31px;
+  height: 31px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #fff;
+}
+
+.toneForest {
+  background: var(--forest);
+}
+
+.toneGold {
+  background: var(--gold);
+}
+
+.toneInk {
+  background: var(--dark);
+}
+
 .copy {
   min-width: 0;
 }

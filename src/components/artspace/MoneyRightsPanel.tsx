@@ -1,11 +1,14 @@
 import { Icon } from '../ui/Icon';
 import { Panel, PanelFooterLink, PanelLink } from './Panel';
-import { moneyAndRights } from '../../data/artspaceContent';
+import { moneyAndRights as demoMoney } from '../../data/artspaceContent';
+import type { MoneyAndRights } from '../../services/dashboard';
 import styles from './MoneyRightsPanel.module.css';
 
 /** Module 5 — recorded earnings and live licences. Nothing here is an
- *  estimate or a projection; every figure is something that happened. */
-export function MoneyRightsPanel() {
+ *  estimate or a projection; every figure is something that happened.
+ *  Pending earnings are money a buyer says they sent and the artist has not
+ *  confirmed — deliberately kept out of the completed total. */
+export function MoneyRightsPanel({ money = demoMoney }: { money?: MoneyAndRights }) {
   return (
     <Panel
       title="Money and Rights"
@@ -15,7 +18,7 @@ export function MoneyRightsPanel() {
       <div className={styles.body}>
         <div className={styles.figures}>
           <div className={styles.earnings}>
-            {moneyAndRights.earnings.map((item) => (
+            {money.earnings.map((item) => (
               <div className={styles.earningCard} key={item.id}>
                 <div className={styles.earningTop}>
                   <span className={styles.earningLabel}>{item.label}</span>
@@ -28,7 +31,7 @@ export function MoneyRightsPanel() {
           </div>
 
           <div className={styles.rights}>
-            {moneyAndRights.rights.map((item) => (
+            {money.rights.map((item) => (
               <div key={item.id}>
                 <p className={styles.rightLabel}>{item.label}</p>
                 <p className={styles.rightValue}>{item.value}</p>
@@ -38,7 +41,7 @@ export function MoneyRightsPanel() {
           </div>
         </div>
 
-        <img src={moneyAndRights.imageUrl} alt="" className={styles.image} loading="lazy" />
+        <img src={money.imageUrl} alt="" className={styles.image} loading="lazy" />
       </div>
 
       <PanelFooterLink to="/artspace/billing">View Details</PanelFooterLink>

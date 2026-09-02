@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
-import { professionalReadiness } from '../../data/artspaceContent';
+import { professionalReadiness as demoReadiness } from '../../data/artspaceContent';
+import type { Readiness } from '../../services/dashboard';
 import styles from './ReadinessScoreCard.module.css';
 
 const RADIUS = 26;
@@ -8,8 +9,8 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 /** The readiness score at a glance. Private to the artist — there is no public
  *  ranking anywhere on Artbank (docs/pivot-checklist/17-do-not-build-guardrails.md). */
-export function ReadinessScoreCard() {
-  const { score, verdict, note } = professionalReadiness;
+export function ReadinessScoreCard({ readiness = demoReadiness }: { readiness?: Readiness }) {
+  const { score, verdict, note } = readiness;
 
   return (
     <section className={styles.card}>

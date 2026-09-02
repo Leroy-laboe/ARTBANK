@@ -1,11 +1,12 @@
 import { Icon } from '../ui/Icon';
 import { Panel, PanelLink } from './Panel';
-import { professionalReadiness } from '../../data/artspaceContent';
+import { professionalReadiness as demoReadiness } from '../../data/artspaceContent';
+import type { Readiness } from '../../services/dashboard';
 import styles from './ProfessionalReadinessPanel.module.css';
 
 /** Module 6 — the private replacement for the old public MRI ranking. It only
  *  ever tells the artist what to improve next; nobody else can see it. */
-export function ProfessionalReadinessPanel() {
+export function ProfessionalReadinessPanel({ readiness = demoReadiness }: { readiness?: Readiness }) {
   return (
     <Panel
       title="Professional Readiness"
@@ -13,7 +14,7 @@ export function ProfessionalReadinessPanel() {
       action={<PanelLink to="/artspace/profile">View My Readiness →</PanelLink>}
     >
       <div className={styles.grid}>
-        {professionalReadiness.tasks.map((task) => (
+        {readiness.tasks.map((task) => (
           <article className={styles.card} key={task.id}>
             <span className={styles.icon}>
               <Icon name={task.icon} size={20} />

@@ -62,6 +62,15 @@ export function PanelButtonLink({ to, children }: { to: string; children: ReactN
   );
 }
 
+/** What a panel says when the artist genuinely has none of this yet.
+ *
+ *  Deliberately distinct from the demo fallback: standing in sample rows here
+ *  would tell a signed-in artist they have interest, earnings or matches they
+ *  do not have. Empty is a real answer and gets said plainly. */
+export function PanelEmpty({ children }: { children: ReactNode }) {
+  return <p className={styles.empty}>{children}</p>;
+}
+
 /** Gold footer link that closes a panel, e.g. "Go to Interest →". */
 export function PanelFooterLink({ to, children }: { to: string; children: ReactNode }) {
   return (

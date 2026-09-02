@@ -8,6 +8,7 @@
 
 import type { IconName } from '../components/ui/Icon';
 import type { QuickAction } from '../components/artspace/QuickActionsPanel';
+import type { MonogramTone } from './artspaceInterest';
 
 const photo = (id: string, w: number, h: number) =>
   `https://images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format&q=80`;
@@ -105,7 +106,11 @@ export type InterestItem = {
   detail: string;
   level: InterestLevel;
   time: string;
-  avatarUrl: string;
+  /** Demo rows carry a photo. Real enquirers usually don't, so the panel
+   *  falls back to initials — same monogram treatment as New Enquiries. */
+  avatarUrl?: string;
+  monogram?: string;
+  tone?: MonogramTone;
 };
 
 export const realInterest: InterestItem[] = [

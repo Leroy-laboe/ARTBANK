@@ -13,55 +13,63 @@
    instead of generic shadcn defaults — so shadcn components (Button, Switch,
    Pricing, etc.) render in the site's actual gold/ink/cream identity rather
    than looking like an unstyled drop-in. Light-only: the rest of the site has
-   no dark mode, so neither does this. */
+   no dark mode, so neither does this.
+
+   Every raw token below is prefixed `--sh-`. shadcn's own names collide with
+   ARTBANK's design tokens — globals.css uses `--muted` for secondary TEXT
+   (#7c7468) while shadcn means a light BACKGROUND by it, and this file loads
+   after globals.css, so an unprefixed `--muted` here silently repaints every
+   muted line on the site near-white. The prefix keeps the two vocabularies
+   apart; only the `--color-*` names Tailwind generates utilities from are
+   shared, and those are namespaced by Tailwind already. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--sh-background);
+  --color-foreground: var(--sh-foreground);
+  --color-card: var(--sh-card);
+  --color-card-foreground: var(--sh-card-foreground);
+  --color-popover: var(--sh-popover);
+  --color-popover-foreground: var(--sh-popover-foreground);
+  --color-primary: var(--sh-primary);
+  --color-primary-foreground: var(--sh-primary-foreground);
+  --color-secondary: var(--sh-secondary);
+  --color-secondary-foreground: var(--sh-secondary-foreground);
+  --color-muted: var(--sh-muted);
+  --color-muted-foreground: var(--sh-muted-foreground);
+  --color-accent: var(--sh-accent);
+  --color-accent-foreground: var(--sh-accent-foreground);
+  --color-destructive: var(--sh-destructive);
+  --color-destructive-foreground: var(--sh-destructive-foreground);
+  --color-border: var(--sh-border);
+  --color-input: var(--sh-input);
+  --color-ring: var(--sh-ring);
+  --radius-sm: calc(var(--sh-radius) - 4px);
+  --radius-md: calc(var(--sh-radius) - 2px);
+  --radius-lg: var(--sh-radius);
+  --radius-xl: calc(var(--sh-radius) + 4px);
   /* Reuses globals.css's Playfair Display stack so Tailwind pages can match
      the serif headings used everywhere else (`font-display` utility). */
   --font-display: var(--font-serif);
 }
 
 :root {
-  --radius: 0.875rem;
-  --background: #fbfaf7;
-  --foreground: #15110c;
-  --card: #ffffff;
-  --card-foreground: #15110c;
-  --popover: #ffffff;
-  --popover-foreground: #15110c;
-  --primary: #b9884f;
-  --primary-foreground: #ffffff;
-  --secondary: #f6ecd9;
-  --secondary-foreground: #8f6a3a;
-  --muted: #efe9dd;
-  --muted-foreground: #7c7468;
-  --accent: #f6ecd9;
-  --accent-foreground: #8f6a3a;
-  --destructive: #c8433f;
-  --destructive-foreground: #ffffff;
-  --border: #e8e1d3;
-  --input: #e8e1d3;
-  --ring: #b9884f;
+  --sh-radius: 0.875rem;
+  --sh-background: #fbfaf7;
+  --sh-foreground: #15110c;
+  --sh-card: #ffffff;
+  --sh-card-foreground: #15110c;
+  --sh-popover: #ffffff;
+  --sh-popover-foreground: #15110c;
+  --sh-primary: #b9884f;
+  --sh-primary-foreground: #ffffff;
+  --sh-secondary: #f6ecd9;
+  --sh-secondary-foreground: #8f6a3a;
+  --sh-muted: #efe9dd;
+  --sh-muted-foreground: #7c7468;
+  --sh-accent: #f6ecd9;
+  --sh-accent-foreground: #8f6a3a;
+  --sh-destructive: #c8433f;
+  --sh-destructive-foreground: #ffffff;
+  --sh-border: #e8e1d3;
+  --sh-input: #e8e1d3;
+  --sh-ring: #b9884f;
 }

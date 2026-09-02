@@ -1,12 +1,14 @@
 import { supabase } from '../lib/supabaseClient';
 import {
   enquiries as demoEnquiries,
+  interestOverview as demoInterestOverview,
   recentViewers as demoViewers,
   type Enquiry,
   type InterestPurpose,
   type MonogramTone,
   type Viewer,
 } from '../data/artspaceInterest';
+import type { OverviewStat } from '../components/artspace/StatsOverviewPanel';
 import type { Profile } from '../types/user';
 
 /** Reads the interest ledger. Requires migrations 0012 and 0016.
@@ -91,12 +93,49 @@ export type InterestResult = {
   viewers: Viewer[];
   /** Count only, never names. Anonymous visitors are not identifiable. */
   anonymousCount: number;
+  /** Overview figures for the right rail. Every one is a count of rows this
+   *  artist can actually read — see buildStats. */
+  stats: OverviewStat[];
   isDemo: boolean;
 };
 
+/** Pipeline stages that mean somebody got past a first look.
+ *  'viewer' is a visit; everything from 'qualified' on is a real conversation. */
+const SERIOUS_STAGES = ['qualified', 'viewing_room', 'negotiation', 'completed'];
+
+/** Counts for the Interest Overview card.
+ *
+ *  Deliberately excludes a "Shortlisted" figure. Saves live in
+ *  `saved_artworks`, whose only policy is "Buyers manage their own save list"
+ *  — an artist reading it gets zero rows whether or not anyone saved their
+ *  work. A confident 0 that means "cannot see" is a worse lie than no number
+ *  at all, so the stat is left out until the artist has a read policy. */
+function buildStats(
+  rows: EntryRow[],
+  anonymousCount: number,
+  followers: number,
+): OverviewStat[] {
+  const serious = rows.filter((r) => SERIOUS_STAGES.includes(r.pipeline_stage)).length;
+  const discussing = rows.filter((r) => r.pipeline_stage === 'negotiation').length;
+
+  return [
+    { id: 'enquiries', value: String(rows.length), label: 'Identified Enquiries' },
+    { id: 'following', value: String(followers), label: 'People Following' },
+    { id: 'serious', value: String(serious), label: 'Serious Interest' },
+    { id: 'discussions', value: String(discussing), label: 'In Discussion' },
+    { id: 'anonymous', value: String(anonymousCount), label: 'Anonymous Views' },
+  ];
+}
+
 export async function loadInterest(profile: Profile | null): Promise<InterestResult> {
   if (!supabase || !profile) {
-    return { enquiries: demoEnquiries, viewers: demoViewers, anonymousCount: 412, isDemo: true };
+    return {
+      enquiries: demoEnquiries,
+      viewers: demoViewers,
+      anonymousCount: 412,
+      stats: demoInterestOverview.stats,
+      isDemo: true,
+    };
   }
 
   const { data, error } = await supabase
@@ -113,23 +152,39 @@ export async function loadInterest(profile: Profile | null): Promise<InterestRes
   // real answer, and dressing it up as someone else's enquiries tells a
   // signed-in artist they have interest they do not have.
   if (error) {
-    return { enquiries: demoEnquiries, viewers: demoViewers, anonymousCount: 412, isDemo: true };
+    return {
+      enquiries: demoEnquiries,
+      viewers: demoViewers,
+      anonymousCount: 412,
+      stats: demoInterestOverview.stats,
+      isDemo: true,
+    };
   }
 
   const rows = (data ?? []) as unknown as EntryRow[];
 
-  const { count } = await supabase
-    .from('interest_entries')
-    .select('id', { count: 'exact', head: true })
-    .eq('artist_id', profile.id)
-    .eq('is_identified', false);
+  const [{ count }, { count: followerCount }] = await Promise.all([
+    supabase
+      .from('interest_entries')
+      .select('id', { count: 'exact', head: true })
+      .eq('artist_id', profile.id)
+      .eq('is_identified', false),
+    // Readable because 0021 adds "Artists read their own followers".
+    supabase
+      .from('profile_follows')
+      .select('follower_id', { count: 'exact', head: true })
+      .eq('artist_id', profile.id),
+  ]);
+
+  const anonymousCount = count ?? 0;
 
   return {
     enquiries: rows.slice(0, 3).map(toEnquiry),
     // Recent Viewers needs thumbnails the ledger doesn't carry; keeping the
     // demo set here is honest as long as the panel says so.
     viewers: demoViewers,
-    anonymousCount: count ?? 0,
+    anonymousCount,
+    stats: buildStats(rows, anonymousCount, followerCount ?? 0),
     isDemo: false,
   };
 }

@@ -31,7 +31,7 @@ import {
 import { exportWorksCsv } from '../lib/exportCsv';
 import type { WorkAction } from '../components/artspace/workActions';
 import type { Work } from '../data/artspaceWorks';
-import { portfolioOverview, works as demoWorks, worksQuickActions } from '../data/artspaceWorks';
+import { works as demoWorks, worksQuickActions } from '../data/artspaceWorks';
 import styles from './MyWorksPage.module.css';
 
 /** My Works — the artwork management screen, not an image gallery. Every row
@@ -101,6 +101,45 @@ export function MyWorksPage() {
       active = false;
     };
   }, [profile]);
+
+  /** Portfolio Overview, counted from the rows on screen rather than stated.
+   *
+   *  Earnings sum recorded deals only — `Work.earnings` is already null where
+   *  nothing was recorded, so an artist who has sold nothing sees "—" instead
+   *  of a confident zero, and nobody sees a total that was never banked. */
+  const overviewStats = useMemo(() => {
+    const recorded = allRows.filter((w) => w.earnings !== null);
+    const earned = recorded.reduce((total, w) => total + (w.earnings ?? 0), 0);
+
+    return [
+      { id: 'total', value: String(allRows.length), label: 'Total Artworks' },
+      {
+        id: 'published',
+        value: String(allRows.filter((w) => w.status === 'Published').length),
+        label: 'Published',
+      },
+      {
+        id: 'on-view',
+        value: String(allRows.filter((w) => w.availability === 'On View').length),
+        label: 'On View',
+      },
+      {
+        id: 'opportunities',
+        value: String(allRows.reduce((total, w) => total + w.opportunities, 0)),
+        label: 'Opportunities',
+      },
+      {
+        id: 'verified',
+        value: String(allRows.filter((w) => w.passport === 'Verified').length),
+        label: 'Certificates',
+      },
+      {
+        id: 'earnings',
+        value: recorded.length === 0 ? '—' : `USD ${Math.round(earned).toLocaleString('en-US')}`,
+        label: 'Earnings to Date',
+      },
+    ];
+  }, [allRows]);
 
   const visible = useMemo(() => {
     let rows = allRows;
@@ -546,10 +585,10 @@ export function MyWorksPage() {
           </div>
 
           <aside className={styles.rightCol}>
+            {/* All-time counts, so no range picker — see InterestPage. */}
             <StatsOverviewPanel
               title="Portfolio Overview"
-              stats={portfolioOverview.stats}
-              ranges={portfolioOverview.ranges}
+              stats={overviewStats}
               columns={3}
               linkTo="/artspace/profile"
             />

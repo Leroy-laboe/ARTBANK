@@ -12,7 +12,6 @@ import { TipsPanel } from '../components/artspace/TipsPanel';
 import { Icon } from '../components/ui/Icon';
 import {
   opportunities,
-  opportunitiesOverview,
   opportunitiesPaging,
   opportunityTabs,
   opportunityTips,
@@ -52,6 +51,21 @@ export function OpportunitiesPage() {
       active = false;
     };
   }, [profile]);
+
+  /** Counted from the artist's own matches, using the same stage groupings the
+   *  tabs filter by — so a figure here and the tab beneath it always agree. */
+  const overviewStats = useMemo(() => {
+    const count = (stages: string[]) => String(rows.filter((o) => stages.includes(o.stage)).length);
+
+    return [
+      { id: 'total', value: String(rows.length), label: 'Total Opportunities' },
+      { id: 'invitations', value: count(tabStages.invitations), label: 'Invitations' },
+      { id: 'applications', value: count(tabStages.applications), label: 'Applications' },
+      { id: 'shortlisted', value: count(tabStages.shortlisted), label: 'Shortlisted' },
+      { id: 'negotiation', value: count(tabStages.negotiation), label: 'In Negotiation' },
+      { id: 'won', value: count(tabStages.won), label: 'Won' },
+    ];
+  }, [rows]);
 
   const visible = useMemo(() => {
     const stages = tabStages[tab];
@@ -105,12 +119,8 @@ export function OpportunitiesPage() {
           </div>
 
           <aside className={styles.rightCol}>
-            <StatsOverviewPanel
-              title="Opportunities Overview"
-              stats={opportunitiesOverview.stats}
-              ranges={opportunitiesOverview.ranges}
-              linkTo="/artspace/opportunities"
-            />
+            {/* All-time counts, so no range picker — see InterestPage. */}
+            <StatsOverviewPanel title="Opportunities Overview" stats={overviewStats} />
             <TopMatchesPanel />
             <TipsPanel
               title="Tips to Win Opportunities"

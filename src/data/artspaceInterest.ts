@@ -244,13 +244,16 @@ export const interestOverview: {
   stats: { id: string; value: string; label: string }[];
 } = {
   ranges: ['All time', 'This year', 'Last 90 days'],
+  // Kept in step with the demo enquiries and followers above, and using the
+  // same labels the real counts use (services/interest.ts buildStats). A stat
+  // card claiming 68 enquiries over a list of three is the kind of mismatch
+  // that makes every other number on the screen worth doubting.
   stats: [
-    { id: 'enquiries', value: '68', label: 'Total Enquiries' },
-    { id: 'following', value: '24', label: 'People Following' },
-    { id: 'serious', value: '12', label: 'Serious Interest' },
-    { id: 'shortlisted', value: '5', label: 'Shortlisted' },
-    { id: 'requests', value: '3', label: 'Requests for Info' },
-    { id: 'discussions', value: '7', label: 'Discussions' },
+    { id: 'enquiries', value: '3', label: 'Identified Enquiries' },
+    { id: 'following', value: '5', label: 'People Following' },
+    { id: 'serious', value: '2', label: 'Serious Interest' },
+    { id: 'discussions', value: '1', label: 'In Discussion' },
+    { id: 'anonymous', value: '412', label: 'Anonymous Views' },
   ],
 };
 

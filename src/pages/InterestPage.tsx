@@ -96,11 +96,12 @@ export function InterestPage() {
           </div>
 
           <aside className={styles.rightCol}>
+            {/* No range selector: these are all-time counts, and a picker that
+                leaves the numbers unchanged when you choose "Last 90 days"
+                states something about them that isn't true. */}
             <StatsOverviewPanel
               title="Interest Overview"
-              stats={interestOverview.stats}
-              ranges={interestOverview.ranges}
-              linkTo="/artspace/interest"
+              stats={data?.stats ?? interestOverview.stats}
             />
             <TopInterestedArtworksPanel />
             <TipsPanel

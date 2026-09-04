@@ -37,8 +37,6 @@ export const artspacePrimaryNav: ArtspaceNavItem[] = [
 export const artspaceAccountNav: ArtspaceNavItem[] = [
   { icon: 'user', label: 'Public Profile', to: '/artspace/profile' },
   { icon: 'credit-card', label: 'Billing', to: '/artspace/billing' },
-  { icon: 'lock', label: 'Privacy', to: '/artspace/privacy' },
-  { icon: 'shield-check', label: 'Security', to: '/artspace/security' },
   { icon: 'help-circle', label: 'Help Center', to: '/artspace/help' },
 ];
 

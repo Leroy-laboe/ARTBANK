@@ -28,6 +28,8 @@ import { TermsPage } from './pages/TermsPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { CookiePolicyPage } from './pages/CookiePolicyPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
+import { ArtspaceComingSoonPage } from './pages/ArtspaceComingSoonPage';
+import { BuyerComingSoonPage } from './pages/BuyerComingSoonPage';
 import { PricingPage } from './pages/PricingPage';
 
 function App() {
@@ -67,10 +69,8 @@ function App() {
           <Route path="/artspace/opportunities" element={<OpportunitiesPage />} />
           <Route path="/artspace/messages" element={<MessagesPage />} />
           <Route path="/artspace/profile" element={<PublicProfilePage />} />
-          <Route path="/artspace/billing" element={<ComingSoonPage title="Billing" />} />
-          <Route path="/artspace/privacy" element={<ComingSoonPage title="Privacy" />} />
-          <Route path="/artspace/security" element={<ComingSoonPage title="Security" />} />
-          <Route path="/artspace/help" element={<ComingSoonPage title="Help Center" />} />
+          <Route path="/artspace/billing" element={<ArtspaceComingSoonPage title="Billing" />} />
+          <Route path="/artspace/help" element={<ArtspaceComingSoonPage title="Help Center" />} />
 
           {/* The buyer workspace — the other side of ArtSpace. Same guard,
               same session; which of the two an account belongs in is decided
@@ -85,7 +85,7 @@ function App() {
           <Route path="/collect/enquiries" element={<MyEnquiriesPage />} />
           <Route path="/collect/messages" element={<BuyerMessagesPage />} />
           <Route path="/collect/rooms" element={<ViewingRoomsPage />} />
-          <Route path="/collect/help" element={<ComingSoonPage title="Help Center" />} />
+          <Route path="/collect/help" element={<BuyerComingSoonPage title="Help Center" />} />
         </Route>
 
         {/* Legal — see docs/pivot-checklist/05-footer-and-legal.md, the

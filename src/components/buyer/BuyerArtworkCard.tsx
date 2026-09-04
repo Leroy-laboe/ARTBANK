@@ -15,6 +15,7 @@ export function BuyerArtworkCard({
   variant = 'save',
   action,
   busy = false,
+  footnote,
 }: {
   artwork: BuyerArtwork;
   /** Omitted (signed out, or a demo row), the corner button isn't rendered. */
@@ -23,6 +24,8 @@ export function BuyerArtworkCard({
   /** Footer action, e.g. Saved Works' "Request Availability". */
   action?: { label: string; onClick: (artwork: BuyerArtwork) => void };
   busy?: boolean;
+  /** Quiet line under the price, e.g. Following's "Published 3 days ago". */
+  footnote?: string;
 }) {
   const saved = artwork.saved;
   const cornerLabel =
@@ -101,6 +104,8 @@ export function BuyerArtworkCard({
         </p>
 
         <p className={styles.price}>{artwork.priceLabel}</p>
+
+        {footnote && <p className={styles.footnote}>{footnote}</p>}
 
         {action && (
           <button

@@ -10,6 +10,9 @@ import type { Profile } from '../types/user';
  *  there is deliberately no anonymous follow. */
 
 export type PublicArtistSummary = {
+  /** Needed to follow them — profile_follows keys on the account, not the
+   *  handle, which the artist can change. */
+  id: string;
   handle: string;
   name: string;
   avatarUrl: string | null;
@@ -18,7 +21,6 @@ export type PublicArtistSummary = {
    *  the real list rather than typing free text. See migration 0022. */
   countryCode: string | null;
   mediums: string[];
-  followers: number;
 };
 
 /** Real, publicly-visible artist accounts — what the Artists directory shows
@@ -61,20 +63,21 @@ export async function listPublicArtists(limit = 24): Promise<PublicArtistSummary
 
   const profiles = (data as unknown as Record<string, unknown>[]).map(rowToProfile);
 
-  const summaries = await Promise.all(
-    profiles.map(async (p): Promise<PublicArtistSummary | null> => {
-      if (!p.profileHandle) return null;
-      return {
-        handle: p.profileHandle,
-        name: p.artistName?.trim() || p.displayName?.trim() || 'Artist',
-        avatarUrl: p.avatarUrl,
-        country: p.country,
-        countryCode: p.countryCode,
-        mediums: p.mediums,
-        followers: await getFollowerCount(p.id),
-      };
-    }),
-  );
+  // No follower count per row. It was a query each (a directory of 60 artists
+  // meant 60 extra round trips) for a number 03-homepage-stats-and-why-artbank.md
+  // says must not be public in the first place.
+  const summaries = profiles.map((p): PublicArtistSummary | null => {
+    if (!p.profileHandle) return null;
+    return {
+      id: p.id,
+      handle: p.profileHandle,
+      name: p.artistName?.trim() || p.displayName?.trim() || 'Artist',
+      avatarUrl: p.avatarUrl,
+      country: p.country,
+      countryCode: p.countryCode,
+      mediums: p.mediums,
+    };
+  });
 
   return summaries
     .filter((s): s is PublicArtistSummary => s !== null)

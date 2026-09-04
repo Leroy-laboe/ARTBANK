@@ -1,0 +1,181 @@
+.notice,
+.sent {
+  margin-bottom: 12px;
+  padding: 9px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
+.notice {
+  border-left: 3px solid var(--gold);
+}
+
+.sent {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-left: 3px solid var(--success);
+}
+
+.sent svg {
+  color: var(--success);
+  flex-shrink: 0;
+}
+
+.state {
+  padding: 28px 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* ── Sections ── */
+
+.section {
+  margin-bottom: 26px;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-family: var(--font-serif);
+  font-size: 17px;
+  color: var(--ink);
+}
+
+.count {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 1px 8px;
+}
+
+/* ── Artists you follow ── */
+
+.artistRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.artistCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.artistCard:hover {
+  border-color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.artistLink {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 13px 8px 8px;
+}
+
+.avatar,
+.avatarFallback {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.avatarFallback {
+  display: grid;
+  place-items: center;
+  background: var(--dark);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.artistName {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.artistMeta {
+  font-size: 11px;
+  color: var(--muted-2);
+}
+
+/* ── New work ── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(196px, 1fr));
+  gap: 13px;
+}
+
+.quietEmpty {
+  padding: 20px 0 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+  max-width: 52ch;
+}
+
+/* ── Empty state ── */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 60px 20px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.emptyIcon {
+  color: var(--muted-2);
+  margin-bottom: 12px;
+}
+
+.emptyTitle {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.emptyNote {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 46ch;
+  margin-bottom: 16px;
+}
+
+.emptyLink {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 8px 17px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.emptyLink:hover {
+  border-color: var(--ink);
+  background: var(--bg);
+}

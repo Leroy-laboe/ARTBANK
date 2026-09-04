@@ -4,6 +4,7 @@ import {
   interestOverview as demoInterestOverview,
   recentViewers as demoViewers,
   type Enquiry,
+  type Follower,
   type InterestPurpose,
   type MonogramTone,
   type Viewer,
@@ -126,6 +127,67 @@ function buildStats(
     { id: 'anonymous', value: String(anonymousCount), label: 'Anonymous Views' },
   ];
 }
+
+type FollowerRow = {
+  follower_id: string;
+  created_at: string;
+  users: {
+    display_name: string | null;
+    artist_name: string | null;
+    avatar_url: string | null;
+    country: string | null;
+    organization: string | null;
+    role: string;
+  } | null;
+};
+
+/** The people following this artist.
+ *
+ *  Readable because 0021 adds "Artists read their own followers". Following is
+ *  a stated, identified relationship — not an anonymous view — so unlike the
+ *  viewer ledger these people can be named. Returns null on a failed read so
+ *  the panel can tell "cannot see" from "nobody yet". */
+export async function loadFollowers(profile: Profile | null): Promise<Follower[] | null> {
+  if (!supabase || !profile) return null;
+
+  const { data, error } = await supabase
+    .from('profile_follows')
+    .select(
+      'follower_id, created_at, users!profile_follows_follower_id_fkey(display_name, artist_name, avatar_url, country, organization, role)',
+    )
+    .eq('artist_id', profile.id)
+    .order('created_at', { ascending: false })
+    .limit(12);
+
+  if (error || !data) return null;
+
+  return (data as unknown as FollowerRow[]).map((row, index) => {
+    const name =
+      row.users?.artist_name?.trim() || row.users?.display_name?.trim() || 'ArtBank member';
+
+    return {
+      id: row.follower_id,
+      name,
+      // Their organisation where they gave one, otherwise what kind of account
+      // it is. Never invented — "Collector" is the account's own role.
+      role: row.users?.organization?.trim() || roleLabel[row.users?.role ?? ''] || 'Member',
+      location: row.users?.country ?? '—',
+      // Everyone here has an account and chose to follow under it, which is
+      // exactly what the badge means on this panel.
+      verified: true,
+      avatarUrl: row.users?.avatar_url ?? undefined,
+      monogram: monogram(name),
+      tone: tones[index % tones.length],
+    };
+  });
+}
+
+const roleLabel: Record<string, string> = {
+  buyer: 'Collector',
+  artist: 'Artist',
+  partner: 'Partner',
+  guardian: 'Guardian',
+};
 
 export async function loadInterest(profile: Profile | null): Promise<InterestResult> {
   if (!supabase || !profile) {

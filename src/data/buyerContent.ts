@@ -29,6 +29,7 @@ export type BuyerNavItem = {
 export const buyerPrimaryNav: BuyerNavItem[] = [
   { icon: 'home', label: 'Discover', to: '/collect' },
   { icon: 'users', label: 'Artists', to: '/collect/artists' },
+  { icon: 'heart', label: 'Following', to: '/collect/following' },
   { icon: 'bookmark', label: 'Saved Works', to: '/collect/saved' },
   { icon: 'handshake', label: 'Purchases', to: '/collect/purchases' },
   { icon: 'mail', label: 'My Enquiries', to: '/collect/enquiries' },
@@ -132,6 +133,8 @@ export type BuyerArtwork = {
   saved: boolean;
   /** ISO, only on rows that came from a save list. Drives "Recently Added". */
   savedAt?: string;
+  /** ISO, set on rows read as new work from a followed artist. */
+  publishedAt?: string;
 };
 
 export const discoverArtworks: BuyerArtwork[] = [

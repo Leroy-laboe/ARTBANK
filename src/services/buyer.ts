@@ -119,7 +119,7 @@ const ARTIST_EMBED =
   'users!artworks_artist_id_fkey(id, display_name, artist_name, avatar_url, country, country_code, profile_handle, show_artwork_prices, allow_enquiries, created_at)';
 
 const ARTWORK_SELECT = `
-  id, title, year, medium, dimensions, image_url,
+  id, title, year, medium, dimensions, image_url, published_at,
   price, price_max, price_type, currency, availability, coa_status,
   artist_id, artist_display_name,
   artwork_images(url, is_primary),
@@ -247,6 +247,107 @@ export async function listSavedArtworks(profile: Profile | null): Promise<Artwor
   // An empty save list is a real answer — do not fall back to the demo shelf,
   // or nothing a buyer removes would ever look removed.
   return { artworks, isDemo: false };
+}
+
+/* ── Following ───────────────────────────────────────────────────────────── */
+
+export type FollowedArtist = {
+  id: string;
+  handle: string | null;
+  name: string;
+  avatarUrl: string | null;
+  country: string | null;
+  followedAt: string;
+};
+
+type FollowRow = {
+  artist_id: string;
+  created_at: string;
+  users: {
+    artist_name: string | null;
+    display_name: string | null;
+    avatar_url: string | null;
+    country: string | null;
+    profile_handle: string | null;
+  } | null;
+};
+
+/** The artists this buyer follows.
+ *
+ *  Readable because 0021's "Users manage their own follows" policy covers
+ *  select as well — a buyer sees their own follow rows and nobody else's.
+ *  Ordered by when they followed, newest first: this is the buyer's own list,
+ *  not a ranking of the artists on it. */
+export async function listFollowedArtists(profile: Profile | null): Promise<FollowedArtist[]> {
+  if (!supabase || !profile) return [];
+
+  const { data, error } = await supabase
+    .from('profile_follows')
+    .select(
+      'artist_id, created_at, users!profile_follows_artist_id_fkey(artist_name, display_name, avatar_url, country, profile_handle)',
+    )
+    .eq('follower_id', profile.id)
+    .order('created_at', { ascending: false });
+
+  if (error || !data) return [];
+
+  return (data as unknown as FollowRow[]).map((row) => ({
+    id: row.artist_id,
+    handle: row.users?.profile_handle ?? null,
+    name: row.users?.artist_name?.trim() || row.users?.display_name?.trim() || 'Artist',
+    avatarUrl: row.users?.avatar_url ?? null,
+    country: row.users?.country ?? null,
+    followedAt: row.created_at,
+  }));
+}
+
+/** Published work by the artists this buyer follows, newest first.
+ *
+ *  An updates list, not a social feed: no likes, no comments, no engagement
+ *  ranking, and the only ordering is when the artist published
+ *  (docs/pivot-checklist/17-do-not-build-guardrails.md bans the feed; the
+ *  Follow action itself is required by 16-public-profile-access.md).
+ *
+ *  Everything the artist has published is included rather than only what came
+ *  after the follow — following someone and being shown an empty list until
+ *  they next post is a worse answer than showing the work you followed them
+ *  for. */
+export async function listNewFromFollowed(
+  profile: Profile | null,
+  limit = 24,
+): Promise<ArtworkFeed> {
+  if (!supabase || !profile) return { artworks: [], isDemo: false };
+
+  const artists = await listFollowedArtists(profile);
+  // Following nobody is a real answer, and an empty list is the honest render.
+  if (artists.length === 0) return { artworks: [], isDemo: false };
+
+  const savedIds = await getSavedIds(profile);
+
+  const { data, error } = await supabase
+    .from('artworks')
+    .select(ARTWORK_SELECT)
+    .in(
+      'artist_id',
+      artists.map((a) => a.id),
+    )
+    .eq('status', 'published')
+    .eq('visibility', 'public')
+    .order('published_at', { ascending: false, nullsFirst: false })
+    .limit(limit);
+
+  if (error || !data) return { artworks: [], isDemo: false };
+
+  type PublishedRow = ArtworkRow & { published_at: string | null };
+  const rows = data as unknown as PublishedRow[];
+
+  return {
+    artworks: rows.map((row) => ({
+      ...toArtwork(row, savedIds),
+      publishedAt: row.published_at ?? undefined,
+    })),
+    isDemo: false,
+  };
 }
 
 export async function setArtworkSaved(

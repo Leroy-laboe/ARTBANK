@@ -1,6 +1,6 @@
 import { Icon } from '../ui/Icon';
-import { Panel, PanelLink } from './Panel';
-import { followers, type MonogramTone } from '../../data/artspaceInterest';
+import { Panel, PanelEmpty, PanelLink } from './Panel';
+import { followers as demoFollowers, type Follower, type MonogramTone } from '../../data/artspaceInterest';
 import styles from './FollowersPanel.module.css';
 
 const toneClass: Record<MonogramTone, string> = {
@@ -11,7 +11,7 @@ const toneClass: Record<MonogramTone, string> = {
 
 /** People who follow the profile. Following is a stated, identified
  *  relationship — not an anonymous view — so these people can be named. */
-export function FollowersPanel() {
+export function FollowersPanel({ followers = demoFollowers }: { followers?: Follower[] }) {
   return (
     <Panel
       title="People Following You"
@@ -22,6 +22,12 @@ export function FollowersPanel() {
         </PanelLink>
       }
     >
+      {followers.length === 0 ? (
+        <PanelEmpty>
+          Nobody is following you yet. A public profile is what gives collectors something to
+          follow.
+        </PanelEmpty>
+      ) : (
       <ul className={styles.grid}>
         {followers.map((person) => (
           <li className={styles.card} key={person.id}>
@@ -58,6 +64,7 @@ export function FollowersPanel() {
           </li>
         ))}
       </ul>
+      )}
     </Panel>
   );
 }

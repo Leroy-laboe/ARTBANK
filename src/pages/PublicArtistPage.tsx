@@ -7,7 +7,6 @@ import { useSession } from '../lib/sessionContext';
 import { getPublicProfile } from '../services/profile';
 import {
   getFeaturedWorks,
-  getFollowerCount,
   isFollowing,
   sendEnquiry,
   setFollowing,
@@ -23,8 +22,8 @@ import styles from './PublicArtistPage.module.css';
  *  Spec 16 sets the order of actions: **Contact first, Follow second, social
  *  links third**, reversing a design where social icons dominated. It also
  *  deletes public earnings and statistics outright, so nothing here counts
- *  money, interest, enquiries or readiness. The only figures are the size of
- *  the body of work and the follower count. */
+ *  money, interest, enquiries or readiness — and 03-homepage-stats deletes the
+ *  public follower count too, leaving the body of work as the only figure. */
 
 const purposes = [
   { id: 'purchase', label: 'I’d like to acquire a work' },
@@ -40,7 +39,7 @@ export function PublicArtistPage() {
 
   const [artist, setArtist] = useState<Profile | null>(null);
   const [works, setWorks] = useState<FeaturedWork[]>([]);
-  const [followers, setFollowers] = useState(0);
+
   const [following, setFollowingState] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -63,13 +62,9 @@ export function PublicArtistPage() {
       setLoading(false);
       if (!found) return;
 
-      const [featured, count] = await Promise.all([
-        getFeaturedWorks(found.id),
-        getFollowerCount(found.id),
-      ]);
+      const featured = await getFeaturedWorks(found.id);
       if (!active) return;
       setWorks(featured);
-      setFollowers(count);
 
       if (viewer) {
         const already = await isFollowing(found.id, viewer);
@@ -91,12 +86,10 @@ export function PublicArtistPage() {
 
     const next = !following;
     setFollowingState(next);
-    setFollowers((n) => n + (next ? 1 : -1));
     try {
       await setFollowing(artist.id, viewer, next);
     } catch {
       setFollowingState(!next);
-      setFollowers((n) => n + (next ? -1 : 1));
       say('Could not update that. Try again.');
     }
   }
@@ -199,9 +192,9 @@ export function PublicArtistPage() {
               )}
               {artist.shortBio && <p className={styles.bio}>{artist.shortBio}</p>}
 
-              <p className={styles.followers}>
-                {followers} follower{followers === 1 ? '' : 's'}
-              </p>
+              {/* No public follower count — 03-homepage-stats-and-why-artbank.md
+                  deletes it so there is no follower competition. The artist
+                  sees their own followers in ArtSpace instead. */}
             </div>
 
             {/* Contact first, Follow second — spec 16's ordering. Neither makes

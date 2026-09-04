@@ -19,6 +19,7 @@ import { DiscoverPage } from './pages/DiscoverPage';
 import { BuyerArtistsPage } from './pages/BuyerArtistsPage';
 import { BuyerArtworkPage } from './pages/BuyerArtworkPage';
 import { SavedWorksPage } from './pages/SavedWorksPage';
+import { FollowingPage } from './pages/FollowingPage';
 import { PurchasesPage } from './pages/PurchasesPage';
 import { MyEnquiriesPage } from './pages/MyEnquiriesPage';
 import { BuyerMessagesPage } from './pages/BuyerMessagesPage';
@@ -79,6 +80,7 @@ function App() {
           <Route path="/collect/artists" element={<BuyerArtistsPage />} />
           <Route path="/collect/artworks/:id" element={<BuyerArtworkPage />} />
           <Route path="/collect/saved" element={<SavedWorksPage />} />
+          <Route path="/collect/following" element={<FollowingPage />} />
           <Route path="/collect/purchases" element={<PurchasesPage />} />
           <Route path="/collect/enquiries" element={<MyEnquiriesPage />} />
           <Route path="/collect/messages" element={<BuyerMessagesPage />} />

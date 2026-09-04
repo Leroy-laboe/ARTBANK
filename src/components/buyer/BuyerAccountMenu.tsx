@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
 import { useSession } from '../../lib/sessionContext';
+import { useGuardianRequestSummary } from '../../lib/useGuardianRequests';
 import styles from './BuyerAccountMenu.module.css';
 
 /** The signed-in buyer's account menu.
@@ -14,6 +15,9 @@ export function BuyerAccountMenu({ trigger }: { trigger: 'row' | 'avatar' }) {
   const { profile, signOut } = useSession();
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
+  // Shown only for the handful of people someone has actually named as their
+  // guardian — everyone else, nothing changes here.
+  const guardianRequests = useGuardianRequestSummary();
 
   useEffect(() => {
     if (!open) return;
@@ -90,6 +94,16 @@ export function BuyerAccountMenu({ trigger }: { trigger: 'row' | 'avatar' }) {
             <Icon name="lock" size={14} />
             Viewing Rooms
           </Link>
+
+          {guardianRequests.total > 0 && (
+            <Link to="/guardian" className={styles.item} onClick={() => setOpen(false)}>
+              <Icon name="shield-check" size={14} />
+              Guardian Requests
+              {guardianRequests.pending > 0 && (
+                <span className={styles.badge}>{guardianRequests.pending}</span>
+              )}
+            </Link>
+          )}
 
           <button
             type="button"

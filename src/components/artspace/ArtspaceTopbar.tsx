@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
 import { useArtist } from '../../lib/useArtist';
 import { useSession } from '../../lib/sessionContext';
+import { useGuardianRequestSummary } from '../../lib/useGuardianRequests';
 import { getUnreadMessageSummary, type MessageNotification } from '../../services/messages';
 import styles from './ArtspaceTopbar.module.css';
 
@@ -37,6 +38,9 @@ export function ArtspaceTopbar({
   const { greeting, firstName, statusLine, name, avatarUrl, unreadNotifications } = useArtist();
   const { profile, signOut } = useSession();
   const navigate = useNavigate();
+  // Shown in the account menu only for the handful of people someone has
+  // actually named as their guardian — everyone else, nothing changes.
+  const guardianRequests = useGuardianRequestSummary();
 
   /* ── Search ── */
 
@@ -265,6 +269,20 @@ export function ArtspaceTopbar({
                 >
                   <Icon name="user" size={14} />
                   Set up your profile
+                </Link>
+              )}
+
+              {guardianRequests.total > 0 && (
+                <Link
+                  to="/guardian"
+                  className={styles.panelItem}
+                  onClick={() => setAccountOpen(false)}
+                >
+                  <Icon name="shield-check" size={14} />
+                  Guardian Requests
+                  {guardianRequests.pending > 0 && (
+                    <span className={styles.panelBadge}>{guardianRequests.pending}</span>
+                  )}
                 </Link>
               )}
 

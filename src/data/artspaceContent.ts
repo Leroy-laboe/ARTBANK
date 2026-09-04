@@ -37,6 +37,9 @@ export const artspacePrimaryNav: ArtspaceNavItem[] = [
 export const artspaceAccountNav: ArtspaceNavItem[] = [
   { icon: 'user', label: 'Public Profile', to: '/artspace/profile' },
   { icon: 'credit-card', label: 'Billing', to: '/artspace/billing' },
+  // Required if the account belongs to someone under 18 — see
+  // docs/pivot-checklist/15-messages.md's guardian-routing hard rule.
+  { icon: 'shield-check', label: 'Guardian', to: '/artspace/guardian' },
   { icon: 'help-circle', label: 'Help Center', to: '/artspace/help' },
 ];
 

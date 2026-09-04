@@ -151,6 +151,20 @@
   color: var(--danger);
 }
 
+.badge {
+  margin-left: auto;
+  min-width: 15.5px;
+  height: 15.5px;
+  padding: 0 3.5px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--gold);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+}
+
 @media (max-width: 1000px) {
   .wrapRow .copy,
   .wrapRow .caret {

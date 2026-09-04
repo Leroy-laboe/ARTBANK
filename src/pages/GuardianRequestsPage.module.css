@@ -1,0 +1,139 @@
+.section {
+  max-width: 720px;
+  padding-top: 64px;
+  padding-bottom: 90px;
+}
+
+.title {
+  font-size: clamp(28px, 4vw, 38px);
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+
+.subtitle {
+  max-width: 56ch;
+  margin: 0 0 32px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.notice {
+  margin-bottom: 20px;
+  padding: 9px 13px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+.state {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.empty {
+  padding: 52px 20px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+}
+
+.emptyIcon {
+  color: var(--muted-2);
+}
+
+.emptyTitle {
+  margin-top: 13px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.emptyNote {
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 46ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.copy {
+  min-width: 0;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.email {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.approved {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--success);
+}
+
+.approve {
+  flex-shrink: 0;
+  padding: 8px 18px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.approve:hover {
+  opacity: 0.85;
+}
+
+.approve:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+@media (max-width: 480px) {
+  .card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

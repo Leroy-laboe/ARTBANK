@@ -30,6 +30,8 @@ import { CookiePolicyPage } from './pages/CookiePolicyPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
 import { ArtspaceComingSoonPage } from './pages/ArtspaceComingSoonPage';
 import { BuyerComingSoonPage } from './pages/BuyerComingSoonPage';
+import { GuardianSettingsPage } from './pages/GuardianSettingsPage';
+import { GuardianRequestsPage } from './pages/GuardianRequestsPage';
 import { PricingPage } from './pages/PricingPage';
 
 function App() {
@@ -70,12 +72,19 @@ function App() {
           <Route path="/artspace/messages" element={<MessagesPage />} />
           <Route path="/artspace/profile" element={<PublicProfilePage />} />
           <Route path="/artspace/billing" element={<ArtspaceComingSoonPage title="Billing" />} />
+          {/* Names the guardian who has to approve contact if this account
+              belongs to someone under 18 — docs/pivot-checklist/15-messages.md. */}
+          <Route path="/artspace/guardian" element={<GuardianSettingsPage />} />
           <Route path="/artspace/help" element={<ArtspaceComingSoonPage title="Help Center" />} />
 
           {/* The buyer workspace — the other side of ArtSpace. Same guard,
               same session; which of the two an account belongs in is decided
               by WorkspaceHome from users.role. */}
           <Route path="/workspace" element={<WorkspaceHome />} />
+          {/* Approving a guardian request: reachable from either workspace's
+              account menu, since a guardian is just as often an existing
+              artist or buyer as a dedicated account. */}
+          <Route path="/guardian" element={<GuardianRequestsPage />} />
           <Route path="/collect" element={<DiscoverPage />} />
           <Route path="/collect/artists" element={<BuyerArtistsPage />} />
           <Route path="/collect/artworks/:id" element={<BuyerArtworkPage />} />

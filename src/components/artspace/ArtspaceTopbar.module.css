@@ -259,6 +259,20 @@
   color: var(--ink);
 }
 
+.panelBadge {
+  margin-left: auto;
+  min-width: 15.5px;
+  height: 15.5px;
+  padding: 0 3.5px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--gold);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+}
+
 .panelDanger {
   color: var(--danger);
 }

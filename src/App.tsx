@@ -32,6 +32,9 @@ import { ArtspaceComingSoonPage } from './pages/ArtspaceComingSoonPage';
 import { BuyerComingSoonPage } from './pages/BuyerComingSoonPage';
 import { GuardianSettingsPage } from './pages/GuardianSettingsPage';
 import { GuardianRequestsPage } from './pages/GuardianRequestsPage';
+import { MyRoomsPage } from './pages/MyRoomsPage';
+import { RoomBuilderPage } from './pages/RoomBuilderPage';
+import { PublicViewingRoomPage } from './pages/PublicViewingRoomPage';
 import { PricingPage } from './pages/PricingPage';
 
 function App() {
@@ -47,6 +50,11 @@ function App() {
         {/* "Creators" was renamed to "Artists" in the nav; keep the old path
             working for anything still pointing at it. */}
         <Route path="/creators" element={<Navigate to="/artists" replace />} />
+        {/* A private viewing room's shareable link — docs/pivot-checklist/
+            21-feature-private-viewing-room.md. Outside RequireAuth on
+            purpose: a room that doesn't require identity has to open for a
+            signed-out visitor, so the gate lives inside the page itself. */}
+        <Route path="/rooms/:id" element={<PublicViewingRoomPage />} />
         <Route path="/how-it-works" element={<ComingSoonPage title="How It Works" />} />
         <Route path="/for-buyers" element={<ComingSoonPage title="For Buyers" />} />
         <Route path="/pricing" element={<PricingPage />} />
@@ -75,6 +83,13 @@ function App() {
           {/* Names the guardian who has to approve contact if this account
               belongs to someone under 18 — docs/pivot-checklist/15-messages.md. */}
           <Route path="/artspace/guardian" element={<GuardianSettingsPage />} />
+          {/* Private Viewing Rooms — docs/pivot-checklist/
+              21-feature-private-viewing-room.md. /rooms/new and /rooms/:id
+              share one builder; the public link lives at /rooms/:id
+              (outside this guard) rather than /artspace/rooms/:id. */}
+          <Route path="/artspace/rooms" element={<MyRoomsPage />} />
+          <Route path="/artspace/rooms/new" element={<RoomBuilderPage />} />
+          <Route path="/artspace/rooms/:id" element={<RoomBuilderPage />} />
           <Route path="/artspace/help" element={<ArtspaceComingSoonPage title="Help Center" />} />
 
           {/* The buyer workspace — the other side of ArtSpace. Same guard,

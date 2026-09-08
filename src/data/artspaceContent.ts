@@ -40,6 +40,9 @@ export const artspaceAccountNav: ArtspaceNavItem[] = [
   // Required if the account belongs to someone under 18 — see
   // docs/pivot-checklist/15-messages.md's guardian-routing hard rule.
   { icon: 'shield-check', label: 'Guardian', to: '/artspace/guardian' },
+  // docs/pivot-checklist/21-feature-private-viewing-room.md's own placement
+  // note: lives under the account menu, not the five primary destinations.
+  { icon: 'lock', label: 'Viewing Rooms', to: '/artspace/rooms' },
   { icon: 'help-circle', label: 'Help Center', to: '/artspace/help' },
 ];
 

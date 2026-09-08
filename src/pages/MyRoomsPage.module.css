@@ -1,0 +1,154 @@
+/* Same shell geometry as Today and My Works — see ArtspacePage.module.css. */
+.shell {
+  display: grid;
+  grid-template-columns: 187px minmax(0, 1fr);
+  min-height: 100svh;
+  background: var(--bg);
+}
+
+.body {
+  min-width: 0;
+  padding: 20px 21.5px 36px;
+}
+
+.newButton {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.newButton:hover {
+  opacity: 0.85;
+}
+
+.state {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.empty {
+  padding: 52px 20px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+}
+
+.emptyIcon {
+  color: var(--muted-2);
+}
+
+.emptyTitle {
+  margin-top: 13px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.emptyNote {
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 46ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.emptyLink {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 15px 17px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+.row:hover {
+  border-color: var(--ink);
+}
+
+.rowExpired {
+  opacity: 0.6;
+}
+
+.rowIcon {
+  flex-shrink: 0;
+  color: var(--gold);
+}
+
+.copy {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.meta {
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--muted-2);
+}
+
+@media (max-width: 1000px) {
+  .shell {
+    grid-template-columns: 61px minmax(0, 1fr);
+  }
+
+  .body {
+    padding: 20px 16px 32px;
+  }
+}
+
+@media (max-width: 650px) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .body {
+    padding: 18px 14.5px 32px;
+  }
+}

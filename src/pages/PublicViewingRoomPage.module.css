@@ -1,0 +1,218 @@
+.state {
+  padding: 90px 24px;
+  text-align: center;
+}
+
+.stateIcon {
+  color: var(--muted-2);
+}
+
+.stateTitle {
+  margin-top: 14px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.stateNote {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.stateActions {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.stateButton {
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.stateLink {
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-decoration: underline;
+}
+
+.wrap {
+  max-width: 980px;
+  padding-top: 56px;
+  padding-bottom: 90px;
+}
+
+.title {
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 4px 0 8px;
+}
+
+.byline {
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.byline a {
+  color: var(--gold-dark);
+  font-weight: 600;
+}
+
+.notes {
+  max-width: 62ch;
+  margin-top: 18px;
+  padding: 16px 18px;
+  border-left: 3px solid var(--gold);
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.notice {
+  margin-top: 20px;
+  padding: 11px 15px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--success);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+.grid {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.imageWrap {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.imageWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardBody {
+  padding: 13px 15px 16px;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.cardMeta {
+  margin-top: 3px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.cardPrice {
+  margin-top: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.cardAvailability {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.download {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-decoration: none;
+}
+
+.download:hover {
+  text-decoration: underline;
+}
+
+.actions {
+  margin-top: 40px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.primaryAction {
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primaryAction:hover {
+  opacity: 0.85;
+}
+
+.secondaryAction {
+  padding: 12px 24px;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius-sm);
+  background: none;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.secondaryAction:hover {
+  background: var(--bg);
+}
+
+.signInNote {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.signInNote a {
+  color: var(--gold-dark);
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

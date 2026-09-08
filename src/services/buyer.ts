@@ -756,10 +756,13 @@ function isMissingColumn(error: { code?: string; message?: string }): boolean {
  *
  *  Returns null rather than throwing when the thread can't be opened. The one
  *  case that reliably does this is 0014's guardian-routing trigger: a
- *  conversation involving a minor is refused without a linked guardian, by
- *  design, and no buyer-side form can or should supply that. The enquiry has
- *  already been recorded by the time this runs, so the artist still hears
- *  about it through the route the guardian rule permits. */
+ *  conversation involving a minor is refused without a verified guardian
+ *  attached. `resolve_guardian_cc` (0027) looks that guardian up and attaches
+ *  them automatically when one exists — so this only actually fails when the
+ *  minor hasn't been approved by their guardian yet, which is exactly the
+ *  case the rule exists to block. The enquiry has already been recorded by
+ *  the time this runs, so the artist still hears about it through the route
+ *  the guardian rule permits. */
 async function openConversation(profile: Profile, input: IntentInput): Promise<string | null> {
   const client = supabase;
   if (!client) return null;
@@ -781,6 +784,13 @@ async function openConversation(profile: Profile, input: IntentInput): Promise<s
     let conversationId = (existing.data as { id: string } | null)?.id ?? null;
 
     if (!conversationId) {
+      // Resolves to null whenever neither party is a minor — a no-op for the
+      // overwhelming majority of conversations.
+      const guardianLookup = await client.rpc('resolve_guardian_cc', {
+        p_artist_id: input.artistId,
+        p_buyer_id: profile.id,
+      });
+
       const created = await client
         .from('conversations')
         .insert({
@@ -789,6 +799,7 @@ async function openConversation(profile: Profile, input: IntentInput): Promise<s
           artwork_id: input.artworkId,
           category: conversationCategory[input.purpose],
           purpose: input.role,
+          guardian_cc_id: guardianLookup.data ?? null,
         })
         .select('id')
         .single();

@@ -28,14 +28,20 @@
   overflow-wrap: anywhere;
 }
 
-.copyBtn {
+.row {
+  display: flex;
+  gap: 8px;
   margin-top: 9px;
-  width: 100%;
+}
+
+.copyBtn {
+  flex: 1;
+  min-width: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--surface);
@@ -43,6 +49,7 @@
   font-size: 11px;
   font-weight: 600;
   color: var(--ink);
+  text-decoration: none;
   cursor: pointer;
   transition: border-color 0.15s ease, background-color 0.15s ease;
 }
@@ -50,6 +57,17 @@
 .copyBtn:hover {
   border-color: var(--ink);
   background: var(--bg);
+}
+
+.qr {
+  display: block;
+  margin: 12px auto 0;
+  width: 120px;
+  height: 120px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: 6px;
+  background: #fff;
 }
 
 .stats {

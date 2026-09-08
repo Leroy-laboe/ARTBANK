@@ -14,6 +14,7 @@ import { SmartLinkPanel } from '../components/artspace/SmartLinkPanel';
 import { Icon } from '../components/ui/Icon';
 import { getArtworkRecord, type ArtworkRecord } from '../services/artworkRecord';
 import { updateArtworkDetails } from '../services/artwork';
+import { smartLinkUrl } from '../services/smartLink';
 import styles from './ArtworkRecordPage.module.css';
 
 /** The artwork record — the "Living Creative Asset Passport" of
@@ -117,11 +118,10 @@ export function ArtworkRecordPage() {
     }
   }
 
-  // The permanent public URL of spec 19 would be /a/{slug}, but that page
-  // isn't built, so this points at the record itself. Copying a link that 404s
-  // would be worse than copying one that only works while signed in — and
-  // SmartLinkPanel says so on screen.
-  const shareUrl = record ? `${window.location.origin}/artspace/works/${record.artwork.id}` : '';
+  // The permanent public URL from docs/pivot-checklist/
+  // 19-feature-smart-artwork-link-qr.md — anyone can open this, signed in or
+  // not. SmartLinkPanel generates the QR for the same address.
+  const shareUrl = record ? smartLinkUrl(record.artwork.id) : '';
 
   if (loading) {
     return (
@@ -241,6 +241,10 @@ export function ArtworkRecordPage() {
               <Icon name="copy" size={14} />
               Share
             </button>
+            <Link to={`/artspace/works/${record.artwork.id}/pack`} className={styles.action}>
+              <Icon name="file-text" size={14} />
+              Generate Pack
+            </Link>
           </div>
         </header>
 
@@ -282,7 +286,7 @@ export function ArtworkRecordPage() {
 
           <aside className={styles.rightCol}>
             <SmartLinkPanel
-              url={shareUrl}
+              artworkId={record.artwork.id}
               totalVisits={record.linkStats.total}
               bySource={record.linkStats.bySource}
             />

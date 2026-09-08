@@ -7,6 +7,8 @@ import { HomePage } from './pages/HomePage';
 import { MarketplacePage } from './pages/MarketplacePage';
 import { CreatorsPage } from './pages/CreatorsPage';
 import { PublicArtistPage } from './pages/PublicArtistPage';
+import { SmartArtworkLinkPage } from './pages/SmartArtworkLinkPage';
+import { ProfessionalPackPage } from './pages/ProfessionalPackPage';
 import { ArtspacePage } from './pages/ArtspacePage';
 import { MyWorksPage } from './pages/MyWorksPage';
 import { InterestPage } from './pages/InterestPage';
@@ -55,6 +57,10 @@ function App() {
             purpose: a room that doesn't require identity has to open for a
             signed-out visitor, so the gate lives inside the page itself. */}
         <Route path="/rooms/:id" element={<PublicViewingRoomPage />} />
+        {/* The Smart Artwork Link — docs/pivot-checklist/
+            19-feature-smart-artwork-link-qr.md. Also outside RequireAuth: the
+            entire point is a link someone with no account can open. */}
+        <Route path="/a/:id" element={<SmartArtworkLinkPage />} />
         <Route path="/how-it-works" element={<ComingSoonPage title="How It Works" />} />
         <Route path="/for-buyers" element={<ComingSoonPage title="For Buyers" />} />
         <Route path="/pricing" element={<PricingPage />} />
@@ -75,6 +81,9 @@ function App() {
           <Route path="/artspace/works/new" element={<AddArtworkPage />} />
           {/* Artwork record / Passport — docs/pivot-checklist/11-artwork-record-passport.md */}
           <Route path="/artspace/works/:id" element={<ArtworkRecordPage />} />
+          {/* One-Click Professional Pack — a print-ready page instead of a
+              PDF this project has no server to render. */}
+          <Route path="/artspace/works/:id/pack" element={<ProfessionalPackPage />} />
           <Route path="/artspace/interest" element={<InterestPage />} />
           <Route path="/artspace/opportunities" element={<OpportunitiesPage />} />
           <Route path="/artspace/messages" element={<MessagesPage />} />

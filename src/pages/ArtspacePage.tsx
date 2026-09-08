@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArtspaceSidebar } from '../components/artspace/ArtspaceSidebar';
 import { ArtspaceTopbar } from '../components/artspace/ArtspaceTopbar';
 import { NeedsDecisionPanel } from '../components/artspace/NeedsDecisionPanel';
+import { ArtworkActionPlanPanel } from '../components/artspace/ArtworkActionPlanPanel';
 import { RealInterestPanel } from '../components/artspace/RealInterestPanel';
 import { ArtworksAtWorkPanel } from '../components/artspace/ArtworksAtWorkPanel';
 import { BestOpportunityPanel } from '../components/artspace/BestOpportunityPanel';
@@ -58,6 +59,7 @@ export function ArtspacePage() {
             {data && (
               <>
                 <NeedsDecisionPanel items={data.needsDecision} />
+                <ArtworkActionPlanPanel items={data.actionPlan} />
 
                 <div className={styles.pair}>
                   <RealInterestPanel items={data.realInterest} />

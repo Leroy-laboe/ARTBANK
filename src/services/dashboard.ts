@@ -2,6 +2,7 @@ import { listMyWorks } from './artwork';
 import { loadInterest } from './interest';
 import { loadOpportunities } from './opportunities';
 import { isSettled, listMyDeals, type DealSummary } from './deals';
+import { listArtworkReadiness, type ArtworkReadiness } from './readiness';
 import type { Work } from '../data/artspaceWorks';
 import type { Enquiry } from '../data/artspaceInterest';
 import type { Opportunity } from '../data/artspaceOpportunities';
@@ -330,6 +331,10 @@ export type DashboardResult = {
   bestOpportunity: BestOpportunity | null;
   money: MoneyAndRights;
   readiness: Readiness;
+  /** Per-artwork readiness and its one next step — see readiness.ts. Distinct
+   *  from `readiness` above, which scores the account (bio, certificates)
+   *  rather than any single work. */
+  actionPlan: ArtworkReadiness[];
   /** True when any part of this fell back to sample content. The screen says
    *  so rather than passing demo figures off as the artist's own. */
   isDemo: boolean;
@@ -338,11 +343,12 @@ export type DashboardResult = {
 export async function loadDashboard(profile: Profile | null): Promise<DashboardResult> {
   if (!profile) return demoDashboard();
 
-  const [worksResult, interestResult, opportunitiesResult, deals] = await Promise.all([
+  const [worksResult, interestResult, opportunitiesResult, deals, actionPlan] = await Promise.all([
     listMyWorks(profile),
     loadInterest(profile),
     loadOpportunities(profile),
     listMyDeals(profile),
+    listArtworkReadiness(profile),
   ]);
 
   // Any source falling back means the numbers on this screen are not the
@@ -361,9 +367,25 @@ export async function loadDashboard(profile: Profile | null): Promise<DashboardR
     bestOpportunity: buildBestOpportunity(opportunitiesResult.opportunities),
     money: buildMoney(works, deals ?? [], demoMoney.imageUrl),
     readiness: buildReadiness(works, profile),
+    actionPlan,
     isDemo: false,
   };
 }
+
+const demoActionPlan: ArtworkReadiness[] = [
+  {
+    artworkId: 'fragments-of-quiet-2',
+    title: 'Fragments of Quiet #2',
+    state: 'Documented',
+    recommendedAction: 'Add ownership statement',
+  },
+  {
+    artworkId: 'golden-silence',
+    title: 'Golden Silence',
+    state: 'Trust-Ready',
+    recommendedAction: 'Confirm available rights',
+  },
+];
 
 function demoDashboard(): DashboardResult {
   return {
@@ -373,6 +395,7 @@ function demoDashboard(): DashboardResult {
     bestOpportunity: { ...demoBestOpportunity, to: '/artspace/opportunities' },
     money: demoMoney,
     readiness: demoReadiness,
+    actionPlan: demoActionPlan,
     isDemo: true,
   };
 }

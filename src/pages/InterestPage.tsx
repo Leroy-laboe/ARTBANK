@@ -5,6 +5,7 @@ import { ArtspacePageHeader } from '../components/artspace/ArtspacePageHeader';
 import { ArtspaceTabs } from '../components/artspace/ArtspaceTabs';
 import { NewEnquiriesPanel } from '../components/artspace/NewEnquiriesPanel';
 import { FollowersPanel } from '../components/artspace/FollowersPanel';
+import { RecentSavesPanel } from '../components/artspace/RecentSavesPanel';
 import { RecentViewersPanel } from '../components/artspace/RecentViewersPanel';
 import { StatsOverviewPanel } from '../components/artspace/StatsOverviewPanel';
 import { TopInterestedArtworksPanel } from '../components/artspace/TopInterestedArtworksPanel';
@@ -12,7 +13,13 @@ import { TipsPanel } from '../components/artspace/TipsPanel';
 import { Icon } from '../components/ui/Icon';
 import { interestOverview, interestTabs, interestTips } from '../data/artspaceInterest';
 import { useSession } from '../lib/sessionContext';
-import { loadFollowers, loadInterest, type InterestResult } from '../services/interest';
+import {
+  loadFollowers,
+  loadInterest,
+  listRecentSaves,
+  type InterestResult,
+  type SavedNotification,
+} from '../services/interest';
 import type { Follower } from '../data/artspaceInterest';
 import { exportInterestCsv } from '../lib/exportCsv';
 import { followers as demoFollowers } from '../data/artspaceInterest';
@@ -28,6 +35,7 @@ export function InterestPage() {
   /** null until read, and stays null if the read failed — the panel keeps its
    *  sample set in that case rather than claiming nobody follows them. */
   const [followers, setFollowers] = useState<Follower[] | null>(null);
+  const [saves, setSaves] = useState<SavedNotification[]>([]);
   const [tab, setTab] = useState('all');
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -38,6 +46,9 @@ export function InterestPage() {
     });
     loadFollowers(profile).then((rows) => {
       if (active) setFollowers(rows);
+    });
+    listRecentSaves(profile).then((rows) => {
+      if (active) setSaves(rows);
     });
     return () => {
       active = false;
@@ -60,8 +71,9 @@ export function InterestPage() {
     setTimeout(() => setNotice(null), 4000);
   }
 
-  const showEnquiries = tab === 'all' || tab === 'enquiries' || tab === 'shortlisted';
+  const showEnquiries = tab === 'all' || tab === 'enquiries';
   const showFollowers = tab === 'all' || tab === 'following';
+  const showSaves = tab === 'all' || tab === 'shortlisted';
   const showViewers = tab === 'all';
 
   return (
@@ -101,6 +113,7 @@ export function InterestPage() {
           <div className={styles.mainCol}>
             {showEnquiries && <NewEnquiriesPanel enquiries={data?.enquiries} />}
             {showFollowers && <FollowersPanel followers={followers ?? undefined} />}
+            {showSaves && <RecentSavesPanel items={saves} />}
             {showViewers && <RecentViewersPanel anonymousCount={data?.anonymousCount} />}
           </div>
 

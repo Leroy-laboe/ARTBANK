@@ -251,6 +251,7 @@ export const interestOverview: {
   stats: [
     { id: 'enquiries', value: '3', label: 'Identified Enquiries' },
     { id: 'following', value: '5', label: 'People Following' },
+    { id: 'shortlisted', value: '4', label: 'Shortlisted' },
     { id: 'serious', value: '2', label: 'Serious Interest' },
     { id: 'discussions', value: '1', label: 'In Discussion' },
     { id: 'anonymous', value: '412', label: 'Anonymous Views' },

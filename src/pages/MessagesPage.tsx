@@ -9,6 +9,7 @@ import { ConversationList } from '../components/artspace/ConversationList';
 import { MessageThread } from '../components/artspace/MessageThread';
 import { RecordSaleDialog } from '../components/artspace/RecordSaleDialog';
 import { confirmPayment, describeDealError, getArtworkDeal, type DealSummary } from '../services/deals';
+import { getConversationStage, resolveStage, type ConversationStage } from '../services/interest';
 import { StatsOverviewPanel } from '../components/artspace/StatsOverviewPanel';
 import { MessageTipsPanel } from '../components/artspace/MessageTipsPanel';
 import {
@@ -35,6 +36,7 @@ export function MessagesPage() {
   const [notice, setNotice] = useState<string | null>(null);
   const [deal, setDeal] = useState<DealSummary | null>(null);
   const [confirming, setConfirming] = useState(false);
+  const [entryStage, setEntryStage] = useState<ConversationStage | null>(null);
 
   const load = useCallback(async () => {
     const result = await loadMessages(profile);
@@ -86,6 +88,24 @@ export function MessagesPage() {
       live = false;
     };
   }, [active?.artworkId, isDemo]);
+
+  // "Interest-to-Deal Progress" — where this specific conversation sits in
+  // the pipeline, per the staff brief's placement note for Messages.
+  useEffect(() => {
+    let live = true;
+    if (!profile || isDemo || !active) {
+      setEntryStage(null);
+      return;
+    }
+    getConversationStage(profile.id, active.counterpartId ?? null, active.artworkId ?? null).then(
+      (stage) => {
+        if (live) setEntryStage(stage);
+      },
+    );
+    return () => {
+      live = false;
+    };
+  }, [profile, active, isDemo]);
 
   /** Three figures, all counted from the conversations actually on screen.
    *
@@ -200,6 +220,10 @@ export function MessagesPage() {
               conversation={active}
               side="artist"
               deal={deal}
+              // No stage on a demo thread — there is no real interest_entries
+              // row behind it, so nothing here would be a fact rather than a
+              // guess.
+              stage={isDemo ? undefined : resolveStage(entryStage, deal)}
               busy={confirming}
               onConfirm={
                 deal

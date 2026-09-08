@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from 'react';
 import { Icon } from '../ui/Icon';
 import { DealBanner } from './DealBanner';
+import { StageProgress } from './StageProgress';
 import type { DealSummary } from '../../services/deals';
+import type { ConversationStage } from '../../services/interest';
 import { thread as demoThread, type Conversation, type MessageDay } from '../../data/artspaceMessages';
 import type { MonogramTone } from '../../data/artspaceInterest';
 import styles from './MessageThread.module.css';
@@ -27,6 +29,7 @@ export function MessageThread({
   onReport,
   onConfirm,
   busy,
+  stage,
 }: {
   conversation: Conversation;
   /** The loaded thread. Falls back to the demo exchange so the panel is
@@ -51,6 +54,9 @@ export function MessageThread({
   onReport?: () => void;
   onConfirm?: () => void;
   busy?: boolean;
+  /** Interest-to-Deal Progress — omitted on a demo thread, where there is no
+   *  real interest_entries row behind it to read a stage from. */
+  stage?: ConversationStage;
 }) {
   const thread = days && days.length > 0 ? days : demoThread;
   const [draft, setDraft] = useState('');
@@ -113,6 +119,12 @@ export function MessageThread({
           <Icon name="more-vertical" size={17} />
         </button>
       </header>
+
+      {stage && (
+        <div className={styles.stageRow}>
+          <StageProgress stage={stage} />
+        </div>
+      )}
 
       {deal && (
         <DealBanner

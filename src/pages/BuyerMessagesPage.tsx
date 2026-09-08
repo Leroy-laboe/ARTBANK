@@ -9,6 +9,7 @@ import { Icon } from '../components/ui/Icon';
 import { useSession } from '../lib/sessionContext';
 import { loadMessages, sendMessage } from '../services/messages';
 import { getArtworkDeal, type DealSummary } from '../services/deals';
+import { getConversationStage, resolveStage, type ConversationStage } from '../services/interest';
 import { ReportPaymentDialog } from '../components/artspace/ReportPaymentDialog';
 import { conversations as demoConversations } from '../data/artspaceMessages';
 import type { Conversation, MessageDay } from '../data/artspaceMessages';
@@ -36,6 +37,7 @@ export function BuyerMessagesPage() {
   const [deal, setDeal] = useState<DealSummary | null>(null);
   const [reporting, setReporting] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  const [entryStage, setEntryStage] = useState<ConversationStage | null>(null);
 
   const reload = useCallback(async () => {
     const result = await loadMessages(profile, 'buyer');
@@ -85,6 +87,24 @@ export function BuyerMessagesPage() {
     };
   }, [active?.artworkId, isDemo]);
 
+  // Interest-to-Deal Progress, read from the buyer's end — the artist is
+  // active.counterpartId here, the viewer is this account.
+  useEffect(() => {
+    let live = true;
+    if (!profile || isDemo || !active) {
+      setEntryStage(null);
+      return;
+    }
+    getConversationStage(active.counterpartId ?? '', profile.id, active.artworkId ?? null).then(
+      (stage) => {
+        if (live) setEntryStage(stage);
+      },
+    );
+    return () => {
+      live = false;
+    };
+  }, [profile, active, isDemo]);
+
   async function handleSend(body: string) {
     if (!profile || !active) return;
     await sendMessage(active.id, profile.id, body);
@@ -128,6 +148,7 @@ export function BuyerMessagesPage() {
           conversation={active}
           side="buyer"
           deal={deal}
+          stage={isDemo ? undefined : resolveStage(entryStage, deal)}
           onReport={deal ? () => setReporting(true) : undefined}
           days={threads[active.id]}
           onSend={isDemo ? undefined : handleSend}

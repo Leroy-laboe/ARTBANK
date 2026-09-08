@@ -1,0 +1,76 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 0;
+}
+
+.step {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+}
+
+.step::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: -50%;
+  width: 100%;
+  height: 2px;
+  background: var(--border-soft);
+  z-index: 0;
+}
+
+.step:first-child::before {
+  content: none;
+}
+
+.stepDone::before {
+  background: var(--gold);
+}
+
+.dot {
+  position: relative;
+  z-index: 1;
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  background: var(--border);
+  border: 2px solid var(--surface);
+}
+
+.stepDone .dot {
+  background: var(--gold);
+}
+
+.stepCurrent .dot {
+  background: var(--ink);
+  box-shadow: 0 0 0 3px var(--gold-bg);
+}
+
+.label {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.stepCurrent .label {
+  color: var(--ink);
+}
+
+.stepDone .label {
+  color: var(--gold-dark);
+}
+
+@media (max-width: 480px) {
+  .label {
+    display: none;
+  }
+}

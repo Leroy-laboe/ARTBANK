@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseClient';
+import { isSettled } from './deals';
 import {
   enquiries as demoEnquiries,
   interestOverview as demoInterestOverview,
@@ -106,15 +107,17 @@ const SERIOUS_STAGES = ['qualified', 'viewing_room', 'negotiation', 'completed']
 
 /** Counts for the Interest Overview card.
  *
- *  Deliberately excludes a "Shortlisted" figure. Saves live in
- *  `saved_artworks`, whose only policy is "Buyers manage their own save list"
- *  — an artist reading it gets zero rows whether or not anyone saved their
- *  work. A confident 0 that means "cannot see" is a worse lie than no number
- *  at all, so the stat is left out until the artist has a read policy. */
+ *  Shortlisted now has a real figure — 0029 added "Artists read who saved
+ *  their own artworks" to `saved_artworks`, which had exactly one policy
+ *  before that (the buyer manages their own list) and always returned zero
+ *  rows to an artist. Whether it slipped in before or after that migration
+ *  runs, `shortlisted` arrives as 0 either way, so nothing here needs to
+ *  branch on it — it just stops being a confident lie once the policy is live. */
 function buildStats(
   rows: EntryRow[],
   anonymousCount: number,
   followers: number,
+  shortlisted: number,
 ): OverviewStat[] {
   const serious = rows.filter((r) => SERIOUS_STAGES.includes(r.pipeline_stage)).length;
   const discussing = rows.filter((r) => r.pipeline_stage === 'negotiation').length;
@@ -122,6 +125,7 @@ function buildStats(
   return [
     { id: 'enquiries', value: String(rows.length), label: 'Identified Enquiries' },
     { id: 'following', value: String(followers), label: 'People Following' },
+    { id: 'shortlisted', value: String(shortlisted), label: 'Shortlisted' },
     { id: 'serious', value: String(serious), label: 'Serious Interest' },
     { id: 'discussions', value: String(discussing), label: 'In Discussion' },
     { id: 'anonymous', value: String(anonymousCount), label: 'Anonymous Views' },
@@ -225,7 +229,7 @@ export async function loadInterest(profile: Profile | null): Promise<InterestRes
 
   const rows = (data ?? []) as unknown as EntryRow[];
 
-  const [{ count }, { count: followerCount }] = await Promise.all([
+  const [{ count }, { count: followerCount }, { count: savedCount }] = await Promise.all([
     supabase
       .from('interest_entries')
       .select('id', { count: 'exact', head: true })
@@ -236,6 +240,10 @@ export async function loadInterest(profile: Profile | null): Promise<InterestRes
       .from('profile_follows')
       .select('follower_id', { count: 'exact', head: true })
       .eq('artist_id', profile.id),
+    // No .eq('artist_id', ...) here — saved_artworks has no such column.
+    // 0029's policy already scopes this to saves on this artist's own
+    // artworks, so an unfiltered count is the correct one, not a shortcut.
+    supabase.from('saved_artworks').select('artwork_id', { count: 'exact', head: true }),
   ]);
 
   const anonymousCount = count ?? 0;
@@ -246,7 +254,94 @@ export async function loadInterest(profile: Profile | null): Promise<InterestRes
     // demo set here is honest as long as the panel says so.
     viewers: demoViewers,
     anonymousCount,
-    stats: buildStats(rows, anonymousCount, followerCount ?? 0),
+    stats: buildStats(rows, anonymousCount, followerCount ?? 0, savedCount ?? 0),
     isDemo: false,
   };
+}
+
+export type ConversationStage = 'enquiry' | 'qualified' | 'viewing_room' | 'negotiation' | 'completed';
+
+/** "Interest-to-Deal Progress" — the pipeline stage of one specific
+ *  conversation, for the stepper on Messages. A conversation doesn't carry
+ *  its own stage (that lives on the interest_entries row that started it),
+ *  so this is the same match buyer.ts uses elsewhere: artist, viewer and
+ *  artwork together, most recent first. Null on a general enquiry with no
+ *  matching entry, or a bare 'viewer' row — neither is a real conversation
+ *  stage to show. */
+export async function getConversationStage(
+  artistId: string,
+  viewerId: string | null,
+  artworkId: string | null,
+): Promise<ConversationStage | null> {
+  if (!supabase || !viewerId) return null;
+
+  const query = supabase
+    .from('interest_entries')
+    .select('pipeline_stage')
+    .eq('artist_id', artistId)
+    .eq('viewer_id', viewerId)
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  const { data, error } = await (
+    artworkId ? query.eq('artwork_id', artworkId) : query.is('artwork_id', null)
+  ).maybeSingle();
+
+  if (error || !data) return null;
+  const stage = (data as { pipeline_stage: string }).pipeline_stage;
+  return stage === 'viewer' ? null : (stage as ConversationStage);
+}
+
+/** A recorded deal is the more authoritative source once one exists — it
+ *  overrides whatever the interest ledger last said, the same way DealBanner
+ *  already takes precedence in the thread itself. */
+export function resolveStage(
+  entryStage: ConversationStage | null,
+  deal: { status: string } | null,
+): ConversationStage {
+  if (deal) return isSettled(deal.status) ? 'completed' : 'negotiation';
+  return entryStage ?? 'enquiry';
+}
+
+export type SavedNotification = {
+  id: string;
+  buyerName: string;
+  artworkId: string;
+  artworkTitle: string;
+  savedAt: string;
+};
+
+type SavedRow = {
+  buyer_user_id: string;
+  artwork_id: string;
+  saved_at: string;
+  artworks: { title: string } | null;
+  users: { display_name: string | null; artist_name: string | null; organization: string | null } | null;
+};
+
+/** "Buyer Save List" (staff brief #9): "notification that an identified
+ *  buyer saved a work." Saving is never anonymous — it requires an account —
+ *  so unlike the viewer ledger, everyone here can be named. Requires 0029. */
+export async function listRecentSaves(profile: Profile | null, limit = 8): Promise<SavedNotification[]> {
+  if (!supabase || !profile) return [];
+
+  const { data, error } = await supabase
+    .from('saved_artworks')
+    .select('buyer_user_id, artwork_id, saved_at, artworks(title), users(display_name, artist_name, organization)')
+    .order('saved_at', { ascending: false })
+    .limit(limit);
+
+  if (error || !data) return [];
+
+  return (data as unknown as SavedRow[]).map((row) => ({
+    id: `${row.buyer_user_id}-${row.artwork_id}`,
+    buyerName:
+      row.users?.organization?.trim() ||
+      row.users?.artist_name?.trim() ||
+      row.users?.display_name?.trim() ||
+      'ArtBank member',
+    artworkId: row.artwork_id,
+    artworkTitle: row.artworks?.title ?? 'Your artwork',
+    savedAt: row.saved_at,
+  }));
 }

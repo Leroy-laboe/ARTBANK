@@ -279,6 +279,18 @@
   border-top: 1px solid var(--border-soft);
 }
 
+.readOnlyNotice {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-soft);
+  background: var(--bg);
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
 .input {
   width: 100%;
   padding: 11px 13px;

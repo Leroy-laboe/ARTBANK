@@ -144,6 +144,7 @@ export function GuardianMinorViewPage() {
                   <MessageThread
                     conversation={activeConversation}
                     days={threads[activeConversation.id]}
+                    readOnly
                   />
                 )}
               </div>

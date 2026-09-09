@@ -30,6 +30,7 @@ export function MessageThread({
   onConfirm,
   busy,
   stage,
+  readOnly,
 }: {
   conversation: Conversation;
   /** The loaded thread. Falls back to the demo exchange so the panel is
@@ -57,6 +58,11 @@ export function MessageThread({
   /** Interest-to-Deal Progress — omitted on a demo thread, where there is no
    *  real interest_entries row behind it to read a stage from. */
   stage?: ConversationStage;
+  /** True for a guardian's view: distinct from a demo thread, which shows a
+   *  disabled composer as a stated preview of what sending looks like. A
+   *  guardian genuinely cannot reply here, so a composer with a Send button
+   *  sitting there — even disabled — claims an ability that doesn't exist. */
+  readOnly?: boolean;
 }) {
   const thread = days && days.length > 0 ? days : demoThread;
   const [draft, setDraft] = useState('');
@@ -193,42 +199,50 @@ export function MessageThread({
         ))}
       </div>
 
-      <form className={styles.composer} onSubmit={submit}>
-        <input
-          type="text"
-          className={styles.input}
-          placeholder="Type your message..."
-          aria-label="Type your message"
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          disabled={!onSend || sending}
-        />
+      {readOnly ? (
+        <p className={styles.readOnlyNotice}>
+          <Icon name="eye" size={13} />
+          You're seeing this because you're this person's verified guardian — you can't reply
+          here.
+        </p>
+      ) : (
+        <form className={styles.composer} onSubmit={submit}>
+          <input
+            type="text"
+            className={styles.input}
+            placeholder="Type your message..."
+            aria-label="Type your message"
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            disabled={!onSend || sending}
+          />
 
-        <div className={styles.composerBar}>
-          <div className={styles.tools}>
-            <button type="button" className={styles.tool} aria-label="Attach a file">
-              <Icon name="paperclip" size={17} />
-            </button>
-            <button type="button" className={styles.tool} aria-label="Attach an image">
-              <Icon name="image" size={17} />
-            </button>
-            <button type="button" className={styles.tool} aria-label="Insert an emoji">
-              <Icon name="smile" size={17} />
-            </button>
-            <button type="button" className={styles.tool} aria-label="Use a saved reply">
-              <Icon name="sparkles" size={17} />
+          <div className={styles.composerBar}>
+            <div className={styles.tools}>
+              <button type="button" className={styles.tool} aria-label="Attach a file">
+                <Icon name="paperclip" size={17} />
+              </button>
+              <button type="button" className={styles.tool} aria-label="Attach an image">
+                <Icon name="image" size={17} />
+              </button>
+              <button type="button" className={styles.tool} aria-label="Insert an emoji">
+                <Icon name="smile" size={17} />
+              </button>
+              <button type="button" className={styles.tool} aria-label="Use a saved reply">
+                <Icon name="sparkles" size={17} />
+              </button>
+            </div>
+
+            <button
+              type="submit"
+              className={styles.send}
+              disabled={!onSend || sending || draft.trim() === ''}
+            >
+              {sending ? 'Sending…' : 'Send'}
             </button>
           </div>
-
-          <button
-            type="submit"
-            className={styles.send}
-            disabled={!onSend || sending || draft.trim() === ''}
-          >
-            {sending ? 'Sending…' : 'Send'}
-          </button>
-        </div>
-      </form>
+        </form>
+      )}
     </div>
   );
 }

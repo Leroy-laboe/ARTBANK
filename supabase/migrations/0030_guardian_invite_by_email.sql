@@ -91,6 +91,10 @@ end;
 $$;
 
 -- ── 3. The minor's own view needs to tell "invited" from "linked" ───────
+-- CREATE OR REPLACE can't change a function's return columns, only its
+-- body — has_account is a new column, so the old signature has to go first.
+drop function if exists public.my_guardian_link();
+
 create or replace function public.my_guardian_link()
 returns table (
   guardian_name text,

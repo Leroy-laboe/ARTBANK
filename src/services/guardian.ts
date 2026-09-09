@@ -105,3 +105,37 @@ export async function approveGuardianLink(minorId: string): Promise<void> {
   const { error } = await supabase.rpc('approve_guardian_link', { target_minor_id: minorId });
   if (error) throw friendlyError(error);
 }
+
+/* ── Oversight (0031) ─────────────────────────────────────────────────────
+ * Read-only, and deliberately narrower than the minor's own dashboard:
+ * artworks in full (the minor's own work), earnings as settled totals and
+ * enquiries/views as counts only — never a buyer's name. Those identities
+ * were disclosed to the artist specifically, not to a second person. */
+
+export type GuardianMinorView = {
+  minorName: string;
+  memberSince: string;
+  artworks: {
+    id: string;
+    title: string;
+    imageUrl: string | null;
+    medium: string | null;
+    year: number | null;
+    status: string;
+    availability: string;
+  }[];
+  earnings: { currency: string; total: number; count: number }[];
+  identifiedEnquiries: number;
+  anonymousViews: number;
+  opportunityMatches: number;
+};
+
+/** Null on any failure — not authorized (unverified or not their guardian),
+ *  not signed in, or the row simply doesn't exist. All three look the same
+ *  from here, which is correct: nothing about why should leak back. */
+export async function getGuardianView(minorId: string): Promise<GuardianMinorView | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase.rpc('guardian_view_minor', { p_minor_id: minorId });
+  if (error || !data) return null;
+  return data as GuardianMinorView;
+}

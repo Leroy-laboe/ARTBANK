@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { Icon } from '../components/ui/Icon';
@@ -90,13 +91,18 @@ export function GuardianRequestsPage() {
                   </div>
 
                   {r.verifiedAt ? (
-                    <span className={styles.approved}>
-                      <Icon name="badge-check" size={14} />
-                      Approved {new Date(r.verifiedAt).toLocaleDateString('en-GB', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric',
-                      })}
+                    <span className={styles.approvedGroup}>
+                      <span className={styles.approved}>
+                        <Icon name="badge-check" size={14} />
+                        Approved {new Date(r.verifiedAt).toLocaleDateString('en-GB', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
+                      </span>
+                      <Link to={`/guardian/${r.minorId}`} className={styles.viewAccount}>
+                        View Account
+                      </Link>
                     </span>
                   ) : (
                     <button

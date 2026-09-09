@@ -34,6 +34,7 @@ import { ArtspaceComingSoonPage } from './pages/ArtspaceComingSoonPage';
 import { BuyerComingSoonPage } from './pages/BuyerComingSoonPage';
 import { GuardianSettingsPage } from './pages/GuardianSettingsPage';
 import { GuardianRequestsPage } from './pages/GuardianRequestsPage';
+import { GuardianMinorViewPage } from './pages/GuardianMinorViewPage';
 import { MyRoomsPage } from './pages/MyRoomsPage';
 import { RoomBuilderPage } from './pages/RoomBuilderPage';
 import { PublicViewingRoomPage } from './pages/PublicViewingRoomPage';
@@ -109,6 +110,10 @@ function App() {
               account menu, since a guardian is just as often an existing
               artist or buyer as a dedicated account. */}
           <Route path="/guardian" element={<GuardianRequestsPage />} />
+          {/* Read-only oversight of a specific minor's account, once
+              approved — docs/pivot-checklist's guardian scope plus the
+              "fuller dashboard" this session extended it to. */}
+          <Route path="/guardian/:minorId" element={<GuardianMinorViewPage />} />
           <Route path="/collect" element={<DiscoverPage />} />
           <Route path="/collect/artists" element={<BuyerArtistsPage />} />
           <Route path="/collect/artworks/:id" element={<BuyerArtworkPage />} />

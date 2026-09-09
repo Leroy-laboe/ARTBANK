@@ -4,7 +4,7 @@ import { Icon } from './Icon';
 import styles from './auth-switch.module.css';
 
 export type AuthMode = 'signin' | 'signup';
-export type AccountRole = 'artist' | 'buyer';
+export type AccountRole = 'artist' | 'buyer' | 'guardian';
 
 export type AuthSwitchProps = {
   /** Which side the card opens on. Added so /login and /register can share it. */
@@ -186,6 +186,18 @@ export default function AuthSwitch({
                     />
                     <span className={styles.roleTitle}>Buyer / Organization</span>
                     <span className={styles.roleDesc}>Source professional creative talent</span>
+                  </label>
+                  <label className={cn(styles.roleCard, role === 'guardian' && styles.roleCardActive)}>
+                    <input
+                      type="radio"
+                      name="role"
+                      value="guardian"
+                      checked={role === 'guardian'}
+                      onChange={() => setRole('guardian')}
+                      className={styles.roleRadio}
+                    />
+                    <span className={styles.roleTitle}>Guardian</span>
+                    <span className={styles.roleDesc}>Approve contact for a minor</span>
                   </label>
                 </div>
 

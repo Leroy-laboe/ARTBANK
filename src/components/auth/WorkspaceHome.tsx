@@ -4,12 +4,14 @@ import styles from './RequireAuth.module.css';
 
 /** Where "sign in" lands you.
  *
- *  There are two private workspaces now — ArtSpace for artists at /artspace
- *  and the buyer workspace at /collect — and which one a person belongs in is
- *  a property of their public.users row, not of the credentials they just
- *  typed. Sign-in cannot answer it: the role arrives with the profile, one
- *  round trip later. So the sign-in form sends everyone here and this waits
- *  for the profile before choosing, rather than guessing and bouncing.
+ *  There are two private workspaces — ArtSpace for artists at /artspace and
+ *  the buyer workspace at /collect — plus /guardian for a pure guardian
+ *  account, which has no artist or buyer business at all. Which of the
+ *  three a person belongs in is a property of their public.users row, not
+ *  of the credentials they just typed. Sign-in cannot answer it: the role
+ *  arrives with the profile, one round trip later. So the sign-in form sends
+ *  everyone here and this waits for the profile before choosing, rather
+ *  than guessing and bouncing.
  *
  *  Artists keep the historical destination when the role can't be read at
  *  all — a profile that failed to load is a broken read, not a signal, and
@@ -33,5 +35,7 @@ export function WorkspaceHome() {
     );
   }
 
-  return <Navigate to={profile?.role === 'buyer' ? '/collect' : '/artspace'} replace />;
+  if (profile?.role === 'buyer') return <Navigate to="/collect" replace />;
+  if (profile?.role === 'guardian') return <Navigate to="/guardian" replace />;
+  return <Navigate to="/artspace" replace />;
 }

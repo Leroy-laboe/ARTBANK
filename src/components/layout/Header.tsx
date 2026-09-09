@@ -24,7 +24,11 @@ export function Header() {
   // brief gap where the button will be.
   const actions = loading ? null : isAuthenticated ? (
     <Link to="/workspace" className={styles.workspaceBtn}>
-      {profile?.role === 'buyer' ? 'My Workspace' : 'My ArtSpace'}
+      {profile?.role === 'buyer'
+        ? 'My Workspace'
+        : profile?.role === 'guardian'
+          ? 'Guardian Requests'
+          : 'My ArtSpace'}
     </Link>
   ) : (
     <div className={styles.authGroup}>

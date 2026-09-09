@@ -46,7 +46,7 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
   async function handleSignUp(values: {
     email: string;
     password: string;
-    role: 'artist' | 'buyer';
+    role: 'artist' | 'buyer' | 'guardian';
   }) {
     if (!values.email || !values.password) {
       setInfo('');

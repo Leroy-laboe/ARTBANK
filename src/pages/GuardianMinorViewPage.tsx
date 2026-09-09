@@ -3,18 +3,32 @@ import { Link, useParams } from 'react-router-dom';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { Icon } from '../components/ui/Icon';
+import { ConversationList } from '../components/artspace/ConversationList';
+import { MessageThread } from '../components/artspace/MessageThread';
 import { getGuardianView, type GuardianMinorView } from '../services/guardian';
+import { listGuardianConversations } from '../services/guardianMessages';
+import type { Conversation, MessageDay } from '../data/artspaceMessages';
 import styles from './GuardianMinorViewPage.module.css';
 
 /** A verified guardian's view of the minor's account. Read-only, and
  *  narrower than the minor's own dashboard on purpose — see guardian.ts.
  *  Requires migration 0031; reachable only from an already-approved row on
  *  /guardian, since guardian_view_minor() refuses anyone who isn't a
- *  verified guardian of this specific id. */
+ *  verified guardian of this specific id.
+ *
+ *  Conversations is the other half of what approving a guardian actually
+ *  does: guardian_cc_id has granted read access to these specific threads
+ *  since 0014, but nothing ever queried it — approving unblocked messaging
+ *  with nowhere for the guardian to see it happen. This is that screen, and
+ *  needs no new migration: "Participants read their conversations" (0014)
+ *  already covers guardian_cc_id, see guardianMessages.ts. */
 export function GuardianMinorViewPage() {
   const { minorId = '' } = useParams();
   const [view, setView] = useState<GuardianMinorView | null>(null);
   const [loading, setLoading] = useState(true);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [threads, setThreads] = useState<Record<string, MessageDay[]>>({});
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -24,10 +38,18 @@ export function GuardianMinorViewPage() {
         setLoading(false);
       }
     });
+    listGuardianConversations(minorId).then((result) => {
+      if (!active) return;
+      setConversations(result.conversations);
+      setThreads(result.threads);
+      setActiveId(result.conversations[0]?.id ?? null);
+    });
     return () => {
       active = false;
     };
   }, [minorId]);
+
+  const activeConversation = conversations.find((c) => c.id === activeId) ?? null;
 
   if (loading) {
     return (
@@ -103,6 +125,30 @@ export function GuardianMinorViewPage() {
               <span className={styles.statLabel}>Opportunity Matches</span>
             </div>
           </div>
+
+          <section className={styles.section}>
+            <h2 className={styles.sectionTitle}>Conversations ({conversations.length})</h2>
+            <p className={styles.sectionNote}>
+              Only the conversations you were cc'd on because they involve this account — not
+              everything they message about, just the contact this approval actually let through.
+            </p>
+            {conversations.length === 0 ? (
+              <p className={styles.empty}>
+                No conversations yet. They'll appear here once contact involving this account
+                actually happens.
+              </p>
+            ) : (
+              <div className={styles.mailbox}>
+                <ConversationList items={conversations} activeId={activeId ?? ''} onSelect={setActiveId} />
+                {activeConversation && (
+                  <MessageThread
+                    conversation={activeConversation}
+                    days={threads[activeConversation.id]}
+                  />
+                )}
+              </div>
+            )}
+          </section>
 
           <section className={styles.section}>
             <h2 className={styles.sectionTitle}>Earnings</h2>

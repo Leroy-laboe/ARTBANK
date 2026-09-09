@@ -101,6 +101,24 @@
   color: var(--muted);
 }
 
+.sectionNote {
+  margin: -6px 0 12px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted-2);
+}
+
+.mailbox {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  min-width: 0;
+  height: 460px;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
 .hint {
   margin-top: 10px;
   font-size: 11px;

@@ -2,6 +2,12 @@
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   min-height: 0;
+  /* Without this, a grid item defaults to min-width: auto — its content's
+     own minimum size — rather than shrinking to fit whatever track width
+     the parent grid actually gives it. At a narrow enough column (240px
+     here vs. MessagesPage's 292px), the search row's content stayed at its
+     preferred ~273px and spilled straight into the thread pane next to it. */
+  min-width: 0;
   border-right: 1px solid var(--border-soft);
 }
 
@@ -12,6 +18,9 @@
   align-items: center;
   gap: 8px;
   padding: 13px 14px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .searchField {

@@ -81,13 +81,13 @@ export function GuardianSettingsPage() {
               <>
                 <div className={styles.status}>
                   <Icon
-                    name={link.verifiedAt ? 'badge-check' : 'clock'}
+                    name={link.verifiedAt ? 'badge-check' : link.hasAccount ? 'clock' : 'mail'}
                     size={18}
                     className={link.verifiedAt ? styles.verifiedIcon : styles.pendingIcon}
                   />
                   <div>
-                    <p className={styles.name}>{link.guardianName}</p>
-                    <p className={styles.email}>{link.guardianEmail}</p>
+                    <p className={styles.name}>{link.guardianName ?? link.guardianEmail}</p>
+                    {link.guardianName && <p className={styles.email}>{link.guardianEmail}</p>}
                   </div>
                 </div>
 
@@ -98,7 +98,9 @@ export function GuardianSettingsPage() {
                         month: 'short',
                         year: 'numeric',
                       })}.`
-                    : 'Waiting for them to approve. Contact involving you stays blocked until they do.'}
+                    : link.hasAccount
+                      ? 'Waiting for them to approve. Contact involving you stays blocked until they do.'
+                      : "They don't have an ArtBank account yet. Ask them to sign up with this exact email — the invite attaches automatically the moment they do, then they can approve it."}
                 </p>
 
                 <button type="button" className={styles.change} onClick={() => setEditing(true)}>
@@ -108,12 +110,12 @@ export function GuardianSettingsPage() {
             ) : (
               <form onSubmit={submit} className={styles.form}>
                 <label className={styles.label} htmlFor="guardian-email">
-                  Guardian&rsquo;s ARTBank email
+                  Guardian&rsquo;s email
                 </label>
                 <p className={styles.hint}>
                   {link
                     ? 'Naming someone new resets approval — the current guardian stays in place until the new one accepts.'
-                    : "They need an ARTBank account already. If they don't have one, ask them to sign up first."}
+                    : "They don't need an ArtBank account yet — if they don't have one, tell them to sign up with this email afterwards."}
                 </p>
                 <div className={styles.row}>
                   <input

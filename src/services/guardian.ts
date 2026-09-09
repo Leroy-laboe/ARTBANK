@@ -1,18 +1,26 @@
 import { supabase } from '../lib/supabaseClient';
 import type { Profile } from '../types/user';
 
-/** Guardian linking and approval. Requires migration 0026.
+/** Guardian linking and approval. Requires migrations 0026 and 0030.
  *
  *  Every read and write here goes through a Postgres function rather than a
  *  table policy — guardian_links stays service-role-only at the table level
  *  (0007), so the only way to touch a row is through one of these narrow,
  *  security-definer functions. See docs/pivot-checklist/15-messages.md's hard
  *  rule: a minor cannot receive uncontrolled adult contact, and an unapproved
- *  request must not count as a guardian. */
+ *  request must not count as a guardian.
+ *
+ *  0030: naming a guardian never requires them to already have an account —
+ *  a real guardian usually doesn't. `hasAccount` on MyGuardianLink is false
+ *  until whoever owns that email actually signs up, at which point it's
+ *  claimed automatically. */
 
 export type MyGuardianLink = {
-  guardianName: string;
+  /** Null until the guardian has an account — there's nothing to name them
+   *  by yet beyond the email that was entered. */
+  guardianName: string | null;
   guardianEmail: string;
+  hasAccount: boolean;
   verifiedAt: string | null;
   createdAt: string;
 };
@@ -26,8 +34,9 @@ export type GuardianRequest = {
 };
 
 type GuardianLinkRow = {
-  guardian_name: string;
+  guardian_name: string | null;
   guardian_email: string;
+  has_account: boolean;
   verified_at: string | null;
   created_at: string;
 };
@@ -41,7 +50,6 @@ type GuardianRequestRow = {
 };
 
 const errorText: Record<string, string> = {
-  guardian_not_found: "No ARTBank account uses that email. Ask them to sign up first, then try again.",
   cannot_link_self: "You can't name yourself as your own guardian.",
   not_signed_in: 'You need to be signed in to do that.',
 };
@@ -70,6 +78,7 @@ export async function getMyGuardianLink(profile: Profile | null): Promise<MyGuar
   return {
     guardianName: row.guardian_name,
     guardianEmail: row.guardian_email,
+    hasAccount: row.has_account,
     verifiedAt: row.verified_at,
     createdAt: row.created_at,
   };

@@ -130,14 +130,33 @@ function fromRow(row: ArtworkRow): Work {
 
 export type WorksResult = { works: Work[]; isDemo: boolean };
 
-export async function listMyWorks(profile: Profile | null): Promise<WorksResult> {
+/** `limit` is opt-in rather than a default, and that asymmetry is deliberate.
+ *
+ *  Two kinds of caller read this. A *list* surface (My Works, the room
+ *  builder's picker) shows a page and should ask for one. The dashboard
+ *  reduces the whole catalogue into totals — readiness percentages, money,
+ *  how many works are missing dimensions — so a silent cap there would not
+ *  truncate a list, it would produce wrong numbers, which is the failure this
+ *  audit is trying to remove rather than introduce.
+ *
+ *  Once `dashboard_summary()` does that counting in Postgres (finding 6 in
+ *  docs/pivot-checklist/27-production-readiness-audit.md), the unbounded call
+ *  goes away and this can default to a page. */
+export async function listMyWorks(
+  profile: Profile | null,
+  limit?: number,
+): Promise<WorksResult> {
   if (!supabase || !profile) return { works: demoWorks, isDemo: true };
 
-  const { data, error } = await supabase
+  const query = supabase
     .from('artworks')
     .select(SELECT)
     .or(`artist_id.eq.${profile.id},uploaded_by.eq.${profile.id}`)
     .order('updated_at', { ascending: false });
+
+  // Built first, capped only if the caller asked, so the dashboard's
+  // whole-catalogue reduction is left alone.
+  const { data, error } = await (limit === undefined ? query : query.limit(limit));
 
   // A missing table (migrations not run yet) lands here — fall back rather
   // than showing an empty portfolio the artist might mistake for data loss.

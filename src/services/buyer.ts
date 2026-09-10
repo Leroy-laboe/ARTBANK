@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseClient';
+import { PAGE_SIZE, toPaged } from './pagination';
 import {
   buyerEnquiries as demoEnquiries,
   demoArtworkDetail,
@@ -173,7 +174,10 @@ export async function getSavedIds(profile: Profile | null): Promise<Set<string>>
   return new Set((data as { artwork_id: string }[]).map((r) => r.artwork_id));
 }
 
-export type ArtworkFeed = { artworks: BuyerArtwork[]; isDemo: boolean };
+/** `hasMore` is set when the read hit its ceiling and stopped short of the
+ *  full set — the surface showing it is expected to say so rather than
+ *  quietly presenting a truncated list as complete. */
+export type ArtworkFeed = { artworks: BuyerArtwork[]; isDemo: boolean; hasMore?: boolean };
 
 /** Discover — every published, publicly-visible artwork.
  *
@@ -229,7 +233,9 @@ export async function listSavedArtworks(profile: Profile | null): Promise<Artwor
     .from('saved_artworks')
     .select(`saved_at, artworks(${ARTWORK_SELECT})`)
     .eq('buyer_user_id', profile.id)
-    .order('saved_at', { ascending: false });
+    .order('saved_at', { ascending: false })
+    // Ceiling, not a page: see services/pagination.ts.
+    .limit(PAGE_SIZE + 1);
 
   if (error || !data) return { artworks: demoSaved, isDemo: true };
 
@@ -246,7 +252,11 @@ export async function listSavedArtworks(profile: Profile | null): Promise<Artwor
 
   // An empty save list is a real answer — do not fall back to the demo shelf,
   // or nothing a buyer removes would ever look removed.
-  return { artworks, isDemo: false };
+  //
+  // The query asks for PAGE_SIZE + 1; the extra row is the "there is more"
+  // probe and is trimmed here rather than shown.
+  const page = toPaged(artworks);
+  return { artworks: page.items, isDemo: false, hasMore: page.hasMore };
 }
 
 /* ── Following ───────────────────────────────────────────────────────────── */
@@ -287,7 +297,9 @@ export async function listFollowedArtists(profile: Profile | null): Promise<Foll
       'artist_id, created_at, users!profile_follows_artist_id_fkey(artist_name, display_name, avatar_url, country, profile_handle)',
     )
     .eq('follower_id', profile.id)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    // Ceiling, not a page: see services/pagination.ts.
+    .limit(PAGE_SIZE + 1);
 
   if (error || !data) return [];
 
@@ -729,25 +741,14 @@ export async function sendIntent(profile: Profile, input: IntentInput): Promise<
     .from('interest_entries')
     .insert({ ...entry, viewer_role: input.role });
 
-  if (error) {
-    // 0023 adds viewer_role. Against a database still on 0022 the insert
-    // fails on that one column, and losing a serious enquiry over a field the
-    // artist would like but does not need is the wrong trade — the role also
-    // opens the message below, so it is not lost either way.
-    if (!isMissingColumn(error)) throw error;
-    const retry = await client.from('interest_entries').insert(entry);
-    if (retry.error) throw retry.error;
-  }
+  // 0023's viewer_role is assumed present. The retry that used to drop the
+  // column and re-insert existed for databases still on 0022; treating a
+  // schema gap as an ordinary runtime branch is what finding 5 of the
+  // production audit set out to remove.
+  if (error) throw error;
 
   const conversationId = await openConversation(profile, input);
   return { conversationId };
-}
-
-/** Postgres 42703 is "undefined column"; PostgREST reports the same thing as
- *  PGRST204 when its schema cache has no such field. Either way the row is
- *  fine and one column is not. */
-function isMissingColumn(error: { code?: string; message?: string }): boolean {
-  return error.code === '42703' || error.code === 'PGRST204';
 }
 
 /** Opens (or reuses) the thread this enquiry belongs to and posts the buyer's

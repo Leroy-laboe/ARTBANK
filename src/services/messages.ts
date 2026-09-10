@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseClient';
+import { PAGE_SIZE, THREAD_PAGE_SIZE } from './pagination';
 import {
   conversations as demoConversations,
   thread as demoThread,
@@ -151,11 +152,19 @@ export async function loadMessages(
 
   if (!supabase || !profile) return demo;
 
+  // Both ceilings matter, and they multiply: without them a mailbox read
+  // pulled every conversation *and* every message inside each one, so the
+  // busiest account paid the largest bill on every visit. Messages come back
+  // newest-first so the cap keeps the most recent ones; toThread() re-sorts
+  // ascending for display, so nothing renders backwards.
   const { data, error } = await supabase
     .from('conversations')
     .select(selectFor(side))
     .eq(sides[side].self, profile.id)
-    .order('last_message_at', { ascending: false });
+    .order('last_message_at', { ascending: false })
+    .order('created_at', { ascending: false, referencedTable: 'messages' })
+    .limit(PAGE_SIZE)
+    .limit(THREAD_PAGE_SIZE, { referencedTable: 'messages' });
 
   // A read that FAILED and a mailbox that is EMPTY are not the same thing.
   // The first means we cannot see the data — no migrations, no permission —

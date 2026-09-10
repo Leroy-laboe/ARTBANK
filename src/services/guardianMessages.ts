@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseClient';
+import { PAGE_SIZE, THREAD_PAGE_SIZE } from './pagination';
 import { type Conversation, type MessageCategory, type MessageDay } from '../data/artspaceMessages';
 import type { MonogramTone } from '../data/artspaceInterest';
 
@@ -152,7 +153,11 @@ export async function listGuardianConversations(minorId: string): Promise<Guardi
     .from('conversations')
     .select(SELECT)
     .or(`artist_id.eq.${minorId},buyer_id.eq.${minorId}`)
-    .order('last_message_at', { ascending: false });
+    .order('last_message_at', { ascending: false })
+    // Same two ceilings as the artist and buyer mailboxes — see messages.ts.
+    .order('created_at', { ascending: false, referencedTable: 'messages' })
+    .limit(PAGE_SIZE)
+    .limit(THREAD_PAGE_SIZE, { referencedTable: 'messages' });
 
   if (error || !data) return { conversations: [], threads: {} };
 

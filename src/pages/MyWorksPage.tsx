@@ -11,6 +11,7 @@ import { StatsOverviewPanel } from '../components/artspace/StatsOverviewPanel';
 import { QuickActionsPanel } from '../components/artspace/QuickActionsPanel';
 import { WorksFiltersPanel } from '../components/artspace/WorksFiltersPanel';
 import { RecordSaleDialog } from '../components/artspace/RecordSaleDialog';
+import { PAGE_SIZE } from '../services/pagination';
 import {
   activeTabId,
   applyTab,
@@ -94,7 +95,7 @@ export function MyWorksPage() {
   // the demo set until then, so the screen never renders empty.
   useEffect(() => {
     let active = true;
-    listMyWorks(profile).then((result) => {
+    listMyWorks(profile, PAGE_SIZE).then((result) => {
       if (active) setAllRows(result.works);
     });
     return () => {
@@ -637,7 +638,7 @@ export function MyWorksPage() {
             say(summary);
             // Earnings and the interest count are computed from other tables,
             // so re-read rather than patching a figure in place.
-            void listMyWorks(profile).then((result) => setAllRows(result.works));
+            void listMyWorks(profile, PAGE_SIZE).then((result) => setAllRows(result.works));
           }}
         />
       )}

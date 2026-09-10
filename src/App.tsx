@@ -1,50 +1,76 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { SessionProvider } from './lib/session';
 import { RequireAuth } from './components/auth/RequireAuth';
 import { RequireNonGuardian } from './components/auth/RequireNonGuardian';
 import { WorkspaceHome } from './components/auth/WorkspaceHome';
-import { AuthPage } from './pages/AuthPage';
+import { RouteFallback } from './components/ui/RouteFallback';
+
+/* ── Eagerly loaded ────────────────────────────────────────────────────────
+ * Only the surfaces someone can land on cold, where a chunk round-trip would
+ * sit between them and the first paint: the marketing homepage, the auth
+ * card, and the three public links that get opened from a QR code, a shared
+ * URL or a search result by people with no session and no warmed cache.
+ * ComingSoonPage is here too — it backs the catch-all route and is small
+ * enough that splitting it would cost more than it saves. */
 import { HomePage } from './pages/HomePage';
-import { MarketplacePage } from './pages/MarketplacePage';
-import { CreatorsPage } from './pages/CreatorsPage';
-import { PublicArtistPage } from './pages/PublicArtistPage';
+import { AuthPage } from './pages/AuthPage';
 import { SmartArtworkLinkPage } from './pages/SmartArtworkLinkPage';
-import { ProfessionalPackPage } from './pages/ProfessionalPackPage';
-import { ArtspacePage } from './pages/ArtspacePage';
-import { MyWorksPage } from './pages/MyWorksPage';
-import { InterestPage } from './pages/InterestPage';
-import { OpportunitiesPage } from './pages/OpportunitiesPage';
-import { MessagesPage } from './pages/MessagesPage';
-import { PublicProfilePage } from './pages/PublicProfilePage';
-import { AddArtworkPage } from './pages/AddArtworkPage';
-import { ArtworkRecordPage } from './pages/ArtworkRecordPage';
-import { DiscoverPage } from './pages/DiscoverPage';
-import { BuyerArtistsPage } from './pages/BuyerArtistsPage';
-import { BuyerArtworkPage } from './pages/BuyerArtworkPage';
-import { SavedWorksPage } from './pages/SavedWorksPage';
-import { FollowingPage } from './pages/FollowingPage';
-import { PurchasesPage } from './pages/PurchasesPage';
-import { MyEnquiriesPage } from './pages/MyEnquiriesPage';
-import { BuyerMessagesPage } from './pages/BuyerMessagesPage';
-import { ViewingRoomsPage } from './pages/ViewingRoomsPage';
-import { TermsPage } from './pages/TermsPage';
-import { PrivacyPage } from './pages/PrivacyPage';
-import { CookiePolicyPage } from './pages/CookiePolicyPage';
-import { ComingSoonPage } from './pages/ComingSoonPage';
-import { ArtspaceComingSoonPage } from './pages/ArtspaceComingSoonPage';
-import { BuyerComingSoonPage } from './pages/BuyerComingSoonPage';
-import { GuardianSettingsPage } from './pages/GuardianSettingsPage';
-import { GuardianRequestsPage } from './pages/GuardianRequestsPage';
-import { GuardianMinorViewPage } from './pages/GuardianMinorViewPage';
-import { MyRoomsPage } from './pages/MyRoomsPage';
-import { RoomBuilderPage } from './pages/RoomBuilderPage';
 import { PublicViewingRoomPage } from './pages/PublicViewingRoomPage';
-import { PricingPage } from './pages/PricingPage';
+import { PublicArtistPage } from './pages/PublicArtistPage';
+import { ComingSoonPage } from './pages/ComingSoonPage';
+
+/* ── Lazily loaded ─────────────────────────────────────────────────────────
+ * Everything behind a sign-in, plus the secondary marketing pages. A visitor
+ * reading the homepage has no reason to download the artist dashboard, the
+ * buyer workspace or the guardian screens, and before this split they
+ * downloaded all three.
+ *
+ * Pages use named exports and React.lazy wants a default, hence the small
+ * unwrap on each line. */
+const MarketplacePage = lazy(async () => ({ default: (await import('./pages/MarketplacePage')).MarketplacePage }));
+const CreatorsPage = lazy(async () => ({ default: (await import('./pages/CreatorsPage')).CreatorsPage }));
+const PricingPage = lazy(async () => ({ default: (await import('./pages/PricingPage')).PricingPage }));
+const TermsPage = lazy(async () => ({ default: (await import('./pages/TermsPage')).TermsPage }));
+const PrivacyPage = lazy(async () => ({ default: (await import('./pages/PrivacyPage')).PrivacyPage }));
+const CookiePolicyPage = lazy(async () => ({ default: (await import('./pages/CookiePolicyPage')).CookiePolicyPage }));
+
+const ArtspacePage = lazy(async () => ({ default: (await import('./pages/ArtspacePage')).ArtspacePage }));
+const MyWorksPage = lazy(async () => ({ default: (await import('./pages/MyWorksPage')).MyWorksPage }));
+const AddArtworkPage = lazy(async () => ({ default: (await import('./pages/AddArtworkPage')).AddArtworkPage }));
+const ArtworkRecordPage = lazy(async () => ({ default: (await import('./pages/ArtworkRecordPage')).ArtworkRecordPage }));
+const ProfessionalPackPage = lazy(async () => ({ default: (await import('./pages/ProfessionalPackPage')).ProfessionalPackPage }));
+const InterestPage = lazy(async () => ({ default: (await import('./pages/InterestPage')).InterestPage }));
+const OpportunitiesPage = lazy(async () => ({ default: (await import('./pages/OpportunitiesPage')).OpportunitiesPage }));
+const MessagesPage = lazy(async () => ({ default: (await import('./pages/MessagesPage')).MessagesPage }));
+const PublicProfilePage = lazy(async () => ({ default: (await import('./pages/PublicProfilePage')).PublicProfilePage }));
+const ArtspaceComingSoonPage = lazy(async () => ({ default: (await import('./pages/ArtspaceComingSoonPage')).ArtspaceComingSoonPage }));
+const GuardianSettingsPage = lazy(async () => ({ default: (await import('./pages/GuardianSettingsPage')).GuardianSettingsPage }));
+const MyRoomsPage = lazy(async () => ({ default: (await import('./pages/MyRoomsPage')).MyRoomsPage }));
+const RoomBuilderPage = lazy(async () => ({ default: (await import('./pages/RoomBuilderPage')).RoomBuilderPage }));
+
+const DiscoverPage = lazy(async () => ({ default: (await import('./pages/DiscoverPage')).DiscoverPage }));
+const BuyerArtistsPage = lazy(async () => ({ default: (await import('./pages/BuyerArtistsPage')).BuyerArtistsPage }));
+const BuyerArtworkPage = lazy(async () => ({ default: (await import('./pages/BuyerArtworkPage')).BuyerArtworkPage }));
+const SavedWorksPage = lazy(async () => ({ default: (await import('./pages/SavedWorksPage')).SavedWorksPage }));
+const FollowingPage = lazy(async () => ({ default: (await import('./pages/FollowingPage')).FollowingPage }));
+const PurchasesPage = lazy(async () => ({ default: (await import('./pages/PurchasesPage')).PurchasesPage }));
+const MyEnquiriesPage = lazy(async () => ({ default: (await import('./pages/MyEnquiriesPage')).MyEnquiriesPage }));
+const BuyerMessagesPage = lazy(async () => ({ default: (await import('./pages/BuyerMessagesPage')).BuyerMessagesPage }));
+const ViewingRoomsPage = lazy(async () => ({ default: (await import('./pages/ViewingRoomsPage')).ViewingRoomsPage }));
+const BuyerComingSoonPage = lazy(async () => ({ default: (await import('./pages/BuyerComingSoonPage')).BuyerComingSoonPage }));
+
+const GuardianRequestsPage = lazy(async () => ({ default: (await import('./pages/GuardianRequestsPage')).GuardianRequestsPage }));
+const GuardianMinorViewPage = lazy(async () => ({ default: (await import('./pages/GuardianMinorViewPage')).GuardianMinorViewPage }));
 
 function App() {
   return (
     <BrowserRouter>
       <SessionProvider>
+      {/* One boundary around the whole table rather than per route: the
+          fallback is identical everywhere, and nesting them would only add
+          places for a chunk to flash. */}
+      <Suspense fallback={<RouteFallback />}>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/artists" element={<CreatorsPage />} />
@@ -150,6 +176,7 @@ function App() {
         <Route path="/apply" element={<Navigate to="/register" replace />} />
         <Route path="*" element={<ComingSoonPage title="This page" />} />
       </Routes>
+      </Suspense>
       </SessionProvider>
     </BrowserRouter>
   );

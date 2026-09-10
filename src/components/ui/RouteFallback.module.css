@@ -1,0 +1,39 @@
+.wrap {
+  display: grid;
+  place-items: center;
+  /* Roughly a viewport, so the footer doesn't ride up and then drop back
+     down once the chunk lands. */
+  min-height: 60vh;
+  background: var(--bg);
+}
+
+.spinner {
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: var(--radius-full);
+  /* The delay is the point: a fast chunk should show nothing at all. */
+  opacity: 0;
+  animation:
+    spin 0.7s linear infinite,
+    reveal 0.01s linear 0.25s forwards;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: reveal 0.01s linear 0.25s forwards;
+  }
+}

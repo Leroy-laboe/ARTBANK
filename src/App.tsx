@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { SessionProvider } from './lib/session';
 import { RequireAuth } from './components/auth/RequireAuth';
+import { RequireNonGuardian } from './components/auth/RequireNonGuardian';
 import { WorkspaceHome } from './components/auth/WorkspaceHome';
 import { AuthPage } from './pages/AuthPage';
 import { HomePage } from './pages/HomePage';
@@ -77,53 +78,63 @@ function App() {
             One guard covers the whole tree: anyone without a session is sent
             to /login and returned here once they're in. */}
         <Route element={<RequireAuth><Outlet /></RequireAuth>}>
-          <Route path="/artspace" element={<ArtspacePage />} />
-          <Route path="/artspace/works" element={<MyWorksPage />} />
-          <Route path="/artspace/works/new" element={<AddArtworkPage />} />
-          {/* Artwork record / Passport — docs/pivot-checklist/11-artwork-record-passport.md */}
-          <Route path="/artspace/works/:id" element={<ArtworkRecordPage />} />
-          {/* One-Click Professional Pack — a print-ready page instead of a
-              PDF this project has no server to render. */}
-          <Route path="/artspace/works/:id/pack" element={<ProfessionalPackPage />} />
-          <Route path="/artspace/interest" element={<InterestPage />} />
-          <Route path="/artspace/opportunities" element={<OpportunitiesPage />} />
-          <Route path="/artspace/messages" element={<MessagesPage />} />
-          <Route path="/artspace/profile" element={<PublicProfilePage />} />
-          <Route path="/artspace/billing" element={<ArtspaceComingSoonPage title="Billing" />} />
-          {/* Names the guardian who has to approve contact if this account
-              belongs to someone under 18 — docs/pivot-checklist/15-messages.md. */}
-          <Route path="/artspace/guardian" element={<GuardianSettingsPage />} />
-          {/* Private Viewing Rooms — docs/pivot-checklist/
-              21-feature-private-viewing-room.md. /rooms/new and /rooms/:id
-              share one builder; the public link lives at /rooms/:id
-              (outside this guard) rather than /artspace/rooms/:id. */}
-          <Route path="/artspace/rooms" element={<MyRoomsPage />} />
-          <Route path="/artspace/rooms/new" element={<RoomBuilderPage />} />
-          <Route path="/artspace/rooms/:id" element={<RoomBuilderPage />} />
-          <Route path="/artspace/help" element={<ArtspaceComingSoonPage title="Help Center" />} />
-
           {/* The buyer workspace — the other side of ArtSpace. Same guard,
               same session; which of the two an account belongs in is decided
               by WorkspaceHome from users.role. */}
           <Route path="/workspace" element={<WorkspaceHome />} />
           {/* Approving a guardian request: reachable from either workspace's
               account menu, since a guardian is just as often an existing
-              artist or buyer as a dedicated account. */}
+              artist or buyer as a dedicated account. Every role can reach
+              these two — a pure guardian account is blocked from the other
+              routes below instead (see RequireNonGuardian). */}
           <Route path="/guardian" element={<GuardianRequestsPage />} />
           {/* Read-only oversight of a specific minor's account, once
               approved — docs/pivot-checklist's guardian scope plus the
               "fuller dashboard" this session extended it to. */}
           <Route path="/guardian/:minorId" element={<GuardianMinorViewPage />} />
-          <Route path="/collect" element={<DiscoverPage />} />
-          <Route path="/collect/artists" element={<BuyerArtistsPage />} />
-          <Route path="/collect/artworks/:id" element={<BuyerArtworkPage />} />
-          <Route path="/collect/saved" element={<SavedWorksPage />} />
-          <Route path="/collect/following" element={<FollowingPage />} />
-          <Route path="/collect/purchases" element={<PurchasesPage />} />
-          <Route path="/collect/enquiries" element={<MyEnquiriesPage />} />
-          <Route path="/collect/messages" element={<BuyerMessagesPage />} />
-          <Route path="/collect/rooms" element={<ViewingRoomsPage />} />
-          <Route path="/collect/help" element={<BuyerComingSoonPage title="Help Center" />} />
+
+          {/* A pure guardian account has no artist or buyer business at all,
+              so everything below is blocked for that role — see
+              RequireNonGuardian's own comment for why this needs to be a
+              real guard and not just where WorkspaceHome happens to send
+              someone after sign-in. */}
+          <Route element={<RequireNonGuardian><Outlet /></RequireNonGuardian>}>
+            <Route path="/artspace" element={<ArtspacePage />} />
+            <Route path="/artspace/works" element={<MyWorksPage />} />
+            <Route path="/artspace/works/new" element={<AddArtworkPage />} />
+            {/* Artwork record / Passport — docs/pivot-checklist/11-artwork-record-passport.md */}
+            <Route path="/artspace/works/:id" element={<ArtworkRecordPage />} />
+            {/* One-Click Professional Pack — a print-ready page instead of a
+                PDF this project has no server to render. */}
+            <Route path="/artspace/works/:id/pack" element={<ProfessionalPackPage />} />
+            <Route path="/artspace/interest" element={<InterestPage />} />
+            <Route path="/artspace/opportunities" element={<OpportunitiesPage />} />
+            <Route path="/artspace/messages" element={<MessagesPage />} />
+            <Route path="/artspace/profile" element={<PublicProfilePage />} />
+            <Route path="/artspace/billing" element={<ArtspaceComingSoonPage title="Billing" />} />
+            {/* Names the guardian who has to approve contact if this account
+                belongs to someone under 18 — docs/pivot-checklist/15-messages.md. */}
+            <Route path="/artspace/guardian" element={<GuardianSettingsPage />} />
+            {/* Private Viewing Rooms — docs/pivot-checklist/
+                21-feature-private-viewing-room.md. /rooms/new and /rooms/:id
+                share one builder; the public link lives at /rooms/:id
+                (outside this guard) rather than /artspace/rooms/:id. */}
+            <Route path="/artspace/rooms" element={<MyRoomsPage />} />
+            <Route path="/artspace/rooms/new" element={<RoomBuilderPage />} />
+            <Route path="/artspace/rooms/:id" element={<RoomBuilderPage />} />
+            <Route path="/artspace/help" element={<ArtspaceComingSoonPage title="Help Center" />} />
+
+            <Route path="/collect" element={<DiscoverPage />} />
+            <Route path="/collect/artists" element={<BuyerArtistsPage />} />
+            <Route path="/collect/artworks/:id" element={<BuyerArtworkPage />} />
+            <Route path="/collect/saved" element={<SavedWorksPage />} />
+            <Route path="/collect/following" element={<FollowingPage />} />
+            <Route path="/collect/purchases" element={<PurchasesPage />} />
+            <Route path="/collect/enquiries" element={<MyEnquiriesPage />} />
+            <Route path="/collect/messages" element={<BuyerMessagesPage />} />
+            <Route path="/collect/rooms" element={<ViewingRoomsPage />} />
+            <Route path="/collect/help" element={<BuyerComingSoonPage title="Help Center" />} />
+          </Route>
         </Route>
 
         {/* Legal — see docs/pivot-checklist/05-footer-and-legal.md, the

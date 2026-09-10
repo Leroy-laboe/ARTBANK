@@ -5,6 +5,13 @@
   padding: 15.5px 16px 17px;
   display: flex;
   flex-direction: column;
+  /* A flex item defaults to min-width: auto — its content's own min-content
+     size — rather than shrinking to whatever width its column actually gets.
+     Without this, a panel holding anything wide (a table, an unbreakable
+     row) forces itself and every ancestor up to the page wider than the
+     viewport instead of letting its own overflow-x:auto contain it. This is
+     used by 22 components, so the one fix here covers all of them. */
+  min-width: 0;
 }
 
 .head {

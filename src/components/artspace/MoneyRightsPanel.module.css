@@ -91,3 +91,17 @@
   border-radius: var(--radius-sm);
   background: var(--bg);
 }
+
+/* Below this the fixed 104px image column was squeezing the earnings cards
+   into ~half their readable width for a purely decorative photo — the image
+   carries no information the figures don't already state, so it's the one
+   that goes. */
+@media (max-width: 520px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .image {
+    display: none;
+  }
+}

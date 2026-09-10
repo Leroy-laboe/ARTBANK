@@ -1,13 +1,19 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import AuthSwitch, { type AuthMode } from '@/components/ui/auth-switch';
-import panelVideo from '@/video.mp4';
+import { useHeavyMediaAllowed } from '../lib/useHeavyMediaAllowed';
 import { Icon } from '../components/ui/Icon';
 import { signIn, signUp } from '../services/auth';
 import styles from './AuthPage.module.css';
 
 export function AuthPage({ mode }: { mode: AuthMode }) {
   const navigate = useNavigate();
+
+  /* The panel loop is decoration. It now lives in public/ rather than the
+     bundle, and it is only requested when the visitor's connection and motion
+     preference can afford it — before this, every visit to /login pulled a
+     25MB file down before the form was usable. */
+  const showPanelVideo = useHeavyMediaAllowed();
   const [searchParams] = useSearchParams();
 
   /** Where to land after signing in. RequireAuth passes the page the user was
@@ -86,7 +92,7 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
 
       <AuthSwitch
         defaultMode={mode}
-        videoSrc={panelVideo}
+        videoSrc={showPanelVideo ? '/panel-loop.mp4' : undefined}
         // Keep the URL in step with the panel, so a refresh reopens the same side.
         onModeChange={(next) => {
           setError('');

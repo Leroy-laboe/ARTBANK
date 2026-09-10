@@ -43,6 +43,12 @@
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-md);
   padding: 14px 16px 14px;
+  /* A flex item (child of .mainCol) defaults to min-width: auto — its
+     content's min-content size. WorksTable's own scroller relies on this
+     card shrinking to the viewport so overflow-x:auto can do its job;
+     without this the card (and the whole page) grows to the table's 900px
+     instead. */
+  min-width: 0;
 }
 
 .rightCol {

@@ -201,19 +201,38 @@
   }
 }
 
-/* --- Stacked layout: photo drops out of the text's flow and becomes a normal block below it --- */
+/* --- Narrow layout: still one scene, not two blocks ---
+ *
+ * The photo stays a full-bleed background with the copy over it, exactly as
+ * on desktop. Only the direction of the scrim changes: the desktop fade runs
+ * left-to-right because the photo is landscape with plain wall on the left
+ * and the framed artwork on the right, so the copy has somewhere quiet to
+ * sit. A phone crops that same photo to a narrow vertical slice, so there is
+ * no left-hand quiet band any more — the fade runs top-to-bottom instead,
+ * lightening the band the copy occupies and clearing by the time it reaches
+ * the artwork below it.
+ */
 @media (max-width: 1100px) {
   .hero {
     height: auto;
-    min-height: 0;
+    min-height: calc(100svh - var(--header-h));
     max-height: none;
     justify-content: flex-start;
     padding: 0;
   }
 
+  /* The bottom padding is the artwork's band. Reserving it here rather than
+     setting a taller hero height keeps the reveal the same on every phone:
+     the copy takes what it needs, the artwork always gets this much clear
+     space under it, and only a short screen has to scroll for it.
+
+     Longhand on purpose — the `padding: x 0 y` shorthand this replaces was
+     also zeroing the horizontal padding .container supplies, so the copy sat
+     flush against the screen edge with no gutter while every other container
+     on the page kept its 20px. */
   .inner {
-    order: 1;
-    padding: 72px 0 48px;
+    padding-top: 60px;
+    padding-bottom: 300px;
   }
 
   .textCol {
@@ -221,21 +240,34 @@
   }
 
   .pictureBlock {
-    order: 2;
-    position: relative;
-    inset: auto;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    aspect-ratio: 5 / 4;
+    position: absolute;
+    inset: 0;
   }
 
-  /* No copy sits over the photo here, so centre the crop on the artwork rather than its right edge. */
+  /* Two things at once. The percentage picks the horizontal slice — a tall
+     box against a 2:1 photo crops sideways, and 64% lands on the figure
+     rather than the bare wall past the frame. The extra height crops the
+     floor: at 100% the photo's bottom third is gallery floor, which is
+     exactly where the copy clears and the artwork was supposed to appear.
+     Overflowing the block downward pushes the floor out of frame and puts
+     the painting itself in the reveal. */
   .bgImage {
-    object-position: 66% center;
+    height: 135%;
+    object-position: 64% center;
   }
 
+  /* Measured from the bottom in pixels, not percentages, so the clear band
+     matches .inner's reserved 300px exactly on every screen height — a
+     percentage fade lands in a different place on a 667px phone than on an
+     874px one, and the copy above it is what pays for that. */
   .bgScrim {
-    display: none;
+    display: block;
+    background: linear-gradient(0deg,
+        rgba(251, 250, 247, 0) 0px,
+        rgba(251, 250, 247, 0) 120px,
+        rgba(251, 250, 247, 0.5) 210px,
+        rgba(251, 250, 247, 0.88) 285px,
+        rgba(251, 250, 247, 0.93) 100%);
   }
 
   .badgeCard {
@@ -251,15 +283,6 @@
 
   .ctaRow {
     flex-direction: column;
-  }
-
-  .pictureBlock {
-    aspect-ratio: 3 / 4;
-  }
-
-  /* The narrower crop needs a further-right origin to keep the artwork centred. */
-  .bgImage {
-    object-position: 77% center;
   }
 
   /* A 208px column would swallow a phone screen, so the card reflows into a wide two-column strip. */

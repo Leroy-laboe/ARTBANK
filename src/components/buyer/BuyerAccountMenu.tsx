@@ -3,7 +3,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
 import { useSession } from '../../lib/sessionContext';
 import { useGuardianRequestSummary } from '../../lib/useGuardianRequests';
+import { buyerAccountNav, buyerBottomNav, buyerPrimaryNav } from '../../data/buyerContent';
 import styles from './BuyerAccountMenu.module.css';
+
+/** Everywhere a buyer can go that the phone's bottom bar doesn't carry and
+ *  this menu doesn't already list by hand. Derived rather than typed out, so
+ *  a new sidebar destination can't quietly become unreachable on a phone. */
+const HAND_LISTED = ['/collect/saved', '/collect/rooms'];
+const phoneOnlyNav = [...buyerPrimaryNav, ...buyerAccountNav].filter(
+  (item) => !buyerBottomNav.some((b) => b.to === item.to) && !HAND_LISTED.includes(item.to),
+);
 
 /** The signed-in buyer's account menu.
  *
@@ -94,6 +103,18 @@ export function BuyerAccountMenu({ trigger }: { trigger: 'row' | 'avatar' }) {
             <Icon name="lock" size={14} />
             Viewing Rooms
           </Link>
+
+          {/* The sidebar is gone below 650px and the bottom bar carries five
+              of its seven destinations. These are the rest, shown at exactly
+              the widths the rail isn't there. */}
+          <div className={styles.sidebarOnly}>
+            {phoneOnlyNav.map((item) => (
+              <Link key={item.to} to={item.to} className={styles.item} onClick={() => setOpen(false)}>
+                <Icon name={item.icon} size={14} />
+                {item.label}
+              </Link>
+            ))}
+          </div>
 
           {guardianRequests.total > 0 && (
             <Link to="/guardian" className={styles.item} onClick={() => setOpen(false)}>

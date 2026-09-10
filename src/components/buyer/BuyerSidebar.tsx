@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
+import { BottomNavBar } from '../ui/bottom-nav-bar';
 import { BuyerAccountMenu } from './BuyerAccountMenu';
 import { useSession } from '../../lib/sessionContext';
 import { getUnreadMessageSummary } from '../../services/messages';
-import { buyerAccountNav, buyerPrimaryNav } from '../../data/buyerContent';
+import { buyerAccountNav, buyerBottomNav, buyerPrimaryNav } from '../../data/buyerContent';
 import logo from '../../assets/images/artbank-logo-dark.png';
 import styles from './BuyerSidebar.module.css';
 
@@ -38,6 +39,17 @@ export function BuyerSidebar() {
   }, [profile]);
 
   return (
+    <>
+    {/* The phone's navigation — see the same block in ArtspaceSidebar. */}
+    <BottomNavBar
+      className="hidden max-[650px]:flex"
+      items={buyerBottomNav.map((item) => ({
+        ...item,
+        end: item.to === '/collect',
+        badge: item.to === '/collect/messages' && profile ? unreadMessages : item.badge,
+      }))}
+    />
+
     <aside className={styles.sidebar}>
       <Link to="/" className={styles.brand}>
         <img src={logo} alt="ARTBANK" className={styles.brandLogo} />
@@ -83,5 +95,6 @@ export function BuyerSidebar() {
         <BuyerAccountMenu trigger="row" />
       </div>
     </aside>
+    </>
   );
 }

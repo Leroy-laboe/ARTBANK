@@ -359,3 +359,40 @@
     font-size: 20.5px;
   }
 }
+
+/* Only shown where the sidebar isn't — see the matching comment in the
+   account panel. Above this width these same destinations are in the rail,
+   and repeating them in the menu would just be two ways to the same place. */
+.panelSidebarOnly {
+  display: contents;
+}
+
+@media (min-width: 651px) {
+  .panelSidebarOnly {
+    display: none;
+  }
+}
+
+/* Below the sidebar's breakpoint the greeting takes the whole first line and
+   the controls wrap onto their own row, close to the left edge. A panel
+   anchored to its own trigger then hangs off the left of the screen. Give the
+   controls the full width, take the wraps out of the positioning chain, and
+   both panels span the row instead. */
+@media (max-width: 650px) {
+  .controls {
+    position: relative;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .menuWrap {
+    position: static;
+  }
+
+  .panel,
+  .panelRight {
+    left: 0;
+    right: 0;
+    width: auto;
+  }
+}

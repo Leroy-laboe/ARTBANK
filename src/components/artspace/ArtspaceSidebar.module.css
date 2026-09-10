@@ -196,27 +196,12 @@
   }
 }
 
+/* The rail becomes the floating bottom bar here (see BottomNavBar in
+   ArtspaceSidebar.tsx) rather than a horizontally-scrolling strip across the
+   top. That strip held six-plus destinations in a 375px-wide box, so most of
+   them sat off-screen behind a scroll nobody could see was there. */
 @media (max-width: 650px) {
   .sidebar {
-    position: static;
-    height: auto;
-    flex-direction: row;
-    border-right: none;
-    border-bottom: 1px solid var(--border-soft);
-    padding: 9px;
-    overflow-x: auto;
-  }
-
-  .nav {
-    flex-direction: row;
-    gap: 3.5px;
-  }
-
-  .divider {
     display: none;
-  }
-
-  .addBtn {
-    margin: 0;
   }
 }

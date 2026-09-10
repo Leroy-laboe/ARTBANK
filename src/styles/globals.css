@@ -143,3 +143,14 @@ ul {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* Clearance for the floating bottom navigation on phones. The bar is
+   position:fixed, so it sits over whatever ends the page; the class is set by
+   BottomNavBar itself while it is mounted, which keeps this from applying on
+   signed-out pages that have no bar. One rule instead of the same padding
+   repeated across 16 page modules. */
+@media (max-width: 650px) {
+  body.has-bottom-nav main {
+    padding-bottom: 96px;
+  }
+}

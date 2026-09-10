@@ -5,6 +5,7 @@ import { useArtist } from '../../lib/useArtist';
 import { useSession } from '../../lib/sessionContext';
 import { useGuardianRequestSummary } from '../../lib/useGuardianRequests';
 import { getUnreadMessageSummary, type MessageNotification } from '../../services/messages';
+import { artspaceAccountNav } from '../../data/artspaceContent';
 import styles from './ArtspaceTopbar.module.css';
 
 /** Search and account controls, shared by every ArtSpace screen.
@@ -285,6 +286,30 @@ export function ArtspaceTopbar({
                   )}
                 </Link>
               )}
+
+              {/* The account destinations normally live in the sidebar, which
+                  the bottom bar replaces on a phone. Without these they would
+                  be unreachable there, so they appear here at exactly the
+                  widths the sidebar is gone. */}
+              <div className={styles.panelSidebarOnly}>
+                {artspaceAccountNav
+                  // Skip Public Profile when the link above is already
+                  // pointing at that same editor ("Set up your profile"). With
+                  // a handle the link above goes to the public page instead,
+                  // so the editor still needs its own row.
+                  .filter((item) => item.to !== '/artspace/profile' || profile?.profileHandle)
+                  .map((item) => (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      className={styles.panelItem}
+                      onClick={() => setAccountOpen(false)}
+                    >
+                      <Icon name={item.icon} size={14} />
+                      {item.label}
+                    </Link>
+                  ))}
+              </div>
 
               <button
                 type="button"

@@ -41,6 +41,21 @@ export const buyerAccountNav: BuyerNavItem[] = [
   { icon: 'help-circle', label: 'Help Center', to: '/collect/help' },
 ];
 
+/** What the phone's bottom bar carries. Five, not the seven above: a bottom
+ *  bar is thumb-reachable navigation, and past five the targets get too
+ *  narrow to hit and the active item's label has nowhere to expand into.
+ *  Following and Purchases are the two that drop — both are places a buyer
+ *  goes deliberately rather than moves between, and both stay one tap away
+ *  in the sidebar. ArtSpace needs no equivalent list: artspacePrimaryNav is
+ *  already exactly five. */
+export const buyerBottomNav: BuyerNavItem[] = [
+  { icon: 'home', label: 'Discover', to: '/collect' },
+  { icon: 'users', label: 'Artists', to: '/collect/artists' },
+  { icon: 'bookmark', label: 'Saved', to: '/collect/saved' },
+  { icon: 'mail', label: 'Enquiries', to: '/collect/enquiries' },
+  { icon: 'message', label: 'Messages', to: '/collect/messages' },
+];
+
 /* ── Discover ── */
 
 export const discoverHero = {

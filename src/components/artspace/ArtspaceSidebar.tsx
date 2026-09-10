@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
+import { BottomNavBar } from '../ui/bottom-nav-bar';
 import { useSession } from '../../lib/sessionContext';
 import { getUnreadMessageSummary } from '../../services/messages';
 import { artspaceAccountNav, artspacePrimaryNav } from '../../data/artspaceContent';
@@ -50,6 +51,19 @@ export function ArtspaceSidebar() {
   }
 
   return (
+    <>
+    {/* The phone's navigation. Rendered here rather than in each ArtSpace
+        page so every screen that already mounts this sidebar gets it, and
+        hidden above the breakpoint where the rail itself returns. */}
+    <BottomNavBar
+      className="hidden max-[650px]:flex"
+      items={artspacePrimaryNav.map((item) => ({
+        ...item,
+        end: item.to === '/artspace',
+        badge: item.to === '/artspace/messages' && profile ? unreadMessages : item.badge,
+      }))}
+    />
+
     <aside className={styles.sidebar}>
       <Link to="/" className={styles.brand}>
         <img src={logo} alt="ARTBANK" className={styles.brandLogo} />
@@ -115,5 +129,6 @@ export function ArtspaceSidebar() {
         </div>
       </div>
     </aside>
+    </>
   );
 }

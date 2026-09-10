@@ -8,32 +8,18 @@ import type { Profile } from '../types/user';
  *  auth.uid() = auth_user_id in 0008), so the profile editor can save for
  *  real. The public presentation columns come from 0021. */
 
-/** Everything that existed before 0021. Kept separate so a project without
- *  that migration can still sign in — see `fetchProfileRow`. */
-const BASE_COLUMNS =
-  'id, auth_user_id, jo1n_identity_id, email, display_name, avatar_url, role, status, country, organization, collecting_interests, is_minor, created_at';
-
-const PROFILE_020_COLUMNS =
-  `${BASE_COLUMNS}, artist_name, nationality, website, public_email, short_bio, artist_statement, cover_url, mediums, years_active, education, awards, social_links, profile_handle, profile_visibility, show_contact_information, allow_enquiries, show_artwork_prices`;
-
-/** Adds 0022's country_code on top of 0021's columns. Kept as its own tier —
- *  see `fetchProfileRow` — rather than folded into PROFILE_020_COLUMNS, so an
- *  account that has 0021 but not yet 0022 doesn't lose every 0021 field over
- *  one missing column. */
-const PROFILE_COLUMNS = `${PROFILE_020_COLUMNS}, country_code`;
+/** One list, not the three migration-era tiers it used to be split into.
+ *  The split existed so a database missing 0021 or 0022 could still serve a
+ *  partial profile; the app now assumes its schema is current and lets a
+ *  behind database fail loudly instead. */
+const PROFILE_COLUMNS =
+  'id, auth_user_id, jo1n_identity_id, email, display_name, avatar_url, role, status, country, country_code, organization, collecting_interests, is_minor, created_at, artist_name, nationality, website, public_email, short_bio, artist_statement, cover_url, mediums, years_active, education, awards, social_links, profile_handle, profile_visibility, show_contact_information, allow_enquiries, show_artwork_prices';
 
 /** The subset a stranger may see. `email`, `role`, `status` and `is_minor` are
  *  deliberately absent: 0021's read policy is row-level, so keeping them out
- *  of the query is what actually stops them reaching a public page.
- *
- *  `_PRE_0022` omits country_code. Public reads (getPublicProfile,
- *  listPublicArtists) fall back to it on error, so an account that already
- *  has a working public profile doesn't go dark — 404ing, or vanishing from
- *  the directory — over one column added for the flag feature. */
-export const PUBLIC_PROFILE_COLUMNS_PRE_0022 =
-  'id, display_name, avatar_url, cover_url, country, artist_name, nationality, website, public_email, short_bio, artist_statement, mediums, years_active, education, awards, social_links, profile_handle, profile_visibility, show_contact_information, allow_enquiries, show_artwork_prices, created_at';
-
-export const PUBLIC_PROFILE_COLUMNS = `${PUBLIC_PROFILE_COLUMNS_PRE_0022}, country_code`;
+ *  of the query is what actually stops them reaching a public page. */
+export const PUBLIC_PROFILE_COLUMNS =
+  'id, display_name, avatar_url, cover_url, country, country_code, artist_name, nationality, website, public_email, short_bio, artist_statement, mediums, years_active, education, awards, social_links, profile_handle, profile_visibility, show_contact_information, allow_enquiries, show_artwork_prices, created_at';
 
 type Row = Record<string, unknown>;
 
@@ -86,12 +72,17 @@ export function rowToProfile(row: Row): Profile {
 
 /** Reads one profile row by column and value.
  *
- *  Three tiers, each falling back to the last if its columns don't exist yet:
- *  0022's country_code → 0021's public-profile columns → the pre-0021 base.
- *  Without this, running the current build against a database that's behind
- *  by even one migration would fail every profile read and lock the user out
- *  of a signed-in session entirely — a much worse outcome than a profile
- *  missing its newest field. */
+ *  This used to be three tiers — 0022's country_code, then 0021's
+ *  public-profile columns, then a pre-0021 base — each retrying on a
+ *  "column does not exist" error. That treated "which migrations are applied"
+ *  as a runtime unknown: it cost two extra round-trips on the fallback path,
+ *  it swallowed a genuine typo'd column as though it were a version
+ *  difference, and it grew a rung every time a migration added a field.
+ *
+ *  The schema is now something the app may assume. A database that is behind
+ *  should fail loudly here rather than quietly serve a profile with its
+ *  newest fields missing — see finding 5 in
+ *  docs/pivot-checklist/27-production-readiness-audit.md. */
 export async function fetchProfileRow(
   column: string,
   value: string,
@@ -99,15 +90,14 @@ export async function fetchProfileRow(
   const client = supabase;
   if (!client) return null;
 
-  const full = await client.from('users').select(PROFILE_COLUMNS).eq(column, value).maybeSingle();
-  if (!full.error) return full.data ? rowToProfile(full.data as Row) : null;
+  const { data, error } = await client
+    .from('users')
+    .select(PROFILE_COLUMNS)
+    .eq(column, value)
+    .maybeSingle();
 
-  const mid = await client.from('users').select(PROFILE_020_COLUMNS).eq(column, value).maybeSingle();
-  if (!mid.error) return mid.data ? rowToProfile(mid.data as Row) : null;
-
-  const base = await client.from('users').select(BASE_COLUMNS).eq(column, value).maybeSingle();
-  if (base.error) throw base.error;
-  return base.data ? rowToProfile(base.data as Row) : null;
+  if (error) throw error;
+  return data ? rowToProfile(data as Row) : null;
 }
 
 export type ProfilePatch = {
@@ -268,27 +258,13 @@ export async function getPublicProfile(handle: string): Promise<Profile | null> 
   const client = supabase;
   if (!client) return null;
 
-  const full = await client
+  const { data, error } = await client
     .from('users')
     .select(PUBLIC_PROFILE_COLUMNS)
     .ilike('profile_handle', handle)
     .maybeSingle();
 
-  // Loosely typed on purpose: the two selects produce genuinely different
-  // Supabase-inferred row shapes, and this only ever feeds rowToProfile,
-  // which already reads defensively from an untyped Row.
-  let data: Row | null = full.data as Row | null;
-  if (full.error) {
-    const fallback = await client
-      .from('users')
-      .select(PUBLIC_PROFILE_COLUMNS_PRE_0022)
-      .ilike('profile_handle', handle)
-      .maybeSingle();
-    if (fallback.error || !fallback.data) return null;
-    data = fallback.data as Row;
-  }
-
-  if (!data) return null;
+  if (error || !data) return null;
 
   const found = rowToProfile(data as Row);
   return found.profileVisibility === 'public' ? found : null;

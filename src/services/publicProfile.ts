@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabaseClient';
-import { rowToProfile, PUBLIC_PROFILE_COLUMNS, PUBLIC_PROFILE_COLUMNS_PRE_0022 } from './profile';
+import { rowToProfile, PUBLIC_PROFILE_COLUMNS } from './profile';
 import type { Profile } from '../types/user';
 
 /** What a visitor to /artists/{handle} can do: follow, and make contact.
@@ -32,10 +32,9 @@ export type PublicArtistSummary = {
  *  bans a public artist ranking (docs/pivot-checklist/17-do-not-build-guardrails.md),
  *  and ordering by a popularity number would read as exactly that.
  *
- *  Falls back to the pre-0022 column list on error (missing country_code):
- *  without this, every artist who already has a working public profile would
- *  drop out of the directory the moment that column was added, not because
- *  anything about their profile changed. */
+ *  Reads one column list. The pre-0022 fallback that used to sit here is
+ *  gone — the app assumes its schema is current rather than discovering it
+ *  per query. */
 export async function listPublicArtists(limit = 24): Promise<PublicArtistSummary[]> {
   const client = supabase;
   if (!client) return [];
@@ -51,15 +50,8 @@ export async function listPublicArtists(limit = 24): Promise<PublicArtistSummary
       .not('profile_handle', 'is', null)
       .limit(limit);
 
-  const full = await query(PUBLIC_PROFILE_COLUMNS);
-  let data = full.data;
-  if (full.error) {
-    const fallback = await query(PUBLIC_PROFILE_COLUMNS_PRE_0022);
-    if (fallback.error || !fallback.data) return [];
-    data = fallback.data;
-  }
-
-  if (!data) return [];
+  const { data, error } = await query(PUBLIC_PROFILE_COLUMNS);
+  if (error || !data) return [];
 
   const profiles = (data as unknown as Record<string, unknown>[]).map(rowToProfile);
 

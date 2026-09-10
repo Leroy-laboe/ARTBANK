@@ -95,3 +95,49 @@
     padding: 18px 14.5px 32px;
   }
 }
+
+/* A read that failed, told plainly. Sits where the demo notice would, and the
+   panels below stay unrendered rather than falling back to sample figures. */
+.loadError {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 13px 15px;
+  border: 1px solid var(--border);
+  border-left: 3px solid #b4453c;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: #b4453c;
+}
+
+.loadErrorTitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.loadErrorNote {
+  margin: 3px 0 0;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.retry {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: 0.18s;
+}
+
+.retry:hover {
+  border-color: var(--gold);
+}

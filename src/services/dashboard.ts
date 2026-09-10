@@ -1,7 +1,10 @@
+import { isSupabaseConfigured } from '../lib/supabaseClient';
+import { getDashboardTotals, type DashboardTotals } from './dashboardTotals';
+import { PAGE_SIZE } from './pagination';
 import { listMyWorks } from './artwork';
 import { loadInterest } from './interest';
 import { loadOpportunities } from './opportunities';
-import { isSettled, listMyDeals, type DealSummary } from './deals';
+import { listMyDeals, type DealSummary } from './deals';
 import { listArtworkReadiness, type ArtworkReadiness } from './readiness';
 import type { Work } from '../data/artspaceWorks';
 import type { Enquiry } from '../data/artspaceInterest';
@@ -23,13 +26,19 @@ import {
 
 /** Today — the dashboard an artist lands on after signing in.
  *
- *  Every figure below is read or counted, never estimated. The rule the rest
- *  of the app follows applies here too: a read that FAILED and a table that is
- *  EMPTY are different answers. A failure stands in demo content (`isDemo`),
- *  because a fresh clone with no Supabase project behind it should still
- *  render. An artist who genuinely has nothing gets real zeros and the empty
- *  states that go with them — telling them they have interest, earnings or
- *  matches they do not have is the one thing this screen must never do. */
+ *  Every figure below is read or counted, never estimated, and three outcomes
+ *  are kept apart rather than two. Sample content appears only when there is
+ *  no session or no Supabase project, so a fresh clone still renders. An
+ *  artist who genuinely has nothing gets real zeros and the empty states that
+ *  go with them. A read that *failed* gets an error and a retry — telling
+ *  someone they have interest, earnings or matches they do not have is the
+ *  one thing this screen must never do.
+ *
+ *  Whole-catalogue figures (readiness percentages, earnings totals) come from
+ *  dashboard_summary() in migration 0034. They cannot be derived from the
+ *  `works` array here, which is deliberately only a page: a percentage
+ *  computed over 50 of 400 works would describe a sample as though it were
+ *  the catalogue. */
 
 const MONEY = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
 
@@ -195,17 +204,15 @@ export type MoneyAndRights = {
   imageUrl: string;
 };
 
-function buildMoney(works: Work[], deals: DealSummary[], imageUrl: string): MoneyAndRights {
-  // Settled only. An awaiting_payment deal is a promise, and the whole point
-  // of the payment handshake is that a promise is not an earning.
-  const settled = deals.filter((d) => isSettled(d.status));
-  const pending = deals.filter((d) => d.status === 'awaiting_payment');
-
-  const currency = deals[0]?.currency ?? 'USD';
-  const sum = (list: DealSummary[]) => list.reduce((total, d) => total + d.amount, 0);
-
-  const licences = settled.filter((d) => d.dealType === 'licence').length;
-  const protectedWorks = works.filter((w) => w.passport === 'Verified').length;
+/** Same reasoning as buildReadiness: earnings are a sum over every deal the
+ *  artist has ever recorded, so they come from the database's own count.
+ *  Settled means 'agreed' or 'paid' — an awaiting_payment deal is a promise,
+ *  and the whole point of the payment handshake is that a promise is not an
+ *  earning. Migration 0034 applies the same filter. */
+function buildMoney(totals: DashboardTotals, imageUrl: string): MoneyAndRights {
+  const currency = totals.currency;
+  const licences = totals.settledLicenceCount;
+  const protectedWorks = totals.worksWithPassport;
 
   return {
     earnings: [
@@ -213,15 +220,15 @@ function buildMoney(works: Work[], deals: DealSummary[], imageUrl: string): Mone
         id: 'completed',
         icon: 'bank',
         label: 'Completed Earnings',
-        value: money(sum(settled), currency),
-        note: txnNote(settled.length),
+        value: money(totals.settledTotal, currency),
+        note: txnNote(totals.settledCount),
       },
       {
         id: 'pending',
         icon: 'hourglass',
         label: 'Pending Earnings',
-        value: money(sum(pending), currency),
-        note: txnNote(pending.length),
+        value: money(totals.pendingTotal, currency),
+        note: txnNote(totals.pendingCount),
       },
     ],
     rights: [
@@ -270,20 +277,24 @@ function verdictFor(score: number): { verdict: string; note: string } {
 /** Private to the artist, and only ever a list of what to finish next. There
  *  is no public ranking anywhere on ArtBank — see
  *  docs/pivot-checklist/17-do-not-build-guardrails.md. */
-function buildReadiness(works: Work[], profile: Profile): Readiness {
-  const withDimensions = works.filter((w) => w.dimensions !== '—').length;
-  const withPassport = works.filter((w) => w.passport === 'Verified').length;
+/** Counts come from dashboard_summary() rather than from the `works` array,
+ *  which is now only a page. Deriving these percentages from a page would
+ *  describe a sample as though it were the whole catalogue. */
+function buildReadiness(totals: DashboardTotals, profile: Profile): Readiness {
+  const withDimensions = totals.worksWithDimensions;
+  const withPassport = totals.worksWithPassport;
+  const worksTotal = totals.worksTotal;
   const bioFields = [profile.shortBio, profile.artistStatement, profile.website, profile.education];
   const bioDone = bioFields.filter((v) => Boolean(v && String(v).trim())).length;
 
-  const dimensionsPct = pct(withDimensions, works.length);
-  const passportPct = pct(withPassport, works.length);
+  const dimensionsPct = pct(withDimensions, worksTotal);
+  const passportPct = pct(withPassport, worksTotal);
   const bioPct = pct(bioDone, bioFields.length);
 
-  const missingDimensions = works.length - withDimensions;
-  const missingPassport = works.length - withPassport;
+  const missingDimensions = worksTotal - withDimensions;
+  const missingPassport = worksTotal - withPassport;
 
-  const noWorks = works.length === 0;
+  const noWorks = worksTotal === 0;
 
   const tasks: Readiness['tasks'] = [
     {
@@ -340,35 +351,66 @@ export type DashboardResult = {
   isDemo: boolean;
 };
 
-export async function loadDashboard(profile: Profile | null): Promise<DashboardResult> {
-  if (!profile) return demoDashboard();
+/** Three outcomes, not two.
+ *
+ *  `demo` is for a clone with no Supabase project behind it, where sample
+ *  content is the only way the screen renders at all. `error` is for a real
+ *  signed-in artist whose read did not come back. Those used to collapse into
+ *  one branch, which meant a dropped request could hand somebody invented
+ *  earnings and enquiries and label them "sample" — on a product whose whole
+ *  claim is verified provenance, that is the worst failure available. An
+ *  artist who genuinely has nothing still gets `live` with real zeros. */
+export type DashboardState =
+  | { status: 'live'; data: DashboardResult }
+  | { status: 'demo'; data: DashboardResult }
+  | { status: 'error' };
 
-  const [worksResult, interestResult, opportunitiesResult, deals, actionPlan] = await Promise.all([
-    listMyWorks(profile),
-    loadInterest(profile),
-    loadOpportunities(profile),
-    listMyDeals(profile),
-    listArtworkReadiness(profile),
-  ]);
+export async function loadDashboardState(profile: Profile | null): Promise<DashboardState> {
+  // No session, or no backend configured at all — sample content is the
+  // honest answer here, and nobody can mistake it for their own account.
+  if (!profile || !isSupabaseConfigured) {
+    return { status: 'demo', data: demoDashboard() };
+  }
 
-  // Any source falling back means the numbers on this screen are not the
-  // artist's own, and the whole screen has to say so.
-  const isDemo =
-    worksResult.isDemo || interestResult.isDemo || opportunitiesResult.isDemo || deals === null;
+  const [worksResult, interestResult, opportunitiesResult, deals, actionPlan, totals] =
+    await Promise.all([
+      // A page, not the catalogue. The panels that list works show a handful;
+      // every whole-catalogue figure now comes from `totals` instead.
+      listMyWorks(profile, PAGE_SIZE),
+      loadInterest(profile),
+      loadOpportunities(profile),
+      listMyDeals(profile),
+      listArtworkReadiness(profile),
+      getDashboardTotals(profile),
+    ]);
 
-  if (isDemo) return demoDashboard();
+  // A signed-in artist whose data did not load gets an error and a retry.
+  // Never numbers. `totals` is included: a catalogue that could not be counted
+  // is not a catalogue with nothing in it.
+  if (
+    worksResult.isDemo ||
+    interestResult.isDemo ||
+    opportunitiesResult.isDemo ||
+    deals === null ||
+    totals === null
+  ) {
+    return { status: 'error' };
+  }
 
   const works = worksResult.works;
 
   return {
-    needsDecision: buildNeedsDecision(works, interestResult.enquiries, deals),
-    realInterest: buildRealInterest(interestResult.enquiries),
-    artworksAtWork: buildArtworksAtWork(works, deals),
-    bestOpportunity: buildBestOpportunity(opportunitiesResult.opportunities),
-    money: buildMoney(works, deals ?? [], demoMoney.imageUrl),
-    readiness: buildReadiness(works, profile),
-    actionPlan,
-    isDemo: false,
+    status: 'live',
+    data: {
+      needsDecision: buildNeedsDecision(works, interestResult.enquiries, deals),
+      realInterest: buildRealInterest(interestResult.enquiries),
+      artworksAtWork: buildArtworksAtWork(works, deals),
+      bestOpportunity: buildBestOpportunity(opportunitiesResult.opportunities),
+      money: buildMoney(totals, demoMoney.imageUrl),
+      readiness: buildReadiness(totals, profile),
+      actionPlan,
+      isDemo: false,
+    },
   };
 }
 

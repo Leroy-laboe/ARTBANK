@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap');
 
 :root {
   --ink: #15110c;
@@ -34,6 +34,8 @@
 
   --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Handwriting, for margin notes and sign-offs only — never body copy. */
+  --font-hand: 'Caveat', 'Segoe Script', 'Bradley Hand', cursive;
 
   --container: 1280px;
   --radius-sm: 8px;

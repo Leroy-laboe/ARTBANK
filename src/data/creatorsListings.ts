@@ -23,7 +23,7 @@ export const creatorsListings: CreatorProfile[] = [
     followers: '1.8K',
     careerStage: 'Established',
     style: 'Abstract',
-    imageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&h=620&fit=crop&auto=format&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=500&h=620&fit=crop&auto=format&q=80',
   },
   {
     id: 'creator-3',

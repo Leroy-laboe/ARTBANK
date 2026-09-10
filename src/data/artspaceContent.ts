@@ -55,7 +55,7 @@ export const artspaceArtist = {
   location: 'Kuala Lumpur, Malaysia',
   joinId: 'AT-MY-25-0001',
   memberSince: 'May 2025',
-  avatarUrl: photo('photo-1494790108377-be9c29b29330', 160, 160),
+  avatarUrl: photo('photo-1607746882042-944635dfe10e', 160, 160),
   greeting: 'Good morning',
   statusLine: 'Here’s what’s happening with your art and opportunities today.',
   unreadNotifications: 5,

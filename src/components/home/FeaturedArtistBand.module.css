@@ -1,53 +1,451 @@
-/* Full-bleed split: the image runs to the left edge, the copy column carries
-   the forest ground all the way to the right edge. The inner .copy is what
-   lines up with the page container, so text stays on the same grid as every
-   other section while the colour itself bleeds. */
+/* Full-bleed split: a dark gallery stage runs to the left edge, the copy
+   column carries the forest ground all the way to the right edge. The inner
+   .copy is what lines up with the page container, so text stays on the same
+   grid as every other section while the colour itself bleeds. */
 .band {
-  display: grid;
-  grid-template-columns: 42% 58%;
-  background: var(--forest);
-  color: var(--forest-text);
-}
-
-.media {
   position: relative;
-  min-height: 420px;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  /* The colour the stage gradient ends on, so the seam where the copy
+     column's own gradient starts transparent doesn't step. */
+  background: #16201a;
+  color: var(--forest-text);
+  overflow: hidden;
+  isolation: isolate;
 }
 
-.media img {
+/* ── Stage ── */
+
+.stage {
+  position: relative;
+  min-height: 560px;
+  background: linear-gradient(102deg, #080b09 0%, #0f1512 58%, #16201a 100%);
+}
+
+.wordmark {
+  position: absolute;
+  z-index: 7;
+  top: 34px;
+  left: 40px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+/* The wall itself, tinted from the selected painting and taken right down.
+   Anywhere a canvas edge doesn't quite reach reads as unlit gallery wall
+   rather than as a hole punched in the composition. */
+.wall {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.wallLayer {
+  position: absolute;
+  inset: -15%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(70px) saturate(0.7) brightness(0.36);
+  opacity: 0;
+  transition: opacity 650ms ease;
+}
+
+.wallOn {
+  opacity: 1;
+}
+
+.gallery {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* ── Canvases ─────────────────────────────────────────────────────────────
+ * Four frames fanned across the wall. Each holds every painting stacked and
+ * cross-fades between them, so advancing shuffles the whole wall rather than
+ * swapping one picture. */
+
+.canvas {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 2px;
+  /* A stretched canvas, not a card: a hairline edge and a deep contact
+     shadow are the only framing. */
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 44px 96px -30px rgba(0, 0, 0, 0.95);
+  transition: box-shadow 480ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.canvasImg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
+  transition: opacity 480ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.canvasImgOn {
+  opacity: 1;
+}
+
+/* Everything unlit sits in shadow, which is what makes the hero canvas read
+   as lit rather than merely larger. */
+.canvas::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(8, 13, 10, 0.66);
+  transition: opacity 480ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.canvasLit::before {
+  opacity: 0;
+}
+
+/* Gold raking light down the leading edge of the lit canvas. */
+.canvasLit::after {
+  content: '';
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  top: -4%;
+  bottom: -4%;
+  width: 3px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--gold-light) 16%,
+    #f6e2c0 50%,
+    var(--gold-light) 84%,
+    transparent
+  );
+  box-shadow: 0 0 30px 4px rgba(216, 176, 119, 0.6);
+}
+
+.canvasLit {
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 176, 119, 0.34),
+    0 48px 104px -30px rgba(0, 0, 0, 0.95);
+}
+
+/* Positions read straight off the composition: two small canvases stacked at
+   the far left, one tall canvas behind her, and the hero to her right. */
+/* Overlaps .near below it for the same reason .mid overlaps .hero — meeting
+   exactly would leave a dark seam between the two stacked canvases. */
+.far {
+  left: 3%;
+  top: -3%;
+  width: 26%;
+  height: 51%;
+  z-index: 1;
+  transform: rotate(-6deg) skewY(1.4deg);
+}
+
+.near {
+  left: -2%;
+  top: 44%;
+  width: 27%;
+  height: 48%;
+  z-index: 1;
+  transform: rotate(-6deg) skewY(1.4deg);
+}
+
+/* Runs past where the hero begins rather than stopping short of it. Both
+   canvases carry the same rotation so their edges stay parallel, which makes
+   the overlap constant down the full height — leave a gap and the bare wall
+   shows between them as a black stripe. The extra height above and below is
+   the same idea: a 5deg rotation lifts one corner and drops the other by
+   about 3% of the stage, and without the slack that exposes the wall at the
+   top and bottom edges. */
+.mid {
+  left: 11%;
+  top: -8%;
+  width: 60%;
+  height: 112%;
+  z-index: 2;
+  transform: rotate(-5deg) skewY(1.1deg);
+}
+
+/* Starts just clear of the portrait's right edge, so its lit gold edge reads
+   instead of being buried behind her, and bleeds past the stage into the copy
+   column — which paints over it — so no wall shows down the right side. */
+.hero {
+  left: 67%;
+  top: -8%;
+  width: 36%;
+  height: 112%;
+  z-index: 3;
+  transform: rotate(-5deg) skewY(1.1deg);
+}
+
+/* ── Wall label ── */
+
+.label {
+  position: absolute;
+  z-index: 4;
+  /* Lifted off the canvas foot, which now sits below the stage so rotation
+     can't expose the wall — anchored at 0 the label would be clipped. */
+  inset: auto 0 5% 0;
+  display: block;
+  padding: 56px 18px 20px;
+  background: linear-gradient(to top, rgba(6, 10, 7, 0.94), rgba(6, 10, 7, 0.5) 46%, transparent);
+  text-align: left;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  /* Trails the cross-fade just enough that the label arrives with the new
+     painting rather than over the outgoing one. */
+  transition:
+    opacity 380ms cubic-bezier(0.22, 1, 0.36, 1) 90ms,
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1) 90ms;
+}
+
+.canvasLit .label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* The hero deliberately bleeds past the stage so no wall shows down the right
+   side, which puts the last slice of its label under the copy column. Pull
+   the text back into the part that's actually visible. */
+.hero .label {
+  padding-right: 46px;
+}
+
+.labelTitle {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Wraps rather than truncating — a narrow canvas is normal here, and a
+   clipped medium reads as a bug on a wall label. */
+.labelMeta {
+  display: block;
+  margin-top: 4px;
+  font-size: 10px;
+  line-height: 1.6;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--forest-muted);
+}
+
+/* ── Portrait ─────────────────────────────────────────────────────────────
+ * She has to be the one lit thing on the wall. The paintings are dropped
+ * into shadow exactly where she stands and she's lifted a little against
+ * them, which is what separates her from the canvases — without it a
+ * rectangular photograph just sits among rectangular paintings. */
+
+.spot {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  pointer-events: none;
+  background:
+    /* A warm bounce off her hair, so the separation isn't only darkness. */
+    radial-gradient(30% 34% at 43% 30%, rgba(216, 176, 119, 0.15), transparent 72%),
+    /* Deep, but not to black — her own photographic background is a dark
+       grey, and a black wall behind it turns that into a visible pale
+       rectangle instead of hiding it. */
+    radial-gradient(
+      46% 64% at 43% 54%,
+      rgba(6, 10, 8, 0.62) 0%,
+      rgba(6, 10, 8, 0.44) 46%,
+      transparent 80%
+    );
+}
+
+/* She stays the focal point and stays in front — the collection fans out
+   from behind her. The soft elliptical edge sinks the photograph's own
+   background into the dark wall instead of cutting a rectangle through the
+   paintings she's standing among. */
+.portraitWrap {
+  position: absolute;
+  z-index: 5;
+  left: 22%;
+  bottom: 0;
+  /* An explicit height rather than pairing `top` with `bottom` — on a
+     replaced element `height: auto` wins over `bottom`, which left her as a
+     short hard-edged rectangle sitting on top of the paintings instead of
+     standing among them. */
+  height: 92%;
+  width: 44%;
+  pointer-events: none;
+  filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.72));
+}
+
+.portrait {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 18%;
+  /* Tight enough that almost none of the photograph's own background
+     survives — what's left of it fades out before it can read as a pane of
+     glass hanging in front of the paintings. */
+  -webkit-mask-image: radial-gradient(
+    48% 78% at 50% 54%,
+    #000 52%,
+    rgba(0, 0, 0, 0.45) 76%,
+    transparent 97%
+  );
+  mask-image: radial-gradient(
+    48% 78% at 50% 54%,
+    #000 52%,
+    rgba(0, 0, 0, 0.45) 76%,
+    transparent 97%
+  );
+  /* Lifted against the shadow the spotlight puts on the wall behind her. */
+  filter: brightness(1.16) contrast(1.06) saturate(1.04);
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  background:
+    radial-gradient(84% 72% at 42% 46%, transparent 44%, rgba(6, 10, 8, 0.6) 100%),
+    linear-gradient(0deg, rgba(6, 10, 8, 0.42), transparent 26%);
+}
+
+.explore {
+  position: absolute;
+  z-index: 7;
+  left: 40px;
+  bottom: 42px;
+  margin: 0;
+  padding-left: 26px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.7;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--forest-text);
+}
+
+/* The small gold cross that marks the label. */
+.plus {
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 13px;
+  height: 13px;
+  background:
+    linear-gradient(var(--gold-light), var(--gold-light)) center / 100% 1px no-repeat,
+    linear-gradient(var(--gold-light), var(--gold-light)) center / 1px 100% no-repeat;
+}
+
+/* ── Copy ── */
+
 .copyCol {
-  display: flex;
+  position: relative;
+  /* Above every canvas. .stage sets no z-index so it never opens a stacking
+     context, which means the hero canvas bleeding past its right edge would
+     otherwise paint on top of this column instead of under it. */
+  z-index: 8;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  padding: 68px 40px 68px 64px;
+  gap: 40px;
+  padding: 72px 44px 72px 60px;
+  /* The base the painting behind the text sits on, and what shows through
+     wherever the scrim is heaviest. */
+  background: #131f18;
+}
+
+.texture {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Blurred only enough to stay brushwork — fully defocused it stops reading
+   as a painting and just becomes a colour wash. */
+.textureLayer {
+  position: absolute;
+  inset: -8%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(10px) saturate(0.9) brightness(0.72);
+  opacity: 0;
+  transition: opacity 650ms ease;
+}
+
+.textureOn {
+  opacity: 0.9;
+}
+
+/* Opaque at the seam, so the stage runs into the copy column without a step,
+   then lifting toward the right edge where only the rail sits — the text
+   keeps a dark ground, the far edge keeps the brushwork. */
+.textureScrim {
+  position: absolute;
+  inset: 0;
+  /* Heavy across the text block, thinning only past where the copy ends, so
+     the brushwork shows on the far edge without ever sitting under a line of
+     type. */
+  background: linear-gradient(
+    90deg,
+    #16201a 0%,
+    rgba(18, 30, 23, 0.93) 14%,
+    rgba(18, 30, 23, 0.88) 62%,
+    rgba(18, 30, 23, 0.52) 100%
+  );
 }
 
 .copy {
+  position: relative;
+  z-index: 1;
   max-width: 560px;
 }
 
+/* Gold kicker with the rule that trails it. */
 .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 18px;
   color: var(--gold-light);
-  margin: 0 0 14px;
+  margin: 0 0 18px;
+}
+
+.eyebrow::after {
+  content: '';
+  width: 84px;
+  height: 1px;
+  background: var(--gold);
 }
 
 .title {
   font-family: var(--font-serif);
-  font-size: clamp(26px, 2.9vw, 36px);
+  font-size: clamp(27px, 3vw, 38px);
   line-height: 1.22;
   color: #fff;
   font-weight: 500;
-  margin: 0 0 16px;
+  margin: 0 0 18px;
+}
+
+.titleAccent {
+  color: var(--gold-light);
 }
 
 .desc {
-  margin: 0 0 20px;
+  margin: 0 0 22px;
   font-size: 14px;
   line-height: 1.65;
   color: var(--forest-muted);
@@ -55,20 +453,22 @@
 }
 
 .quote {
-  margin: 0 0 16px;
-  padding-left: 14px;
+  margin: 0 0 20px;
+  padding-left: 16px;
   border-left: 2px solid var(--gold);
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 15px;
-  line-height: 1.55;
+  font-size: 15.5px;
+  line-height: 1.6;
   color: var(--forest-text);
-  max-width: 46ch;
+  max-width: 44ch;
 }
 
 .meta {
-  margin: 0 0 24px;
-  font-size: 12.5px;
+  margin: 0 0 26px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: var(--forest-muted);
 }
 
@@ -79,7 +479,7 @@
   background: var(--gold-light);
   color: #22200f;
   border-radius: var(--radius-full);
-  padding: 11px 22px;
+  padding: 12px 24px;
   font-size: 13.5px;
   font-weight: 600;
   transition: 0.18s;
@@ -90,16 +490,312 @@
   transform: translateY(-1px);
 }
 
+/* ── Rail: progress, thumbnails, prev/next ── */
+
+.rail {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: end;
+  gap: 22px;
+}
+
+.railTop {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.progress {
+  position: relative;
+  width: 1px;
+  height: 232px;
+  background: rgba(215, 226, 216, 0.2);
+}
+
+/* --i / --n come from the component, so one rule drives the vertical bar here
+   and the horizontal one under the swipe layout below. */
+.progressThumb {
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 3px;
+  height: calc(100% / var(--n));
+  border-radius: 3px;
+  background: var(--gold-light);
+  box-shadow: 0 0 12px rgba(216, 176, 119, 0.7);
+  transform: translateY(calc(var(--i) * 100%));
+  transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.thumbs {
+  display: grid;
+  gap: 10px;
+}
+
+.thumb {
+  position: relative;
+  display: block;
+  width: 62px;
+  height: 62px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: none;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.5;
+  transition:
+    opacity 420ms ease,
+    border-color 420ms ease,
+    box-shadow 420ms ease;
+}
+
+.thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.thumb:hover {
+  opacity: 0.85;
+}
+
+.thumbActive,
+.thumbActive:hover {
+  opacity: 1;
+  border-color: var(--gold-light);
+  box-shadow: 0 0 22px -4px rgba(216, 176, 119, 0.6);
+}
+
+.thumb:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 3px;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+}
+
+.navBtn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  /* Not --forest-border: the colour wash behind the rail shifts with the
+     selected painting, and a green border disappears into the warm ones. */
+  border: 1px solid rgba(215, 226, 216, 0.26);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--forest-text);
+  cursor: pointer;
+  transition: 0.18s;
+}
+
+.navBtn:hover {
+  border-color: var(--gold-light);
+  color: var(--gold-light);
+  background: rgba(216, 176, 119, 0.09);
+}
+
+@media (max-width: 1200px) {
+  .copyCol {
+    padding: 58px 30px 58px 44px;
+    gap: 26px;
+  }
+
+  .railTop {
+    gap: 16px;
+  }
+
+  .progress {
+    height: 196px;
+  }
+
+  .thumb {
+    width: 54px;
+    height: 54px;
+  }
+
+  .explore,
+  .wordmark {
+    left: 26px;
+  }
+}
+
+/* ── Swipe layout ─────────────────────────────────────────────────────────
+ * The wall becomes a scroll-snap carousel: the canvases are swipeable, the
+ * portrait moves above them and the story keeps its full shape. */
+
 @media (max-width: 900px) {
   .band {
     grid-template-columns: 1fr;
   }
 
-  .media {
-    min-height: 280px;
+  .stage {
+    /* One square edge for the portrait, shared with the veil that sits over
+       it. Square rather than a viewport-height clamp: capping a vw height
+       letterboxes her into a slice on the wider end of this range. */
+    --portrait-h: min(100vw, 460px);
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto auto;
+  }
+
+  .gallery {
+    position: relative;
+    inset: auto;
+    display: flex;
+    gap: 14px;
+    /* Pulled up under her so the canvases still overlap the portrait. */
+    margin-top: -54px;
+    padding: 0 20px 32px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .gallery::-webkit-scrollbar {
+    display: none;
+  }
+
+  .canvas,
+  .far,
+  .near,
+  .mid,
+  .hero {
+    position: relative;
+    left: auto;
+    top: auto;
+    /* Capped in px as well as %, so the canvases stay portrait-shaped at the
+       wide end of this range instead of turning into letterboxed strips. */
+    flex: 0 0 min(76%, 400px);
+    width: auto;
+    height: clamp(330px, 84vw, 500px);
+    transform: none;
+    scroll-snap-align: center;
+  }
+
+  .portraitWrap {
+    position: relative;
+    /* The gallery comes first in the DOM, and the story has to open on her,
+       not on a painting. */
+    order: -1;
+    left: 0;
+    bottom: auto;
+    justify-self: center;
+    width: var(--portrait-h);
+    height: var(--portrait-h);
+    filter: none;
+  }
+
+  .portrait {
+    /* Nearly square here, so a portrait-shaped source has to be pinned near
+       the top or the crop lands as a band across her eyes. */
+    object-position: 50% 4%;
+    -webkit-mask-image: linear-gradient(180deg, #000 56%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 56%, transparent 100%);
+  }
+
+  .veil {
+    inset: 0 0 auto 0;
+    height: var(--portrait-h);
+    background: linear-gradient(0deg, rgba(6, 10, 8, 0.4), transparent 44%);
+  }
+
+  /* Nothing behind her to separate from once the composition stacks. */
+  .spot {
+    display: none;
+  }
+
+  /* Nothing bleeds under a copy column here — the panels are the carousel. */
+  .hero .label {
+    padding-right: 18px;
+  }
+
+  .wordmark {
+    top: 22px;
+    left: 22px;
+  }
+
+  /* No room for it beside the carousel, and the story carries the section
+     without it. */
+  .explore {
+    display: none;
   }
 
   .copyCol {
-    padding: 44px 24px 52px;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 28px;
+    padding: 32px 24px 50px;
+  }
+
+  /* No seam to cover once the band stacks, so the scrim is even across. */
+  .textureScrim {
+    background: rgba(18, 30, 23, 0.9);
+  }
+
+  .rail {
+    justify-items: stretch;
+    gap: 18px;
+  }
+
+  .railTop {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .thumbs {
+    grid-auto-flow: column;
+    justify-content: start;
+  }
+
+  .progress {
+    width: 100%;
+    max-width: 264px;
+    height: 1px;
+  }
+
+  .progressThumb {
+    top: -1px;
+    left: 0;
+    width: calc(100% / var(--n));
+    height: 3px;
+    transform: translateX(calc(var(--i) * 100%));
+  }
+}
+
+@media (max-width: 560px) {
+  .canvas,
+  .far,
+  .near,
+  .mid,
+  .hero {
+    flex-basis: min(82%, 400px);
+  }
+
+  .thumb {
+    width: 48px;
+    height: 48px;
+  }
+
+  .label {
+    padding: 46px 15px 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvasImg,
+  .canvas::before,
+  .label,
+  .progressThumb,
+  .textureLayer {
+    transition-duration: 1ms;
   }
 }

@@ -305,7 +305,7 @@ export const demoArtworkDetail: BuyerArtworkDetail = {
   ],
   rightsNote: 'Reproduction requires written permission from the artist.',
   permittedUses: ['Editorial coverage', 'Exhibition display'],
-  artistAvatarUrl: photo('photo-1494790108377-be9c29b29330', 160, 160),
+  artistAvatarUrl: photo('photo-1607746882042-944635dfe10e', 160, 160),
   artistCountry: 'Kuala Lumpur, Malaysia',
   artistCountryCode: 'my',
   artistMemberSince: 'Jan 2023',

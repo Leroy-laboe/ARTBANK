@@ -1,95 +1,235 @@
+/* Proportions here are measured off the design: an inner block 328px deep at
+   1440, with the copy hung from the top and the ladder from the bottom. The
+   left and right insets follow the site's shared .container instead of the
+   design's own margins, so the band still lines up with the sections above
+   and below it. */
 .band {
-  background: var(--dark);
+  position: relative;
+  background: linear-gradient(100deg, #191410 0%, #1d1815 58%, #15100d 100%);
   color: var(--cream-text);
-  padding: 46px 0;
+  padding: 78px 0 42px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ── Edge furniture ───────────────────────────────────────────────────────
+ * Drawn rather than photographed, for the same reason as the market band: a
+ * lit stock image cut into a near-black ground halos, and nothing in reach
+ * matched the brief. These sit in the palette exactly. */
+
+/* A solid sphere, not a glow — it needs a readable edge where it meets the
+   ground, which a fading radial never gives you. */
+.orb {
+  position: absolute;
+  z-index: 0;
+  left: -168px;
+  bottom: -252px;
+  width: 470px;
+  height: 470px;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 30% 22%,
+      rgba(226, 190, 152, 0.19),
+      rgba(122, 90, 66, 0.1) 44%,
+      rgba(26, 20, 16, 0) 76%
+    ),
+    #1c1613;
+  box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+/* Runs in from the page edge and stops at a dot the monogram picks up, so the
+   eye is led to the mark rather than dropped beside it. */
+.lead {
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  top: 172px;
+  width: calc((100% - var(--container)) / 2 + 34px);
+  min-width: 44px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(216, 176, 119, 0.5));
+  pointer-events: none;
+}
+
+.lead::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: -2.5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+/* The fractured stone face at the right edge: dark ground with bright veins
+   raked across it at different angles. */
+.stone {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 200px;
+  pointer-events: none;
+  background:
+    linear-gradient(101deg, transparent 27%, rgba(236, 208, 166, 0.26) 33%, transparent 41%),
+    linear-gradient(93deg, transparent 47%, rgba(190, 156, 116, 0.17) 52%, transparent 59%),
+    linear-gradient(113deg, transparent 62%, rgba(240, 214, 176, 0.2) 67%, transparent 73%),
+    linear-gradient(86deg, transparent 9%, rgba(146, 112, 76, 0.15) 15%, transparent 25%),
+    linear-gradient(120deg, transparent 78%, rgba(204, 170, 128, 0.14) 83%, transparent 89%),
+    linear-gradient(178deg, #241a11 0%, #120d09 54%, #1e150e 100%);
+  /* Enough softening that the bands read as veining in stone; any sharper and
+     they read as light rays. */
+  filter: blur(1.6px);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 46%);
+  mask-image: linear-gradient(90deg, transparent, #000 46%);
 }
 
 .inner {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 34px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: stretch;
+  column-gap: 36px;
+  /* The ladder is taken out of the flow and hung off the band's own right
+     edge, so this reserves its width. Left in the grid it stole enough from
+     the copy to break the heading onto a third line. */
+  padding-right: 130px;
+  min-height: 328px;
 }
 
-/* Concentric rings around the monogram, drawn with borders rather than an
-   image so it stays crisp at any size. */
+/* ── Monogram ── */
+
 .mark {
   position: relative;
-  width: 84px;
-  height: 84px;
   display: grid;
   place-items: center;
-  flex-shrink: 0;
-}
-
-.mark::before,
-.mark::after {
-  content: '';
-  position: absolute;
+  align-self: start;
+  /* Sits level with the middle of the two heading lines, not with the block
+     as a whole. */
+  margin-top: 34px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
-  border: 1px solid var(--dark-border);
-}
-
-.mark::before {
-  inset: 0;
-}
-
-.mark::after {
-  inset: 12px;
-  border-color: rgba(216, 176, 119, 0.35);
+  border: 1px solid rgba(216, 176, 119, 0.4);
 }
 
 .markLetter {
   font-family: var(--font-serif);
-  font-size: 26px;
+  font-size: 33px;
+  line-height: 1;
   color: var(--gold-light);
 }
 
-.eyebrow {
-  color: var(--gold-light);
-  margin: 0 0 10px;
+/* ── Copy ── */
+
+.copy {
+  align-self: start;
+  padding-left: 16px;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0 0 24px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.kickerName {
+  color: var(--gold);
+}
+
+.kickerRule {
+  width: 32px;
+  height: 1px;
+  background: rgba(216, 176, 119, 0.5);
+}
+
+.kickerNote {
+  color: var(--muted-2);
 }
 
 .title {
   font-family: var(--font-serif);
-  font-size: clamp(21px, 2.3vw, 28px);
-  line-height: 1.25;
+  /* Capped so the gold sentence holds one line in the width this column
+     actually gets — a third line is what the design most obviously isn't. */
+  font-size: clamp(25px, 2.55vw, 36px);
+  line-height: 1.18;
   color: #fff;
   font-weight: 500;
-  margin: 0 0 8px;
+  margin: 0 0 14px;
+}
+
+.titleAccent {
+  color: var(--gold-light);
 }
 
 .desc {
-  margin: 0 0 14px;
-  font-size: 13.5px;
+  margin: 0 0 22px;
+  font-size: 16px;
   color: var(--muted-2);
 }
 
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
 }
 
 .tag {
-  border: 1px solid var(--dark-border);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 22px;
+  border: 1px solid rgba(216, 176, 119, 0.26);
   border-radius: var(--radius-full);
-  padding: 4px 13px;
-  font-size: 11.5px;
+  font-family: var(--font-serif);
+  font-size: 15px;
   color: var(--cream-text);
+}
+
+.tag svg {
+  color: var(--gold-light);
+}
+
+/* ── Right rail ── */
+
+/* Stretched so its rule runs the full depth of the band rather than only as
+   far as the button it holds. */
+/* Pulled out past the band's padding so its rule runs the full depth of the
+   band, the way the design draws it, rather than stopping level with the
+   copy. The top padding is the band's own 78px plus the 88px the button sits
+   below the top edge. */
+.rail {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 16px;
+  margin: -78px 0 -42px;
+  padding: 166px 0 42px 34px;
+  border-left: 1px solid rgba(216, 176, 119, 0.16);
 }
 
 .cta {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: var(--gold-light);
-  color: #22200f;
+  gap: 10px;
+  height: 52px;
+  padding: 0 30px;
   border: none;
   border-radius: var(--radius-full);
-  padding: 11px 22px;
+  background: var(--gold-light);
+  color: #22200f;
   font: inherit;
-  font-size: 13.5px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -101,14 +241,164 @@
   transform: translateY(-1px);
 }
 
-@media (max-width: 900px) {
+.railNote {
+  margin: 0;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.8;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+/* ── Ladder ── */
+
+/* Hung off the band rather than placed in the grid, so it reads over the
+   stone face at the very edge the way the design has it. */
+.ladder {
+  position: absolute;
+  z-index: 1;
+  right: 40px;
+  bottom: 42px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  line-height: 2;
+  text-transform: uppercase;
+  color: rgba(214, 200, 186, 0.52);
+}
+
+/* A short rule closing the column, not a full underline. */
+.ladder::after {
+  content: '';
+  display: block;
+  width: 30px;
+  height: 1px;
+  margin-top: 16px;
+  background: rgba(216, 176, 119, 0.4);
+}
+
+@media (max-width: 1240px) {
   .inner {
-    grid-template-columns: auto 1fr;
-    gap: 22px;
+    column-gap: 28px;
+    padding-right: 118px;
+  }
+
+  .copy {
+    padding-left: 8px;
+  }
+
+  .rail {
+    padding-left: 28px;
+  }
+
+  /* Below the container's own width there's no gutter left for it to run
+     through, and the dot ends up sitting inside the monogram. */
+  .lead {
+    display: none;
+  }
+}
+
+/* The rail and the ladder stop fitting beside the copy well before the page
+   narrows, so both drop under it and turn into a row. */
+@media (max-width: 1080px) {
+  .inner {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 30px;
+    row-gap: 30px;
+    padding-right: 0;
+    min-height: 0;
+  }
+
+  .rail {
+    grid-column: 1 / -1;
+    grid-auto-flow: column;
+    align-content: center;
+    align-items: center;
+    gap: 30px;
+    margin: 0;
+    padding: 28px 0 0;
+    border-left: none;
+    border-top: 1px solid rgba(216, 176, 119, 0.16);
+  }
+
+  /* Back into the flow — there's no edge left to hang it off once the band
+     stacks, and it would sit on top of the copy. */
+  .ladder {
+    position: static;
+    grid-column: 1 / -1;
+    align-self: start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 24px;
+    line-height: 1.6;
+  }
+
+  .ladder::after {
+    display: none;
+  }
+
+  .stone {
+    width: 150px;
+  }
+}
+
+@media (max-width: 720px) {
+  .band {
+    padding: 52px 0 46px;
+  }
+
+  .inner {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 22px;
+  }
+
+  .copy {
+    padding-left: 0;
+  }
+
+  .mark {
+    margin-top: 0;
+    width: 74px;
+    height: 74px;
+  }
+
+  .markLetter {
+    font-size: 27px;
+  }
+
+  .rail {
+    grid-auto-flow: row;
+    justify-items: start;
+    gap: 18px;
   }
 
   .cta {
-    grid-column: 1 / -1;
-    justify-self: start;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stone {
+    width: 120px;
+    opacity: 0.55;
+  }
+}
+
+@media (max-width: 480px) {
+  .kicker {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
+
+  .tags {
+    gap: 9px;
+  }
+
+  .tag {
+    padding: 8px 16px;
+    font-size: 13.5px;
   }
 }

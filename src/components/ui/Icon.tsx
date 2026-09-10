@@ -87,6 +87,8 @@ export type IconName =
   | 'map-pin'
   | 'lightbulb'
   | 'tag'
+  | 'compass'
+  | 'bolt'
   | 'check';
 
 const paths: Record<IconName, React.ReactNode> = {
@@ -611,6 +613,13 @@ const paths: Record<IconName, React.ReactNode> = {
       <circle cx="16.4" cy="7.6" r="1.1" />
     </>
   ),
+  compass: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <polygon points="15.6 8.4 13.5 13.5 8.4 15.6 10.5 10.5" />
+    </>
+  ),
+  bolt: <polygon points="13.6 2.5 5 13.6 11 13.6 10.4 21.5 19 10.4 13 10.4" />,
   check: <polyline points="4.5 12.5 9.5 17.5 19.5 6.5" />,
 };
 

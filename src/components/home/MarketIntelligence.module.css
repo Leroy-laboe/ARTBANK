@@ -338,36 +338,101 @@
   }
 }
 
-@media (max-width: 860px) {
+/* ── Tablet: 735–1068px ──────────────────────────────────────────────────
+   Two signals across rather than three squeezed or one at a time. */
+@media (max-width: 1068px) {
+  .title {
+    font-size: var(--t-section);
+    line-height: var(--t-section-lh);
+  }
+
   .signals {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 30px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 30px;
+  }
+
+  /* The third signal starts a second row, so it loses the rule that only
+     makes sense between columns. */
+  .signal:nth-child(odd) {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .shot {
+    width: 96px;
+    height: 128px;
+  }
+}
+
+/* ── Mobile: ≤734px ──────────────────────────────────────────────────────
+   Three stacked signals with a rule between them ran to 771px. They become a
+   swipe row instead, which is what the brief asks of repeated intelligence
+   cards, and keeps the stripe reading as a stripe. */
+@media (max-width: 734px) {
+  .section {
+    padding: var(--sec-y) 0;
+  }
+
+  .title {
+    font-size: var(--t-section);
+    line-height: var(--t-section-lh);
+  }
+
+  .signals {
+    display: flex;
+    grid-template-columns: none;
+    gap: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 20px;
+    contain: paint;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    margin: 0 -20px;
+    padding: 0 20px 4px;
+  }
+
+  .signals::-webkit-scrollbar {
+    display: none;
   }
 
   .signal,
   .signal:first-child {
-    padding: 0 0 30px;
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+    padding: 0 18px 0 0;
     border-left: none;
-    border-bottom: 1px solid var(--plum-line);
-  }
-
-  .signal:last-child {
-    padding-bottom: 0;
     border-bottom: none;
   }
 
+  /* The rule moves to the right edge, where it now divides one card from the
+     next instead of one column from the next. */
+  .signal:not(:last-child) {
+    border-right: 1px solid var(--plum-line);
+  }
+
   .rank {
-    font-size: 44px;
+    font-size: 40px;
   }
 
   .shot {
-    width: 110px;
-    height: 132px;
+    width: 84px;
+    height: 112px;
   }
 
+  /* Two short facts per line rather than four full-width rows. */
   .facts {
-    flex-wrap: wrap;
-    gap: 22px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 18px 14px;
+    margin-top: 26px;
+  }
+
+  .fact {
+    padding-left: 0;
+    border-left: none;
   }
 
   .script {
@@ -375,26 +440,21 @@
     padding-left: 0;
     text-align: left;
     width: 100%;
+    grid-column: 1 / -1;
   }
 
   .script::before {
-    display: none;
-  }
-}
-
-@media (max-width: 560px) {
-  .fact {
-    padding-left: 0;
-    border-left: none;
-    width: 100%;
-  }
-
-  .shot {
     display: none;
   }
 
   .cta {
     width: 100%;
     justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .signals {
+    scroll-behavior: smooth;
   }
 }

@@ -33,6 +33,8 @@
   grid-auto-columns: minmax(180px, 1fr);
   gap: 18px;
   overflow-x: auto;
+  /* Keeps the layout viewport at device width — see WorksTable.module.css. */
+  contain: paint;
   scroll-snap-type: x mandatory;
   padding-bottom: 4px;
 }

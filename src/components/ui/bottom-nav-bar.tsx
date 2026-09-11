@@ -65,6 +65,22 @@ export function BottomNavBar({
   const isActive = (item: BottomNavItem) =>
     item.end ? pathname === item.to : pathname === item.to || pathname.startsWith(`${item.to}/`);
 
+  /* Account screens (Billing, Help Center and friends) are reached from the
+     menu, not from this bar, so nothing in it is active there and the pill
+     would shrink by the width of the missing label — a bar that moves as you
+     browse. Hold that space open instead so it is the same size everywhere. */
+  const anyActive = items.some(isActive);
+
+  /* Half the missing label at each end, so the icons stay centred in the pill
+     rather than leaving a hole on the right. The label costs its own width
+     plus the 8px gap and 8px margin that come with it; each spacer then picks
+     up 4px of its own from the row's spacing, hence the subtraction. Inline
+     rather than a Tailwind class: an arbitrary value built at runtime never
+     reaches the generated stylesheet. */
+  const spacer = anyActive ? null : (
+    <span aria-hidden className="shrink-0" style={{ width: (MOBILE_LABEL_WIDTH + 16) / 2 - 4 }} />
+  );
+
   return (
     <motion.nav
       initial={{ scale: 0.9, opacity: 0 }}
@@ -81,6 +97,8 @@ export function BottomNavBar({
         className,
       )}
     >
+      {spacer}
+
       {items.map((item) => {
         const active = isActive(item);
 
@@ -140,6 +158,8 @@ export function BottomNavBar({
           </MotionLink>
         );
       })}
+
+      {spacer}
     </motion.nav>
   );
 }

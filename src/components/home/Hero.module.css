@@ -27,8 +27,11 @@
 }
 
 .title {
-  font-size: 52px;
-  line-height: 1.1;
+  /* Three steps, from globals.css: 52 / 44 / 36. The desktop value is what
+     was hard-coded here, so nothing moves at desktop width — the tablet step
+     is what's new. It used to hold 52px all the way down to 640px. */
+  font-size: var(--t-hero);
+  line-height: var(--t-hero-lh);
   letter-spacing: -1px;
   margin-bottom: 22px;
 }
@@ -276,13 +279,26 @@
   }
 }
 
-@media (max-width: 640px) {
-  .title {
-    font-size: 36px;
+@media (max-width: 734px) {
+  /* One button carries the weight; the second stays reachable as a quieter
+     control beside it rather than a second full-width slab under it. */
+  .ctaRow {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
   }
 
-  .ctaRow {
-    flex-direction: column;
+  .ctaRow > :first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .ctaRow > :last-child {
+    flex: 0 0 auto;
+    background: none;
+    border-color: transparent;
+    padding-left: 4px;
+    padding-right: 4px;
   }
 
   /* A 208px column would swallow a phone screen, so the card reflows into a wide two-column strip. */

@@ -2,6 +2,13 @@
    width and scrolls inside this box rather than crushing the artwork column. */
 .scroller {
   overflow-x: auto;
+  /* Paint containment, not the overflow rule, is what keeps this box from
+     widening the page. A phone sizes its layout viewport from the widest
+     content it can find, and a scroller's hidden overflow still counts: the
+     browser then lays the whole page out at ~960px and zooms out, which puts
+     everything position:fixed — the bottom navigation — off the side of the
+     screen. overflow-x: clip does not stop it; this does. */
+  contain: paint;
 }
 
 .table {

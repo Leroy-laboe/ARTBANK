@@ -131,8 +131,132 @@
   color: var(--gold-light);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1068px) {
   .top {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── Link groups ─────────────────────────────────────────────────────────
+   Each group is a <details>. Above the mobile tier it has to look and behave
+   exactly like the plain column it replaced: content always visible whatever
+   the element's open state, no marker, and a heading that can't be clicked
+   shut. `display: flex` on the list is what overrides the browser's own
+   "hide everything but the summary when closed" rule. */
+.group > summary {
+  list-style: none;
+  cursor: default;
+  pointer-events: none;
+}
+
+.group > summary::-webkit-details-marker,
+.group > summary::marker {
+  display: none;
+  content: '';
+}
+
+.group > .linkList {
+  display: flex;
+}
+
+/* Chrome hides a closed <details>'s contents by putting `content-visibility:
+   hidden` on this pseudo-element, which skips their layout entirely — the
+   list still painted, but every link inside it measured short, and the whole
+   footer came up 56px shorter than the design. Overriding `display` on the
+   list cannot reach that; this can. Older engines that don't know the
+   pseudo-element fall back to the `display: flex` above. */
+.group::details-content {
+  content-visibility: visible;
+  block-size: auto;
+}
+
+.groupCaret {
+  display: none;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+/* ── Mobile: ≤734px ──────────────────────────────────────────────────────
+   Now they are real accordions. Three open columns of links is most of the
+   footer's height on a phone, and almost none of it is what someone came
+   for — the branding, the newsletter and the legal line are. */
+@media (max-width: 734px) {
+  .footer {
+    padding-top: 44px;
+  }
+
+  .top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding-bottom: 32px;
+  }
+
+  .brandCol {
+    margin-bottom: 26px;
+  }
+
+  .brandCol p {
+    max-width: none;
+  }
+
+  .group {
+    border-top: 1px solid var(--dark-border);
+  }
+
+  .group > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Comfortably past the 44px minimum for a thumb. */
+    padding: 17px 0;
+    margin-bottom: 0;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  .group > summary:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  .groupCaret {
+    display: block;
+    color: var(--muted);
+  }
+
+  .group[open] .groupCaret {
+    transform: rotate(180deg);
+  }
+
+  /* Closed is the useful default here — the point is to get past them. */
+  .group:not([open]) > .linkList {
+    display: none;
+  }
+
+  .group > .linkList {
+    padding-bottom: 18px;
+  }
+
+  /* The newsletter is the one thing in this row worth interrupting for, so
+     it keeps its own space under the groups rather than becoming a fourth
+     thing to open. */
+  .newsletterCol {
+    padding-top: 26px;
+  }
+
+  .bottom {
+    gap: 12px;
+    padding: 20px 0;
+  }
+
+  .bottomLinks {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .groupCaret {
+    transition: none;
   }
 }

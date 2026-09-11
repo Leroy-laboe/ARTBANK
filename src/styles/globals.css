@@ -129,7 +129,15 @@ ul {
   padding: 0 40px;
 }
 
-@media (max-width: 900px) {
+/* Gutters, on the tiers. Measured against the reference: ~22px on a tablet,
+   16–20px on a phone. Desktop keeps the 40px it already had. */
+@media (max-width: 1068px) {
+  .container {
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 734px) {
   .container {
     padding: 0 20px;
   }
@@ -142,6 +150,60 @@ ul {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Responsive tiers
+
+   Three deliberate layouts, not one layout shrinking. See
+   docs/pivot-checklist/28-responsive-recomposition-plan.md.
+
+     Desktop  >= 1069px   approved, frozen — nothing below re-declares it
+     Tablet   735–1068px  its own composition, never borrowed from a neighbour
+     Mobile   <= 734px    composed for a phone
+
+   Sections consume these tokens instead of inventing a breakpoint each. The
+   numbers here are the desktop values already in use, so adopting a token
+   changes nothing at desktop width; only the tier overrides move.
+
+   The swipe rails are deliberately not here: each one needs a bleed tied to
+   its own section's padding, so they live with their sections.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Display type. Three steps per role — a phone gets a smaller size and
+     looser leading, because display leading only works at display sizes. */
+  --t-hero: 52px;
+  --t-hero-lh: 1.1;
+  --t-section: 46px;
+  --t-section-lh: 1.13;
+  --t-sub: 30px;
+  --t-sub-lh: 1.15;
+
+  /* One vertical rhythm for every band, instead of ten different paddings. */
+  --sec-y: 96px;
+}
+
+@media (max-width: 1068px) {
+  :root {
+    --t-hero: 44px;
+    --t-section: 38px;
+    --t-section-lh: 1.15;
+    --t-sub: 26px;
+    --sec-y: 76px;
+  }
+}
+
+@media (max-width: 734px) {
+  :root {
+    --t-hero: 36px;
+    --t-hero-lh: 1.14;
+    --t-section: 30px;
+    --t-section-lh: 1.18;
+    --t-sub: 21px;
+    --t-sub-lh: 1.25;
+    --sec-y: 56px;
+  }
 }
 
 /* Clearance for the floating bottom navigation on phones. The bar is

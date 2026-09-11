@@ -663,10 +663,17 @@
 
 /* The still stops being legible long before the page does, so the two columns
    stack while it still has room to be read. */
-@media (max-width: 1080px) {
+/* ── Tablet: 735–1068px ──────────────────────────────────────────────────
+   Copy above, still below at full width. The still keeps both its columns. */
+@media (max-width: 1068px) {
   .layout {
     grid-template-columns: minmax(0, 1fr);
     gap: 52px;
+  }
+
+  .title {
+    font-size: var(--t-section);
+    line-height: var(--t-section-lh);
   }
 
   .intro {
@@ -686,39 +693,103 @@
     left: 0;
   }
 
+  .statRow {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
   .signOff {
     margin-top: 44px;
   }
 }
 
-@media (max-width: 820px) {
-  .statRow {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+/* ── Mobile: ≤734px ──────────────────────────────────────────────────────
+   Same rule as the buyer section below it: the still is a picture of the
+   product, so it shrinks as one object rather than re-laying out. Its four
+   figures stay on one line — stacked they were a 472px column of four short
+   numbers — and the panel keeps its columns. */
+@media (max-width: 734px) {
+  .section {
+    padding: var(--sec-y) 0;
   }
 
-  .decisions,
-  .pair {
+  .title {
+    font-size: var(--t-section);
+    line-height: var(--t-section-lh);
+  }
+
+  /* Two by two, not four stacked rows. */
+  .features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 18px;
+  }
+
+  .feature {
     grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .featureTile {
+    width: 42px;
+    height: 42px;
+  }
+
+  .featureTitle {
+    font-size: 14.5px;
+  }
+
+  .featureText {
+    font-size: 13px;
+  }
+
+  .preview {
+    padding-top: 60px;
+  }
+
+  /* The handwritten note and its arrow point at a sidebar that is about to
+     be too narrow to point at. It keeps its place but stops reserving a
+     column of its own. */
+  .note {
+    font-size: 17px;
+  }
+
+  .noteArrow {
+    width: 56px;
   }
 
   .peek {
     display: none;
   }
-}
 
-@media (max-width: 720px) {
-  .features {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  /* Below this the sidebar costs more width than the still can spare, and the
-     panel is what carries the point. */
   .dash {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: 104px minmax(0, 1fr);
+    font-size: 9px;
+    border-radius: 11px;
   }
 
   .side {
-    display: none;
+    padding: 12px 8px 10px;
+  }
+
+  .brand {
+    margin-bottom: 13px;
+    font-size: 13px;
+  }
+
+  .main {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  /* Four short figures on one line. This is the block the plan called out. */
+  .statRow {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .decisions,
+  .pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
   }
 
   .topTools {
@@ -732,24 +803,20 @@
   .signOff {
     justify-items: start;
     text-align: left;
+    margin-top: 38px;
   }
 }
 
-@media (max-width: 480px) {
-  .statRow {
+@media (max-width: 430px) {
+  .dash {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .featureTile {
-    width: 54px;
-    height: 54px;
+  .side {
+    display: none;
   }
 
-  .note {
-    font-size: 18px;
-  }
-
-  .noteArrow {
-    width: 62px;
+  .statRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

@@ -630,7 +630,13 @@
  * The wall becomes a scroll-snap carousel: the canvases are swipeable, the
  * portrait moves above them and the story keeps its full shape. */
 
-@media (max-width: 900px) {
+/* ── Tablet and mobile: ≤1068px ──────────────────────────────────────────
+   This composition — portrait first as one square crop, the canvases as a
+   snapping row beneath her, copy last — was always the right one. It used to
+   start at 900px, which left 735–900px on the desktop 50/50 split: the copy
+   column squeezed to half of an 834px screen ran the section to 1,523px,
+   taller than the phone's own version of it. The tier boundary is the fix. */
+@media (max-width: 1068px) {
   .band {
     grid-template-columns: 1fr;
   }
@@ -654,6 +660,8 @@
     margin-top: -54px;
     padding: 0 20px 32px;
     overflow-x: auto;
+    /* Keeps the layout viewport at device width — see WorksTable.module.css. */
+    contain: paint;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -745,6 +753,11 @@
     gap: 18px;
   }
 
+  .headline {
+    font-size: var(--t-section);
+    line-height: var(--t-section-lh);
+  }
+
   .railTop {
     flex-direction: column-reverse;
     align-items: stretch;
@@ -771,7 +784,27 @@
   }
 }
 
-@media (max-width: 560px) {
+/* Tablet has the room for a larger opening image than a phone does; the
+   shared cap above is phone-sized. */
+@media (min-width: 735px) and (max-width: 1068px) {
+  .stage {
+    --portrait-h: min(62vw, 560px);
+  }
+
+  .copyCol {
+    padding: 40px 40px 58px;
+  }
+
+  .canvas,
+  .far,
+  .near,
+  .mid,
+  .hero {
+    flex-basis: min(46%, 400px);
+  }
+}
+
+@media (max-width: 430px) {
   .canvas,
   .far,
   .near,

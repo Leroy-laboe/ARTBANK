@@ -4,6 +4,12 @@ import { footerLinks } from '../../data/homeContent';
 import logo from '../../assets/images/artbank-logo-light.png';
 import styles from './Footer.module.css';
 
+const FOOTER_GROUPS = [
+  { title: 'Platform', links: footerLinks.platform },
+  { title: 'Resources', links: footerLinks.resources },
+  { title: 'Company', links: footerLinks.company },
+];
+
 export function Footer() {
   return (
     <footer className={styles.footer}>
@@ -17,40 +23,31 @@ export function Footer() {
             </p>
           </div>
 
-          <div>
-            <div className={styles.colTitle}>Platform</div>
-            <ul className={styles.linkList}>
-              {footerLinks.platform.map((label) => (
-                <li key={label}>
-                  <a href="#">{label}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Three identical shapes, so one loop rather than three copies.
 
-          <div>
-            <div className={styles.colTitle}>Resources</div>
-            <ul className={styles.linkList}>
-              {footerLinks.resources.map((label) => (
-                <li key={label}>
-                  <a href="#">{label}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
+              <details> rather than a plain <div>: on a phone these become
+              collapsible groups, which is the difference between a footer you
+              scroll past and a footer you scroll *through*. They carry `open`
+              so they start expanded, and the stylesheet keeps them expanded
+              and untoggleable above the mobile tier — desktop sees three
+              ordinary link columns, exactly as before. */}
+          {FOOTER_GROUPS.map(({ title, links }) => (
+            <details key={title} className={styles.group}>
+              <summary className={styles.colTitle}>
+                {title}
+                <Icon name="chevron-down" size={15} className={styles.groupCaret} />
+              </summary>
+              <ul className={styles.linkList}>
+                {links.map((label) => (
+                  <li key={label}>
+                    <a href="#">{label}</a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ))}
 
-          <div>
-            <div className={styles.colTitle}>Company</div>
-            <ul className={styles.linkList}>
-              {footerLinks.company.map((label) => (
-                <li key={label}>
-                  <a href="#">{label}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
+          <div className={styles.newsletterCol}>
             <div className={styles.colTitle}>Stay Connected</div>
             <p style={{ fontSize: 13.5, marginBottom: 14 }}>Subscribe to our newsletter</p>
             <form

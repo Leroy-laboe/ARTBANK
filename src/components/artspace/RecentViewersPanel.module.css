@@ -1,5 +1,7 @@
 .scroller {
   overflow-x: auto;
+  /* Keeps the layout viewport at device width — see WorksTable.module.css. */
+  contain: paint;
 }
 
 .table {

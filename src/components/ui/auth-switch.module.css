@@ -122,7 +122,10 @@
   max-width: 380px;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* minmax(0, 1fr), not 1fr: a bare `1fr` is minmax(auto, 1fr), so each track
+     refuses to shrink below its own content's min-content width. On a phone
+     that pushed the third card out through the container's rounded edge. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
   margin-bottom: 10px;
 }
@@ -529,8 +532,12 @@
 
 @media (max-width: 870px) {
   .container {
-    min-height: 800px;
-    height: 100vh;
+    /* Was `100vh` inside a page that adds 20px of margin on each side, so the
+       card was always 40px taller than the screen: it scrolled instead of
+       sitting centred. svh rather than vh so a phone's collapsing address bar
+       doesn't reintroduce the overflow. */
+    height: calc(100svh - 40px);
+    min-height: 620px;
   }
 
   .signinSignup {
@@ -547,14 +554,17 @@
 
   .panelsContainer {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 2fr 1fr;
+    /* The middle row is the form's; the outer two hold a heading, a line of
+       copy and a button each. They were taking a third of the card apiece,
+       which left a band of dead cream between the form and the panel. */
+    grid-template-rows: 0.85fr 2.3fr 0.85fr;
   }
 
   .panel {
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    padding: 2.5rem 8%;
+    padding: 1.6rem 8%;
     grid-column: 1 / 2;
   }
 

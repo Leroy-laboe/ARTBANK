@@ -24,7 +24,14 @@
   position: absolute;
   top: 24px;
   left: 24px;
-  z-index: 1;
+  /* Higher than anything inside the card (max z-index there is 6): the card
+     is `position: relative` with no z-index of its own, so it never opens a
+     stacking context and its internal layers — including the large decorative
+     circle at z-index 6 — compete directly with this button instead of being
+     contained. On sign-in that circle sits at the top of the card and was
+     painting over the button entirely; on sign-up it sits at the bottom, so
+     the same bug was invisible there by accident. */
+  z-index: 10;
   display: inline-flex;
   align-items: center;
   gap: 6px;

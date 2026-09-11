@@ -216,3 +216,17 @@ ul {
     padding-bottom: 96px;
   }
 }
+
+/* Clearance for the floating header pill on the public site (see
+   AnimatedNavFramer / Header.tsx). It replaces the header row entirely below
+   1100px rather than sitting inside it, so — like the bottom bar above — it
+   occupies no layout space of its own and everything below it needs pushing
+   down by hand. 84px clears the pill (48px tall, 16px from the top) with a
+   working margin. Hero cancels this itself: its background bleeds to the
+   very top by design, so it restores the same clearance internally instead,
+   further down in Hero.module.css. */
+@media (max-width: 1100px) {
+  body.has-floating-nav main {
+    padding-top: 84px;
+  }
+}

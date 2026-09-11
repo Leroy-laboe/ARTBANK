@@ -217,11 +217,23 @@
  */
 @media (max-width: 1100px) {
   .hero {
+    /* The sticky header this offset was reserving space for is gone below
+       this width — Header.tsx replaces it with a floating pill that doesn't
+       occupy layout space at all. Without zeroing this, the hero would carry
+       a 69px gap at the top for a header that no longer renders here. */
+    --header-h: 0px;
     height: auto;
     min-height: calc(100svh - var(--header-h));
     max-height: none;
     justify-content: flex-start;
     padding: 0;
+    /* Cancels `main`'s own 84px clearance for the floating nav pill (see
+       globals.css) so the photo still bleeds to the very top of the screen —
+       this is the one section on the page that wants that. `.inner`'s own
+       padding-top below restores the same 84px, on top of what it already
+       reserved, so the copy still clears the pill; only the background
+       ignores it. */
+    margin-top: -84px;
   }
 
   /* The bottom padding is the artwork's band. Reserving it here rather than
@@ -234,7 +246,7 @@
      flush against the screen edge with no gutter while every other container
      on the page kept its 20px. */
   .inner {
-    padding-top: 60px;
+    padding-top: 144px;
     padding-bottom: 300px;
   }
 

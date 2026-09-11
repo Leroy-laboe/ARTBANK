@@ -124,3 +124,14 @@
     display: none;
   }
 }
+
+/* The floating pill nav (Header.tsx) takes over the entire row at the same
+   width the desktop nav above already collapses at — not just the links, the
+   wordmark and the auth buttons too. `.nav` hiding above is now redundant at
+   that width but stays: it's what keeps this rule's own breakpoint honest if
+   the two ever need to move independently again. */
+@media (max-width: 1100px) {
+  .desktopOnly {
+    display: none;
+  }
+}

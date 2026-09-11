@@ -282,6 +282,18 @@
   outline-offset: 1px;
 }
 
+/* The sign-in submit is a ShinyButton (shiny-button.tsx) rather than one of
+   the plain .btn pills below — same 150x49 footprint, same vertical rhythm
+   as the inputs above it, but its own visual treatment lives in that
+   component's module instead of here. */
+.signInSubmit {
+  margin: 10px 0;
+  width: 150px;
+  height: 49px;
+  --shiny-size-padding: 0 1rem;
+  --shiny-size-font: 0.9rem;
+}
+
 .btn {
   width: 150px;
   background: linear-gradient(150deg, var(--gold-light) 0%, var(--gold) 45%, var(--gold-dark) 100%);

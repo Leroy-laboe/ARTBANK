@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll, type Variants 
 import { Menu, X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { ShinyButton } from './shiny-button';
 
 const MotionLink = motion.create(Link);
 
@@ -202,14 +203,21 @@ export function AnimatedNavFramer({ items, className }: { items: FloatingNavItem
 
         <div className={cn('flex items-center gap-0.5 pr-1.5 shrink-0', !isExpanded && 'pointer-events-none')}>
           {cta && (
-            <MotionLink
-              to={cta.to}
-              onClick={(e) => e.stopPropagation()}
-              variants={itemVariants}
-              className="ml-0.5 shrink-0 inline-flex items-center whitespace-nowrap rounded-full bg-[var(--ink)] px-3 py-1.5 text-xs font-semibold text-white no-underline transition-colors hover:bg-[var(--dark-2)]"
-            >
-              {cta.name}
-            </MotionLink>
+            <motion.span variants={itemVariants} className="ml-0.5 shrink-0">
+              {/* Same 0.375rem/0.75rem padding and 0.75rem type the plain
+                  pill it replaces used — the animated treatment is what's
+                  new here, not the size of the button in this bar. This only
+                  works now that the row's own width is a plain CSS
+                  transition rather than a Framer Motion value — see the
+                  comment on the container above. */}
+              <ShinyButton
+                to={cta.to}
+                onClick={(e) => e.stopPropagation()}
+                className="[--shiny-size-padding:0.375rem_0.75rem] [--shiny-size-font:0.75rem]"
+              >
+                {cta.name}
+              </ShinyButton>
+            </motion.span>
           )}
 
           {moreItems.length > 0 && (

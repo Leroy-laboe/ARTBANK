@@ -1,0 +1,238 @@
+/* shiny-button — the supplied design, unchanged.
+   The only thing that moved is the scoping mechanism: Next.js's styled-jsx
+   isn't available in this Vite project, so the <style jsx> block became a CSS
+   Module. Every colour, size, timing, keyframe and pseudo-element below is
+   exactly as supplied.
+
+   The original's `@import` of Inter is dropped only because globals.css
+   already loads that exact family and weight for the whole site — the
+   font-family declaration below still asks for it, so nothing renders
+   differently; it just doesn't fetch the same file twice. */
+
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --gradient-angle-offset {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --gradient-percent {
+  syntax: '<percentage>';
+  initial-value: 5%;
+  inherits: false;
+}
+
+@property --gradient-shine {
+  syntax: '<color>';
+  initial-value: white;
+  inherits: false;
+}
+
+/* The class is doubled purely for specificity. The auth card this sits in
+   carries the supplied `.container * { margin: 0; padding: 0 }` reset from
+   its own stylesheet — same specificity as a single class, and it loads
+   later, so it was winning and flattening this button to its text. Doubling
+   the selector costs nothing and keeps the design's own padding wherever the
+   button is dropped. */
+.shinyCta.shinyCta {
+  --shiny-cta-bg: #000000;
+  --shiny-cta-bg-subtle: #1a1818;
+  --shiny-cta-fg: #ffffff;
+  /* The one change from the supplied colours: this site's own gold in place
+     of the generic blue, so the spinning border, the shimmer and the
+     breathing glow all read as ARTBANK's accent rather than an unrelated
+     hue. Everything else — black base, sizing, timing — is untouched. */
+  --shiny-cta-highlight: var(--gold);
+  --shiny-cta-highlight-subtle: var(--gold-light);
+  --animation: gradient-angle linear infinite;
+  --duration: 3s;
+  --shadow-size: 2px;
+  --transition: 800ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  outline-offset: 4px;
+  /* The demo only ever rendered a <button>. This also renders as a router
+     <Link> (an <a>) — inline-flex and no underline are what an anchor needs
+     to look the same as the button did; nothing here changes the button's
+     own rendering, which was already centred and unlined by default. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  /* A button label shouldn't wrap. The demo never needed to say so — it was
+     a standalone button with a page to itself. Inside a flex row that is
+     short on space, the omission does real damage: without this, the box
+     reports a min-content width of one word (68px for "Create JO1NID")
+     rather than the whole label (110px), and a shrink-to-fit parent will
+     believe it can be 42px narrower than it really wants to be. In the
+     mobile header's floating bar that shortfall came straight out of the
+     links beside it, clipping "For Buyers" mid-word — while this button
+     still rendered at its correct size, so nothing looked wrong about the
+     button itself. */
+  white-space: nowrap;
+  /* Padding and font-size read from custom properties, defaulting to exactly
+     the supplied values — this button is dropped into two places that each
+     had their own existing footprint (150x49, and a compact header pill),
+     and those need to hold their original size while everything else about
+     the design (colour, motion, shape) stays as supplied. A consumer sets
+     --shiny-size-padding/--shiny-size-font and it flows straight through the
+     var(), with no need to out-specificity the doubled selector above. */
+  padding: var(--shiny-size-padding, 1.25rem 2.5rem);
+  font-family: 'Inter', sans-serif;
+  font-size: var(--shiny-size-font, 1.125rem);
+  line-height: 1.2;
+  font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: 360px;
+  color: var(--shiny-cta-fg);
+  background: linear-gradient(var(--shiny-cta-bg), var(--shiny-cta-bg)) padding-box,
+    conic-gradient(
+        from calc(var(--gradient-angle) - var(--gradient-angle-offset)),
+        transparent,
+        var(--shiny-cta-highlight) var(--gradient-percent),
+        var(--gradient-shine) calc(var(--gradient-percent) * 2),
+        var(--shiny-cta-highlight) calc(var(--gradient-percent) * 3),
+        transparent calc(var(--gradient-percent) * 4)
+      )
+      border-box;
+  box-shadow: inset 0 0 0 1px var(--shiny-cta-bg-subtle);
+  transition: var(--transition);
+  transition-property: --gradient-angle-offset, --gradient-percent, --gradient-shine;
+}
+
+.shinyCta::before,
+.shinyCta::after,
+.shinyCta span::before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: 50%;
+  translate: -50% -50%;
+  z-index: -1;
+}
+
+.shinyCta:active {
+  translate: 0 1px;
+}
+
+/* Dots pattern */
+.shinyCta::before {
+  --size: calc(100% - var(--shadow-size) * 3);
+  --position: 2px;
+  --space: calc(var(--position) * 2);
+  width: var(--size);
+  height: var(--size);
+  background: radial-gradient(circle at var(--position) var(--position), white calc(var(--position) / 4), transparent 0)
+    padding-box;
+  background-size: var(--space) var(--space);
+  background-repeat: space;
+  mask-image: conic-gradient(from calc(var(--gradient-angle) + 45deg), black, transparent 10% 90%, black);
+  border-radius: inherit;
+  opacity: 0.4;
+  z-index: -1;
+}
+
+/* Inner shimmer */
+.shinyCta::after {
+  --animation: shimmer linear infinite;
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(-50deg, transparent, var(--shiny-cta-highlight), transparent);
+  mask-image: radial-gradient(circle at bottom, transparent 40%, black);
+  opacity: 0.6;
+}
+
+.shinyCta span {
+  z-index: 1;
+}
+
+.shinyCta span::before {
+  --size: calc(100% + 1rem);
+  width: var(--size);
+  height: var(--size);
+  box-shadow: inset 0 -1ex 2rem 4px var(--shiny-cta-highlight);
+  opacity: 0;
+  transition: opacity var(--transition);
+  animation: calc(var(--duration) * 1.5) breathe linear infinite;
+}
+
+/* Animate */
+.shinyCta,
+.shinyCta::before,
+.shinyCta::after {
+  animation: var(--animation) var(--duration), var(--animation) calc(var(--duration) / 0.4) reverse paused;
+  animation-composition: add;
+}
+
+.shinyCta:is(:hover, :focus-visible) {
+  --gradient-percent: 20%;
+  --gradient-angle-offset: 95deg;
+  --gradient-shine: var(--shiny-cta-highlight-subtle);
+}
+
+.shinyCta:is(:hover, :focus-visible),
+.shinyCta:is(:hover, :focus-visible)::before,
+.shinyCta:is(:hover, :focus-visible)::after {
+  animation-play-state: running;
+}
+
+.shinyCta:is(:hover, :focus-visible) span::before {
+  opacity: 1;
+}
+
+@keyframes gradient-angle {
+  to {
+    --gradient-angle: 360deg;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes breathe {
+  from,
+  to {
+    scale: 1;
+  }
+  50% {
+    scale: 1.2;
+  }
+}
+
+/* ── Two additions the supplied design had no need for ─────────────────────
+   It was only ever an onClick button in a demo. Here it is the sign-in
+   form's real submit control, so it spends time disabled while a sign-in is
+   in flight and has to look like it; and the rest of this site freezes its
+   animations under prefers-reduced-motion, so this one does too. Neither
+   changes how the button looks or moves normally. */
+.shinyCta:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.shinyCta:disabled,
+.shinyCta:disabled::before,
+.shinyCta:disabled::after {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shinyCta,
+  .shinyCta::before,
+  .shinyCta::after,
+  .shinyCta span::before {
+    animation: none;
+  }
+}

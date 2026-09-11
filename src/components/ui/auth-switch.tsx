@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { cn } from '@/lib/utils';
 import { Icon } from './Icon';
+import { ShinyButton } from './shiny-button';
 import styles from './auth-switch.module.css';
 
 export type AuthMode = 'signin' | 'signup';
@@ -126,12 +127,9 @@ export default function AuthSwitch({
             </div>
             {!isSignUp && error && <p className={styles.errorText}>{error}</p>}
             {!isSignUp && !error && info && <p className={styles.infoText}>{info}</p>}
-            <input
-              type="submit"
-              value={loading && !isSignUp ? 'Signing in…' : 'Login'}
-              disabled={loading}
-              className={cn(styles.btn, styles.solid)}
-            />
+            <ShinyButton type="submit" disabled={loading} className={styles.signInSubmit}>
+              {loading && !isSignUp ? 'Signing in…' : 'Login'}
+            </ShinyButton>
           </form>
 
           {/* Sign Up Form */}

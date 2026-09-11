@@ -2,6 +2,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { navLinks } from '../../data/homeContent';
 import { useSession } from '../../lib/sessionContext';
 import { AnimatedNavFramer, type FloatingNavItem } from '../ui/animated-nav-framer';
+import { ShinyButton } from '../ui/shiny-button';
 import logo from '../../assets/images/artbank-logo-dark.png';
 import styles from './Header.module.css';
 
@@ -36,9 +37,9 @@ export function Header() {
       <Link to="/login" className={styles.enterBtn}>
         Enter ArtSpace
       </Link>
-      <Link to="/apply" className={styles.createBtn}>
+      <ShinyButton to="/apply" className={styles.createBtnShiny}>
         Create JO1NID
-      </Link>
+      </ShinyButton>
     </div>
   );
 

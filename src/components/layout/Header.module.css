@@ -99,6 +99,14 @@
   white-space: nowrap;
 }
 
+/* Holds the ShinyButton (shiny-button.tsx) at this row's original footprint
+   rather than the design's own hero-scale padding — the animated treatment
+   is the only thing that's new here, not the button's size in the header. */
+.createBtnShiny {
+  --shiny-size-padding: 10px 20px;
+  --shiny-size-font: 13px;
+}
+
 /* Shown instead of the two auth buttons once someone is signed in. Same
    weight as .createBtn — it is the one action in this slot, so it should not
    read as secondary. */

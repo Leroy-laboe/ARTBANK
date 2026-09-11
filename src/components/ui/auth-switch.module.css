@@ -536,8 +536,13 @@
        card was always 40px taller than the screen: it scrolled instead of
        sitting centred. svh rather than vh so a phone's collapsing address bar
        doesn't reintroduce the overflow. */
+    /* No min-height floor: one was here before (620px) as a defensive
+       minimum, but on any screen shorter than 620px + the page's 40px of
+       margin — an iPhone SE-class phone, or a phone in landscape — it forced
+       the card past the actual viewport and reintroduced the exact overflow
+       this rule exists to prevent. A shorter card on a tiny screen is a
+       smaller problem than a page that scrolls when it isn't supposed to. */
     height: calc(100svh - 40px);
-    min-height: 620px;
   }
 
   .signinSignup {
@@ -574,6 +579,15 @@
 
   .leftPanel {
     grid-row: 1 / 2;
+    /* Clearance under the back button, which lives in the host page
+       (AuthPage.tsx) rather than this component and sits right over this
+       row's top edge in sign-in mode. This grows row 1's own min-content
+       floor rather than the row's `fr` share — the two aren't the same
+       thing: giving row 1 a bigger fr number didn't move anything, because
+       both outer rows already sit at an identical content-driven floor and
+       the grid was clamping row 1 there regardless of its fr weight. Row 2
+       (the form) has real slack and is what actually gives up the space. */
+    padding-top: 4rem;
   }
 
   .panel .content {

@@ -13,7 +13,7 @@
 }
 
 .title {
-  font-size: 12px;
+  font-size: var(--t-caption);
   font-weight: 700;
   letter-spacing: 0.6px;
   text-transform: uppercase;
@@ -21,7 +21,7 @@
 }
 
 .viewAll {
-  font-size: 12px;
+  font-size: var(--t-caption);
   font-weight: 600;
   color: var(--muted);
 }
@@ -48,12 +48,12 @@
 }
 
 .tagLabel {
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   font-weight: 600;
   color: var(--ink-soft);
 }
 
 .tagCount {
-  font-size: 11px;
+  font-size: var(--t-micro);
   color: var(--muted);
 }

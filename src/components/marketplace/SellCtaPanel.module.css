@@ -19,13 +19,13 @@
 
 .title {
   font-family: var(--font-serif);
-  font-size: 17px;
+  font-size: var(--t-title-sm);
   color: var(--ink);
   margin-bottom: 8px;
 }
 
 .desc {
-  font-size: 13px;
+  font-size: var(--t-label);
   line-height: 1.6;
   color: var(--ink-soft);
   margin-bottom: 18px;

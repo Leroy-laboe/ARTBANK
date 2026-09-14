@@ -14,7 +14,7 @@
   padding: 0 40px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1068px) {
   .row {
     padding: 0 20px;
   }
@@ -33,14 +33,14 @@
 }
 
 .title {
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 700;
   color: var(--ink);
   margin-bottom: 3px;
 }
 
 .desc {
-  font-size: 12px;
+  font-size: var(--t-caption);
   line-height: 1.5;
   color: var(--muted);
 }
@@ -52,7 +52,7 @@
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 734px) {
   .row {
     grid-template-columns: 1fr;
   }

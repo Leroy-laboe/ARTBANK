@@ -1,11 +1,16 @@
+/* Grid only — the container geometry (max-width, gutters, and the gutter
+   steps per tier) comes from the shared .container-wide utility in
+   globals.css, the same way every other page takes .container. This used to
+   carry `padding: 28px 0 0` while the element also had .container, which
+   zeroed that container's 40px gutter: the page started 40px left of every
+   other page on the site, and its four-up grid was narrower than the
+   identical grid on /marketplace. */
 .layout {
   display: grid;
   grid-template-columns: 264px 1fr 300px;
   align-items: start;
   gap: 28px;
-  max-width: 1560px;
-  margin: 0 auto;
-  padding: 28px 40px 0;
+  padding-top: 28px;
 }
 
 .mainCol {
@@ -60,7 +65,20 @@
     grid-template-columns: 1fr;
   }
 
+  /* Source order is sidebar → content → rail, which is right on desktop and
+     wrong the moment the three stack: the page opened on a full filter panel
+     and the first artist was ~1,000px down. Content leads, the rail follows,
+     and the filters sit last as a utility rather than a gate.
+
+     Negative orders rather than 1/2/3 because the filter panel is styled in
+     its own module (CreatorFilterSidebar / FilterSidebar) and can't be
+     reached from here — leaving it at the default 0 is what puts it last. */
+  .mainCol {
+    order: -2;
+  }
+
   .rightCol {
+    order: -1;
     position: static;
     flex-direction: row;
     flex-wrap: wrap;
@@ -79,20 +97,13 @@
   }
 }
 
-@media (max-width: 900px) {
-  .layout {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-
-@media (max-width: 720px) {
+@media (max-width: 734px) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 430px) {
   .grid {
     grid-template-columns: minmax(0, 1fr);
   }

@@ -16,7 +16,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 13.5px;
+  font-size: var(--t-label);
   font-weight: 700;
   letter-spacing: 0.3px;
   color: var(--ink);
@@ -27,7 +27,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   font-weight: 600;
   color: var(--muted);
   padding: 0;
@@ -52,7 +52,7 @@
   border: none;
   outline: none;
   background: none;
-  font-size: 13px;
+  font-size: var(--t-label);
   color: var(--ink-soft);
   width: 100%;
   font-family: inherit;
@@ -72,7 +72,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 11.5px;
+  font-size: var(--t-micro);
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
@@ -99,7 +99,7 @@
   cursor: pointer;
   padding: 9px 10px;
   border-radius: var(--radius-sm);
-  font-size: 13.5px;
+  font-size: var(--t-label);
   color: var(--ink-soft);
   font-family: inherit;
 }
@@ -115,7 +115,7 @@
 }
 
 .categoryCount {
-  font-size: 12px;
+  font-size: var(--t-caption);
   color: var(--muted);
 }
 
@@ -168,7 +168,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  font-size: 11.5px;
+  font-size: var(--t-micro);
   color: var(--muted);
 }
 
@@ -176,7 +176,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 8px 10px;
-  font-size: 13px;
+  font-size: var(--t-label);
   color: var(--ink-soft);
   font-family: inherit;
   outline: none;
@@ -197,7 +197,7 @@
   padding: 9px 12px;
   background: none;
   cursor: pointer;
-  font-size: 13px;
+  font-size: var(--t-label);
   color: var(--ink-soft);
   font-family: inherit;
 }
@@ -212,7 +212,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 13.5px;
+  font-size: var(--t-label);
   color: var(--ink-soft);
   cursor: pointer;
 }
@@ -231,7 +231,7 @@
 }
 
 .checkCount {
-  font-size: 12px;
+  font-size: var(--t-caption);
   color: var(--muted);
 }
 
@@ -242,8 +242,8 @@
   border: none;
   border-radius: var(--radius-sm);
   padding: 13px;
-  font-size: 13.5px;
-  font-weight: 700;
+  font-size: var(--t-ctrl);
+  font-weight: var(--ctrl-weight);
   cursor: pointer;
   margin-top: 6px;
   font-family: inherit;
@@ -263,7 +263,7 @@
   border: none;
   cursor: pointer;
   padding: 14px 0 2px;
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   font-weight: 600;
   color: var(--muted);
   font-family: inherit;

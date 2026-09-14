@@ -21,7 +21,7 @@ export function MarketplacePage() {
     <>
       <Header />
       <main>
-        <div className={styles.layout}>
+        <div className={`container-wide ${styles.layout}`}>
           <FilterSidebar />
 
           <div className={styles.mainCol}>

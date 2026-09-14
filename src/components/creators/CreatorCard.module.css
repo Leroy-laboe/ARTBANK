@@ -45,27 +45,33 @@
 }
 
 .body {
-  padding: 13px 14px 15px;
+  padding: var(--card-pad);
 }
 
 .name {
-  font-size: 14.5px;
+  font-size: var(--t-sm);
   font-weight: 700;
   color: var(--ink);
   margin-bottom: 2px;
 }
 
 .title {
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   color: var(--muted);
   margin-bottom: 14px;
 }
 
+/* Same footer row as RealArtistCard's, which sits directly above this card in
+   the same grid on /artists and had already been given the treatment below.
+   Without it there is no gap and nothing may shrink, so at grid widths the
+   country name and "2.4K Followers" ran into each other and the follower
+   count broke mid-phrase onto a second line. */
 .footerRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 12px;
+  gap: 10px;
+  font-size: var(--t-caption);
   color: var(--muted);
 }
 
@@ -73,6 +79,24 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* text-overflow: ellipsis on .country itself doesn't reliably apply when a
+   flex container's overflow mixes an <img> sibling with a bare text node —
+   most browsers just hard-clip with no "…". Isolating the text in its own
+   block is what makes the ellipsis actually render. */
+.countryText {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.followers {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .flag {

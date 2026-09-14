@@ -52,7 +52,7 @@ export function CreatorsPage() {
     <>
       <Header />
       <main>
-        <div className={`container ${styles.layout}`}>
+        <div className={`container-wide ${styles.layout}`}>
           <CreatorFilterSidebar
             filters={filters}
             onChange={(next) => setFilters((prev) => ({ ...prev, ...next }))}

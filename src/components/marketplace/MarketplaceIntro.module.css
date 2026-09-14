@@ -5,13 +5,14 @@
 }
 
 .title {
-  font-size: 42px;
-  letter-spacing: -0.5px;
+  font-size: var(--t-section);
+  line-height: var(--t-section-lh);
+  letter-spacing: var(--t-display-ls);
   margin: 6px 0 14px;
 }
 
 .desc {
-  font-size: 14.5px;
+  font-size: var(--t-sm);
   line-height: 1.65;
   color: var(--muted);
   max-width: 34ch;
@@ -34,13 +35,13 @@
 
 .statValue {
   font-family: var(--font-serif);
-  font-size: 18px;
+  font-size: var(--t-title);
   color: var(--ink);
   line-height: 1.2;
 }
 
 .statLabel {
-  font-size: 11.5px;
+  font-size: var(--t-micro);
   color: var(--muted);
 }
 

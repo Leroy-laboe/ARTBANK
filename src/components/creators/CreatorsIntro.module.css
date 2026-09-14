@@ -17,13 +17,14 @@
 }
 
 .title {
-  font-size: 46px;
-  letter-spacing: -0.5px;
+  font-size: var(--t-section);
+  line-height: var(--t-section-lh);
+  letter-spacing: var(--t-display-ls);
   margin: 0 0 12px;
 }
 
 .desc {
-  font-size: 15px;
+  font-size: var(--t-lead);
   line-height: 1.6;
   color: var(--muted);
   max-width: 40ch;
@@ -100,7 +101,7 @@
 }
 
 .badgeLabel {
-  font-size: 12px;
+  font-size: var(--t-caption);
   font-weight: 600;
   color: var(--ink);
 }
@@ -139,7 +140,7 @@
   border: none;
   outline: none;
   background: none;
-  font-size: 14px;
+  font-size: var(--t-sm);
   color: var(--ink-soft);
   width: 100%;
   font-family: inherit;
@@ -153,7 +154,7 @@
   background: var(--surface);
   border-radius: var(--radius-full);
   padding: 0 20px;
-  font-size: 13.5px;
+  font-size: var(--t-label);
   font-weight: 600;
   color: var(--ink-soft);
   cursor: pointer;
@@ -176,7 +177,7 @@
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 734px) {
   .searchRow {
     flex-direction: column;
   }

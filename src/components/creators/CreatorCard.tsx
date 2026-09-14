@@ -35,7 +35,7 @@ export function CreatorCard({ creator }: { creator: CreatorProfile }) {
         <div className={styles.footerRow}>
           <span className={styles.country}>
             <img src={creator.countryFlag} alt="" className={styles.flag} />
-            {creator.country}
+            <span className={styles.countryText}>{creator.country}</span>
           </span>
           <span className={styles.followers}>{creator.followers} Followers</span>
         </div>

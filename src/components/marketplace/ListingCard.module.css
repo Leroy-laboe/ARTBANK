@@ -41,7 +41,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 9px;
+  font-size: var(--t-overline);
   font-weight: 700;
   letter-spacing: 0.3px;
   color: var(--ink);
@@ -72,7 +72,7 @@
   z-index: 2;
   bottom: 10px;
   left: 10px;
-  font-size: 10px;
+  font-size: var(--t-overline);
   font-weight: 700;
   letter-spacing: 0.3px;
   text-transform: uppercase;
@@ -90,18 +90,18 @@
 }
 
 .body {
-  padding: 14px 16px 16px;
+  padding: var(--card-pad);
 }
 
 .title {
   font-family: var(--font-serif);
-  font-size: 16px;
+  font-size: var(--t-title-sm);
   color: var(--ink);
   margin-bottom: 2px;
 }
 
 .artist {
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   color: var(--muted);
   margin-bottom: 14px;
 }
@@ -114,7 +114,7 @@
 }
 
 .price {
-  font-size: 14.5px;
+  font-size: var(--t-sm);
   font-weight: 700;
   color: var(--ink);
   white-space: nowrap;
@@ -131,21 +131,21 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 700;
   color: var(--ink);
   white-space: nowrap;
 }
 
 .mriLabel {
-  font-size: 10px;
+  font-size: var(--t-overline);
   font-weight: 600;
   color: var(--muted);
   text-transform: uppercase;
 }
 
 .metaLabel {
-  font-size: 10.5px;
+  font-size: var(--t-overline);
   color: var(--muted);
   margin-bottom: 3px;
   white-space: nowrap;
@@ -157,7 +157,7 @@
 }
 
 .endsIn {
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 700;
   color: #c8433f;
   white-space: nowrap;

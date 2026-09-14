@@ -35,7 +35,7 @@
 }
 
 .nav a {
-  font-size: 13.5px;
+  font-size: var(--t-ctrl-sm);
   font-weight: 500;
   color: var(--ink-soft);
   white-space: nowrap;
@@ -72,7 +72,7 @@
   align-items: center;
   background: none;
   color: var(--ink);
-  font-size: 13px;
+  font-size: var(--t-ctrl-sm);
   font-weight: 600;
   padding: 9px 19px;
   border-radius: var(--radius-full);
@@ -90,7 +90,7 @@
   align-items: center;
   background: var(--ink);
   color: #fff;
-  font-size: 13px;
+  font-size: var(--t-ctrl-sm);
   font-weight: 600;
   padding: 10px 20px;
   border-radius: var(--radius-full);
@@ -117,18 +117,12 @@
 
 .workspaceBtn::after {
   content: '→';
-  font-size: 12px;
+  font-size: var(--t-caption);
   line-height: 1;
 }
 
 @media (max-width: 1100px) {
   .nav {
-    display: none;
-  }
-}
-
-@media (max-width: 640px) {
-  .enterBtn {
     display: none;
   }
 }

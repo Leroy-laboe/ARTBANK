@@ -39,13 +39,13 @@
 }
 
 .title {
-  font-size: 13px;
+  font-size: var(--t-label);
   color: var(--gold-light);
   margin-bottom: 12px;
 }
 
 .bio {
-  font-size: 13px;
+  font-size: var(--t-label);
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.78);
   max-width: 40ch;
@@ -60,11 +60,11 @@
 
 .metricValue {
   font-family: var(--font-serif);
-  font-size: 18px;
+  font-size: var(--t-title);
 }
 
 .metricLabel {
-  font-size: 10.5px;
+  font-size: var(--t-overline);
   letter-spacing: 0.6px;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.55);
@@ -77,7 +77,7 @@
   gap: 6px;
   background: #fff;
   color: var(--ink);
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 700;
   padding: 11px 20px;
   border-radius: var(--radius-full);

@@ -34,7 +34,9 @@
 
 .name {
   font-family: var(--font-serif);
-  font-size: 32px;
+  font-size: var(--t-section-sm);
+  line-height: var(--t-section-sm-lh);
+  letter-spacing: var(--t-display-ls);
   font-weight: 600;
   letter-spacing: -0.5px;
   line-height: 1.1;
@@ -45,7 +47,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: var(--t-label);
   color: var(--muted);
 }
 
@@ -59,7 +61,7 @@
 
 .bio {
   margin-top: 10px;
-  font-size: 14px;
+  font-size: var(--t-sm);
   line-height: 1.65;
   color: var(--ink-soft);
   max-width: 70ch;
@@ -67,7 +69,7 @@
 
 .followers {
   margin-top: 8px;
-  font-size: 12px;
+  font-size: var(--t-caption);
   color: var(--muted-2);
 }
 
@@ -91,7 +93,7 @@
   background: var(--forest);
   color: #fff;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.15s ease;
@@ -115,7 +117,7 @@
   border-radius: var(--radius-sm);
   background: var(--surface);
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 600;
   color: var(--ink);
   cursor: pointer;
@@ -137,7 +139,7 @@
   border-radius: var(--radius-sm);
   background: var(--surface);
   border: 1px solid var(--border-soft);
-  font-size: 12px;
+  font-size: var(--t-caption);
   color: var(--muted);
 }
 
@@ -148,7 +150,7 @@
   border-left: 3px solid var(--gold);
   border-radius: var(--radius-sm);
   background: var(--surface);
-  font-size: 13px;
+  font-size: var(--t-label);
   color: var(--ink-soft);
 }
 
@@ -165,14 +167,14 @@
 
 .formTitle {
   font-family: var(--font-serif);
-  font-size: 19px;
+  font-size: var(--t-title);
   font-weight: 600;
 }
 
 .formNote {
   margin-top: 5px;
   margin-bottom: 16px;
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   line-height: 1.6;
   color: var(--muted);
 }
@@ -180,7 +182,7 @@
 .formLabel {
   display: block;
   margin: 13px 0 6px;
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   font-weight: 600;
   color: var(--ink);
 }
@@ -197,7 +199,7 @@
   border-radius: var(--radius-sm);
   background: var(--bg);
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--t-label);
   line-height: 1.6;
   color: var(--ink);
   resize: vertical;
@@ -242,13 +244,13 @@
 
 .sectionTitle {
   font-family: var(--font-serif);
-  font-size: 20px;
+  font-size: var(--t-title);
   font-weight: 600;
   margin-bottom: 14px;
 }
 
 .statement {
-  font-size: 14px;
+  font-size: var(--t-sm);
   line-height: 1.8;
   color: var(--ink-soft);
   max-width: 72ch;
@@ -284,20 +286,20 @@
 }
 
 .workTitle {
-  font-size: 14px;
+  font-size: var(--t-sm);
   font-weight: 600;
   color: var(--ink);
 }
 
 .workMeta {
   margin-top: 3px;
-  font-size: 12px;
+  font-size: var(--t-caption);
   color: var(--muted);
 }
 
 .workPrice {
   margin-top: 5px;
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 600;
   color: var(--ink);
 }
@@ -312,7 +314,7 @@
 }
 
 .panelTitle {
-  font-size: 15px;
+  font-size: var(--t-lead);
   font-weight: 600;
   margin-bottom: 12px;
 }
@@ -324,7 +326,7 @@
 }
 
 .facts dt {
-  font-size: 10.5px;
+  font-size: var(--t-overline);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--muted-2);
@@ -332,7 +334,7 @@
 
 .facts dd {
   margin-top: 3px;
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   line-height: 1.6;
   color: var(--ink);
 }
@@ -353,7 +355,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   color: var(--ink-soft);
   text-decoration: none;
   overflow-wrap: anywhere;
@@ -365,7 +367,7 @@
 }
 
 .empty {
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   color: var(--muted);
 }
 
@@ -374,7 +376,7 @@
 .state {
   padding: 80px 20px;
   text-align: center;
-  font-size: 13px;
+  font-size: var(--t-label);
   color: var(--muted);
 }
 
@@ -388,7 +390,7 @@
 .stateNote {
   margin: 10px auto 0;
   max-width: 52ch;
-  font-size: 13px;
+  font-size: var(--t-label);
   line-height: 1.65;
   color: var(--muted);
 }
@@ -398,7 +400,7 @@
   border-radius: 4px;
   background: var(--surface);
   border: 1px solid var(--border-soft);
-  font-size: 12px;
+  font-size: var(--t-caption);
 }
 
 .stateLink {
@@ -408,7 +410,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--surface);
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 600;
   color: var(--ink);
   text-decoration: none;

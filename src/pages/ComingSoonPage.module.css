@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 96px 20px;
+  padding: var(--sec-y) 20px;
   background:
     radial-gradient(ellipse 55% 55% at 50% 0%, rgba(185, 136, 79, 0.12), transparent 65%),
     linear-gradient(180deg, #fdfcfa 0%, var(--bg) 100%);
@@ -27,16 +27,18 @@
 }
 
 .eyebrow {
-  margin-bottom: 12px;
+  margin-bottom: var(--eyebrow-gap);
 }
 
 .title {
-  font-size: 38px;
+  font-size: var(--t-section-sm);
+  line-height: var(--t-section-sm-lh);
+  letter-spacing: var(--t-display-ls);
   margin-bottom: 14px;
 }
 
 .desc {
-  font-size: 15px;
+  font-size: var(--t-lead);
   color: var(--muted);
   line-height: 1.7;
   margin-bottom: 34px;

@@ -9,14 +9,14 @@
 
 .stateTitle {
   margin-top: 14px;
-  font-size: 18px;
+  font-size: var(--t-title);
   font-weight: 600;
   color: var(--ink);
 }
 
 .stateNote {
   margin-top: 6px;
-  font-size: 13px;
+  font-size: var(--t-label);
   color: var(--muted);
 }
 
@@ -33,13 +33,13 @@
   border-radius: var(--radius-sm);
   background: var(--ink);
   color: #fff;
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 600;
   text-decoration: none;
 }
 
 .stateLink {
-  font-size: 13px;
+  font-size: var(--t-label);
   color: var(--ink-soft);
   text-decoration: underline;
 }
@@ -51,14 +51,14 @@
 }
 
 .title {
-  font-size: clamp(28px, 4vw, 40px);
+  font-size: var(--t-section-sm);
   line-height: 1.15;
   color: var(--ink);
   margin: 4px 0 8px;
 }
 
 .byline {
-  font-size: 13.5px;
+  font-size: var(--t-label);
   color: var(--muted);
 }
 
@@ -74,7 +74,7 @@
   border-left: 3px solid var(--gold);
   background: var(--surface);
   border-radius: var(--radius-sm);
-  font-size: 13.5px;
+  font-size: var(--t-label);
   line-height: 1.6;
   color: var(--ink-soft);
 }
@@ -86,7 +86,7 @@
   border-left: 3px solid var(--success);
   border-radius: var(--radius-sm);
   background: var(--surface);
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   color: var(--ink-soft);
 }
 
@@ -120,27 +120,27 @@
 }
 
 .cardTitle {
-  font-size: 14px;
+  font-size: var(--t-sm);
   font-weight: 600;
   color: var(--ink);
 }
 
 .cardMeta {
   margin-top: 3px;
-  font-size: 11.5px;
+  font-size: var(--t-micro);
   color: var(--muted);
 }
 
 .cardPrice {
   margin-top: 8px;
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   font-weight: 600;
   color: var(--ink);
 }
 
 .cardAvailability {
   margin-top: 2px;
-  font-size: 11px;
+  font-size: var(--t-micro);
   color: var(--muted);
 }
 
@@ -149,7 +149,7 @@
   align-items: center;
   gap: 6px;
   margin-top: 10px;
-  font-size: 11.5px;
+  font-size: var(--t-micro);
   font-weight: 600;
   color: var(--gold-dark);
   text-decoration: none;
@@ -175,7 +175,7 @@
   background: var(--ink);
   color: #fff;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 600;
   cursor: pointer;
 }
@@ -190,7 +190,7 @@
   border-radius: var(--radius-sm);
   background: none;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 600;
   color: var(--ink);
   cursor: pointer;
@@ -201,7 +201,7 @@
 }
 
 .signInNote {
-  font-size: 13px;
+  font-size: var(--t-label);
   color: var(--muted);
 }
 

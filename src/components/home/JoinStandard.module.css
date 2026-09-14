@@ -53,6 +53,14 @@
   color: #fff;
 }
 
+/* Holds the ShinyButton (shiny-button.tsx) at the original 12px/26px,
+   13.5px footprint. No fill or radius override — this button was already
+   ink-black on a full pill, exactly the shiny design's own default. */
+.primaryShiny {
+  --shiny-size-padding: 12px 26px;
+  --shiny-size-font: 13.5px;
+}
+
 .primary:hover {
   background: var(--dark-2);
   transform: translateY(-1px);

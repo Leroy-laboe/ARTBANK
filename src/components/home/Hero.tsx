@@ -1,5 +1,6 @@
 import { Icon } from '../ui/Icon';
 import { Button } from '../ui/Button';
+import { ShinyButton } from '../ui/shiny-button';
 import heroBackground from '../../assets/images/hero_background.jpeg';
 import styles from './Hero.module.css';
 
@@ -22,9 +23,10 @@ export function Hero() {
           </p>
 
           <div className={styles.ctaRow}>
-            <Button variant="primary" icon={<Icon name="arrow-right" size={16} />}>
+            <ShinyButton className={styles.ctaShiny}>
               Build my ArtSpace
-            </Button>
+              <Icon name="arrow-right" size={16} />
+            </ShinyButton>
             <Button variant="secondary" icon={<Icon name="search" size={16} />}>
               Source creative work
             </Button>

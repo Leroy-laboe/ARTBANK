@@ -40,13 +40,22 @@
    the selector costs nothing and keeps the design's own padding wherever the
    button is dropped. */
 .shinyCta.shinyCta {
-  --shiny-cta-bg: #000000;
-  --shiny-cta-bg-subtle: #1a1818;
+  /* Base fill also reads from a hook, same reasoning as the size properties
+     below: one section on the site (the discipline filter pills, View all
+     disciplines) fills its own dark buttons with forest green rather than
+     ink, and a consumer sets --shiny-override-bg/-subtle to match without
+     needing to out-specificity this doubled selector. Defaults are the
+     supplied black. */
+  --shiny-cta-bg: var(--shiny-override-bg, #000000);
+  --shiny-cta-bg-subtle: var(--shiny-override-bg-subtle, #1a1818);
   --shiny-cta-fg: #ffffff;
   /* The one change from the supplied colours: this site's own gold in place
      of the generic blue, so the spinning border, the shimmer and the
      breathing glow all read as ARTBANK's accent rather than an unrelated
-     hue. Everything else — black base, sizing, timing — is untouched. */
+     hue — gold is the one accent this site already runs against every dark
+     surface (the forest-green sections included), so it stays gold even
+     where the base fill below goes forest. Everything else — sizing,
+     timing — is untouched. */
   --shiny-cta-highlight: var(--gold);
   --shiny-cta-highlight-subtle: var(--gold-light);
   --animation: gradient-angle linear infinite;
@@ -91,7 +100,12 @@
   line-height: 1.2;
   font-weight: 500;
   border: 1px solid transparent;
-  border-radius: 360px;
+  /* Same hook pattern as size/fill above: every button this design has been
+     dropped into so far already happened to be a full pill, so this default
+     never had to move. The buyer section's "Explore Artworks" is the first
+     that wasn't — a 10px-radius rounded rectangle — and a consumer sets
+     --shiny-size-radius to hold that shape instead. */
+  border-radius: var(--shiny-size-radius, 360px);
   color: var(--shiny-cta-fg);
   background: linear-gradient(var(--shiny-cta-bg), var(--shiny-cta-bg)) padding-box,
     conic-gradient(
@@ -153,6 +167,15 @@
 
 .shinyCta span {
   z-index: 1;
+  /* The demo's span only ever held text. This button is also used with a
+     trailing icon (Hero.tsx) — flex + a gap gives that icon the same 8px
+     spacing the rest of the site's buttons use (Button.module.css's .btn),
+     rather than the icon sitting flush against the label. Text-only usages
+     are unaffected: a single child in a flex row lays out identically to
+     one in a block. */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .shinyCta span::before {

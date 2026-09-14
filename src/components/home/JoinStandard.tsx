@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { joinStandard } from '../../data/homeSections';
+import { ShinyButton } from '../ui/shiny-button';
 import styles from './JoinStandard.module.css';
 
 export function JoinStandard() {
@@ -19,9 +20,9 @@ export function JoinStandard() {
         <p className={styles.desc}>{joinStandard.description}</p>
 
         <div className={styles.ctaRow}>
-          <Link to="/register" className={styles.primary}>
+          <ShinyButton to="/register" className={styles.primaryShiny}>
             Create Your ArtBank ID
-          </Link>
+          </ShinyButton>
           <Link to="/for-buyers" className={styles.secondary}>
             I’m a buyer / institution
           </Link>

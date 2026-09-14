@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
+import { ShinyButton } from '../ui/shiny-button';
 import {
   buyerBannerArt,
   buyerDemoUser,
@@ -53,10 +54,10 @@ export function BuyerSourcing() {
             </ul>
 
             <div className={styles.ctas}>
-              <Link to="/marketplace" className={styles.ctaPrimary}>
+              <ShinyButton to="/marketplace" className={styles.ctaPrimaryShiny}>
                 Explore Artworks
                 <Icon name="arrow-right" size={15} />
-              </Link>
+              </ShinyButton>
               <Link to="/how-it-works" className={styles.ctaGhost}>
                 <Icon name="play" size={13} />
                 See how it works

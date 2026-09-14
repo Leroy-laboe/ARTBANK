@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
+import { ShinyButton } from '../ui/shiny-button';
 import {
   disciplineArtists,
   disciplineFilters,
@@ -57,20 +58,34 @@ export function DisciplineBrowser() {
 
         <div className={styles.toolbar}>
           <div className={styles.filters} role="tablist" aria-label="Filter by discipline">
-            {disciplineFilters.map((option) => (
-              <button
-                key={option}
-                type="button"
-                role="tab"
-                aria-selected={filter === option}
-                className={[styles.pill, filter === option && styles.pillActive]
-                  .filter(Boolean)
-                  .join(' ')}
-                onClick={() => setFilter(option)}
-              >
-                {option}
-              </button>
-            ))}
+            {disciplineFilters.map((option) =>
+              filter === option ? (
+                // The active pill only — the shiny treatment marks a
+                // selection, not the group itself, so the other four stay
+                // the plain outlined .pill they always were.
+                <ShinyButton
+                  key={option}
+                  type="button"
+                  role="tab"
+                  aria-selected
+                  onClick={() => setFilter(option)}
+                  className={styles.pillShiny}
+                >
+                  {option}
+                </ShinyButton>
+              ) : (
+                <button
+                  key={option}
+                  type="button"
+                  role="tab"
+                  aria-selected={false}
+                  className={styles.pill}
+                  onClick={() => setFilter(option)}
+                >
+                  {option}
+                </button>
+              ),
+            )}
           </div>
 
           <div className={styles.search}>
@@ -84,10 +99,10 @@ export function DisciplineBrowser() {
             />
           </div>
 
-          <Link to="/artists" className={styles.viewAll}>
+          <ShinyButton to="/artists" className={styles.viewAllShiny}>
             View all disciplines
             <Icon name="arrow-right" size={14} />
-          </Link>
+          </ShinyButton>
         </div>
 
         {shown.length > 0 ? (

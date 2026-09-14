@@ -163,6 +163,19 @@
   transform: translateY(-1px);
 }
 
+/* Holds the ShinyButton (shiny-button.tsx) at the original 190x52 forest
+   rectangle rather than the shiny design's default black pill — this
+   section's own CTA was never a pill, and the corner radius is part of that
+   original shape, not just its colour or size. */
+.ctaPrimaryShiny {
+  height: 52px;
+  --shiny-override-bg: var(--forest);
+  --shiny-override-bg-subtle: var(--forest-2);
+  --shiny-size-padding: 0 24px;
+  --shiny-size-font: 14px;
+  --shiny-size-radius: 10px;
+}
+
 .ctaGhost {
   background: var(--surface);
   border: 1px solid var(--border);

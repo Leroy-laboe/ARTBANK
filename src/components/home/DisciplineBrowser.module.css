@@ -131,6 +131,17 @@
   color: #fff;
 }
 
+/* Holds the ShinyButton (shiny-button.tsx) at the active pill's original
+   9px/20px, 13.5px footprint, filled with this section's own forest green
+   rather than the shiny design's default black — the two buttons on this
+   light-background section were already forest, not ink, before this. */
+.pillShiny {
+  --shiny-override-bg: var(--forest);
+  --shiny-override-bg-subtle: var(--forest-2);
+  --shiny-size-padding: 9px 20px;
+  --shiny-size-font: 13.5px;
+}
+
 .search {
   display: flex;
   align-items: center;
@@ -188,6 +199,17 @@
 .viewAll:hover {
   background: var(--forest-2);
   color: #fff;
+}
+
+/* Same forest fill as .pillShiny above, sized to the original 44px-tall,
+   24px-padded button (the shiny design sizes by padding alone, so the
+   vertical figure comes from the two padding numbers, not an explicit
+   height). */
+.viewAllShiny {
+  --shiny-override-bg: var(--forest);
+  --shiny-override-bg-subtle: var(--forest-2);
+  --shiny-size-padding: 13px 24px;
+  --shiny-size-font: 13.5px;
 }
 
 /* ── Cards ── */

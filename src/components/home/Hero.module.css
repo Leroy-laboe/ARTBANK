@@ -50,6 +50,15 @@
   margin-bottom: 22px;
 }
 
+/* Holds the ShinyButton (shiny-button.tsx) at the same footprint the plain
+   .primary Button it replaced used (Button.module.css's .btn: 13px/24px,
+   14.5px type) — the animated treatment is what's new here, not the size of
+   the hero's own primary action. */
+.ctaShiny {
+  --shiny-size-padding: 13px 24px;
+  --shiny-size-font: 14.5px;
+}
+
 .trustItems {
   display: flex;
   flex-wrap: wrap;

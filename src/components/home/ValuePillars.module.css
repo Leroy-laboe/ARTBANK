@@ -33,7 +33,7 @@
 
 .title {
   font-family: var(--font-serif);
-  font-size: 17px;
+  font-size: var(--t-title-sm);
   line-height: 1.35;
   color: var(--ink);
   margin: 0 0 6px;
@@ -42,7 +42,7 @@
 
 .desc {
   margin: 0;
-  font-size: 13px;
+  font-size: var(--t-label);
   line-height: 1.5;
   color: var(--muted);
   max-width: 44ch;
@@ -55,12 +55,12 @@
 
 .statValue {
   font-family: var(--font-serif);
-  font-size: 15px;
+  font-size: var(--t-lead);
   color: var(--ink);
 }
 
 .statLabel {
-  font-size: 12px;
+  font-size: var(--t-caption);
   color: var(--muted-2);
 }
 
@@ -105,11 +105,11 @@
   }
 
   .index {
-    font-size: 19px;
+    font-size: var(--t-title);
   }
 
   .title {
-    font-size: 15.5px;
+    font-size: var(--t-body);
   }
 
   .stat {

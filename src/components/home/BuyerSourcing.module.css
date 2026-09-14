@@ -3,7 +3,7 @@
   /* A shade warmer in the middle than the ArtSpace section above it, so two
      light sections in a row don't read as one long flat run. */
   background: linear-gradient(180deg, var(--bg) 0%, #f4f1ea 52%, var(--bg) 100%);
-  padding: 88px 0 74px;
+  padding: var(--sec-y) 0;
   overflow: hidden;
 }
 
@@ -47,14 +47,14 @@
 /* ── Left column ── */
 
 .eyebrow {
-  margin: 0 0 18px;
+  margin: 0 0 var(--eyebrow-gap);
 }
 
 .title {
   font-family: var(--font-serif);
-  font-size: clamp(30px, 3.5vw, 46px);
-  line-height: 1.14;
-  letter-spacing: -0.015em;
+  font-size: var(--t-section);
+  line-height: var(--t-section-lh);
+  letter-spacing: var(--t-display-ls);
   color: var(--ink);
   margin: 0 0 20px;
   font-weight: 500;
@@ -142,13 +142,13 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  height: 52px;
+  height: var(--ctrl-h);
   /* Trimmed so the pair sits on one line in the narrow copy column rather
      than wrapping onto two. */
   padding: 0 24px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: var(--radius-sm);
+  font-size: var(--t-ctrl);
+  font-weight: var(--ctrl-weight);
   white-space: nowrap;
   transition: 0.18s;
 }
@@ -163,17 +163,18 @@
   transform: translateY(-1px);
 }
 
-/* Holds the ShinyButton (shiny-button.tsx) at the original 190x52 forest
-   rectangle rather than the shiny design's default black pill — this
-   section's own CTA was never a pill, and the corner radius is part of that
-   original shape, not just its colour or size. */
+/* Holds the ShinyButton (shiny-button.tsx) as a forest rectangle rather than
+   the shiny design's default black pill — this section's own CTA was never a
+   pill, and the squared corner is part of that shape, not just its colour or
+   size. Every figure now comes from the same tokens as the .ctaGhost beside
+   it, so the pair cannot drift apart again. */
 .ctaPrimaryShiny {
-  height: 52px;
+  height: var(--ctrl-h);
   --shiny-override-bg: var(--forest);
   --shiny-override-bg-subtle: var(--forest-2);
   --shiny-size-padding: 0 24px;
-  --shiny-size-font: 14px;
-  --shiny-size-radius: 10px;
+  --shiny-size-font: var(--t-ctrl);
+  --shiny-size-radius: var(--radius-sm);
 }
 
 .ctaGhost {
@@ -672,11 +673,6 @@
     padding: var(--sec-y) 0 calc(var(--sec-y) - 14px);
   }
 
-  .title {
-    font-size: var(--t-section);
-    line-height: var(--t-section-lh);
-  }
-
   /* Four short promises read as a set in two columns; stacked they were a
      485px column of mostly whitespace. */
   .features {
@@ -696,7 +692,7 @@
   }
 
   .featureTitle {
-    font-size: 14.5px;
+    font-size: var(--t-sm);
   }
 
   .featureText {

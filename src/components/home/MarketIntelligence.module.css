@@ -13,8 +13,10 @@
   background: radial-gradient(120% 90% at 22% 8%, var(--plum) 0%, var(--plum-deep) 72%);
   color: var(--plum-text);
   /* Deliberately shallow — this band reads as a stripe across the page
-     between two tall light sections, not another full-height block. */
-  padding: 52px 0 46px;
+     between two tall light sections, not another full-height block. That is
+     what --sec-y-tight is for; --sec-y is the depth of the tall sections it
+     sits between. */
+  padding: var(--sec-y-tight) 0;
   overflow: hidden;
   isolation: isolate;
 }
@@ -64,17 +66,18 @@
 
 .eyebrow {
   color: var(--gold);
-  margin: 0 0 16px;
+  margin: 0 0 var(--eyebrow-gap);
 }
 
 .title {
   font-family: var(--font-serif);
-  /* Capped so "before it becomes" holds one line in this column rather than
-     breaking the gold phrase across three, and set tight because the band's
-     height is the point. */
-  font-size: clamp(27px, 2.8vw, 37px);
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  /* --t-section-sm is capped at 36px partly for this headline: "before it
+     becomes" has to hold one line in this column rather than breaking the
+     gold phrase across three. The shared cap is a pixel under the 37px this
+     used to carry, so the line still holds. */
+  font-size: var(--t-section-sm);
+  line-height: var(--t-section-sm-lh);
+  letter-spacing: var(--t-display-ls);
   color: #fff;
   font-weight: 500;
   margin: 0 0 16px;
@@ -86,7 +89,7 @@
 
 .intro {
   margin: 0 0 24px;
-  font-size: 14.5px;
+  font-size: var(--t-sm);
   line-height: 1.6;
   color: var(--plum-muted);
   max-width: 38ch;
@@ -96,13 +99,13 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  height: 48px;
+  height: var(--ctrl-h);
   padding: 0 26px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   background: var(--gold-light);
   color: #2c1a10;
-  font-size: 14.5px;
-  font-weight: 600;
+  font-size: var(--t-ctrl);
+  font-weight: var(--ctrl-weight);
   transition: 0.18s;
 }
 
@@ -113,7 +116,7 @@
 
 .footnote {
   margin: 22px 0 0;
-  font-size: 10px;
+  font-size: var(--t-overline);
   font-weight: 500;
   letter-spacing: 0.11em;
   line-height: 1.7;
@@ -161,7 +164,7 @@
   align-items: center;
   gap: 14px;
   margin: 0 0 16px;
-  font-size: 10.5px;
+  font-size: var(--t-overline);
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -198,7 +201,7 @@
 .label {
   margin: 0 0 13px;
   font-family: var(--font-serif);
-  font-size: 16px;
+  font-size: var(--t-title-sm);
   line-height: 1.26;
   font-weight: 500;
   color: var(--plum-text);
@@ -210,7 +213,7 @@
   align-items: start;
   gap: 9px;
   margin: 0;
-  font-size: 12px;
+  font-size: var(--t-caption);
   line-height: 1.5;
   color: var(--plum-muted);
 }
@@ -265,7 +268,7 @@
 
 .factValue {
   margin: 0;
-  font-size: 13.5px;
+  font-size: var(--t-label);
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -275,7 +278,7 @@
 
 .factLabel {
   margin: 4px 0 0;
-  font-size: 10px;
+  font-size: var(--t-overline);
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -341,11 +344,6 @@
 /* ── Tablet: 735–1068px ──────────────────────────────────────────────────
    Two signals across rather than three squeezed or one at a time. */
 @media (max-width: 1068px) {
-  .title {
-    font-size: var(--t-section);
-    line-height: var(--t-section-lh);
-  }
-
   .signals {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     row-gap: 30px;
@@ -369,15 +367,6 @@
    swipe row instead, which is what the brief asks of repeated intelligence
    cards, and keeps the stripe reading as a stripe. */
 @media (max-width: 734px) {
-  .section {
-    padding: var(--sec-y) 0;
-  }
-
-  .title {
-    font-size: var(--t-section);
-    line-height: var(--t-section-lh);
-  }
-
   .signals {
     display: flex;
     grid-template-columns: none;

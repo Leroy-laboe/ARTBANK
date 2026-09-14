@@ -1,7 +1,7 @@
 .section {
   position: relative;
   background: var(--bg);
-  padding: 84px 0 78px;
+  padding: var(--sec-y) 0;
   overflow: hidden;
 }
 
@@ -43,14 +43,14 @@
 /* ── Left column ── */
 
 .eyebrow {
-  margin: 0 0 18px;
+  margin: 0 0 var(--eyebrow-gap);
 }
 
 .title {
   font-family: var(--font-serif);
-  font-size: clamp(30px, 3.5vw, 46px);
-  line-height: 1.14;
-  letter-spacing: -0.015em;
+  font-size: var(--t-section);
+  line-height: var(--t-section-lh);
+  letter-spacing: var(--t-display-ls);
   color: var(--ink);
   margin: 0 0 20px;
   font-weight: 500;
@@ -671,11 +671,6 @@
     gap: 52px;
   }
 
-  .title {
-    font-size: var(--t-section);
-    line-height: var(--t-section-lh);
-  }
-
   .intro {
     margin-bottom: 34px;
   }
@@ -708,15 +703,6 @@
    figures stay on one line — stacked they were a 472px column of four short
    numbers — and the panel keeps its columns. */
 @media (max-width: 734px) {
-  .section {
-    padding: var(--sec-y) 0;
-  }
-
-  .title {
-    font-size: var(--t-section);
-    line-height: var(--t-section-lh);
-  }
-
   /* Two by two, not four stacked rows. */
   .features {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -734,7 +720,7 @@
   }
 
   .featureTitle {
-    font-size: 14.5px;
+    font-size: var(--t-sm);
   }
 
   .featureText {

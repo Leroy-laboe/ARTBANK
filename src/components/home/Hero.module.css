@@ -23,7 +23,7 @@
 }
 
 .eyebrow {
-  margin-bottom: 18px;
+  margin-bottom: var(--eyebrow-gap);
 }
 
 .title {
@@ -37,7 +37,7 @@
 }
 
 .lede {
-  font-size: 16px;
+  font-size: var(--t-body);
   line-height: 1.7;
   color: var(--muted);
   max-width: 46ch;
@@ -50,13 +50,14 @@
   margin-bottom: 22px;
 }
 
-/* Holds the ShinyButton (shiny-button.tsx) at the same footprint the plain
-   .primary Button it replaced used (Button.module.css's .btn: 13px/24px,
-   14.5px type) — the animated treatment is what's new here, not the size of
-   the hero's own primary action. */
+/* Holds the ShinyButton (shiny-button.tsx) on the same footprint as the
+   plain .primary Button it replaced (Button.module.css's .btn) — the
+   animated treatment is what's new here, not the size of the hero's own
+   primary action. Reading both from the shared control tokens is what keeps
+   that true now that .btn reads from them too. */
 .ctaShiny {
-  --shiny-size-padding: 13px 24px;
-  --shiny-size-font: 14.5px;
+  --shiny-size-padding: var(--ctrl-pad);
+  --shiny-size-font: var(--t-ctrl);
 }
 
 .trustItems {
@@ -72,7 +73,7 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   color: var(--muted);
   white-space: nowrap;
 }
@@ -130,7 +131,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 10.5px;
+  font-size: var(--t-overline);
   font-weight: 700;
   letter-spacing: 0.6px;
   color: var(--gold-light);
@@ -157,13 +158,13 @@
 }
 
 .badgeValue {
-  font-size: 20px;
+  font-size: var(--t-title);
   font-family: var(--font-serif);
   color: #fff;
 }
 
 .badgeSub {
-  font-size: 11px;
+  font-size: var(--t-micro);
   color: var(--muted-2);
   margin-top: 2px;
 }
@@ -172,7 +173,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: var(--t-label);
   color: #fff;
 }
 
@@ -193,7 +194,7 @@
   gap: 6px;
   background: #fff;
   color: var(--ink);
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   font-weight: 700;
   padding: 10px;
   border-radius: var(--radius-full);

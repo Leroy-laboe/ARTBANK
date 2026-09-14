@@ -27,7 +27,7 @@
   z-index: 7;
   top: 34px;
   left: 40px;
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 600;
   letter-spacing: 0.34em;
   text-transform: uppercase;
@@ -224,7 +224,7 @@
 .labelTitle {
   display: block;
   font-family: var(--font-serif);
-  font-size: 15px;
+  font-size: var(--t-lead);
   font-weight: 500;
   color: #fff;
   white-space: nowrap;
@@ -237,7 +237,7 @@
 .labelMeta {
   display: block;
   margin-top: 4px;
-  font-size: 10px;
+  font-size: var(--t-overline);
   line-height: 1.6;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -330,7 +330,7 @@
   bottom: 42px;
   margin: 0;
   padding-left: 26px;
-  font-size: 11px;
+  font-size: var(--t-micro);
   font-weight: 500;
   line-height: 1.7;
   letter-spacing: 0.28em;
@@ -421,7 +421,7 @@
   align-items: center;
   gap: 18px;
   color: var(--gold-light);
-  margin: 0 0 18px;
+  margin: 0 0 var(--eyebrow-gap);
 }
 
 .eyebrow::after {
@@ -433,8 +433,9 @@
 
 .title {
   font-family: var(--font-serif);
-  font-size: clamp(27px, 3vw, 38px);
-  line-height: 1.22;
+  font-size: var(--t-section-sm);
+  line-height: var(--t-section-sm-lh);
+  letter-spacing: var(--t-display-ls);
   color: #fff;
   font-weight: 500;
   margin: 0 0 18px;
@@ -446,7 +447,7 @@
 
 .desc {
   margin: 0 0 22px;
-  font-size: 14px;
+  font-size: var(--t-sm);
   line-height: 1.65;
   color: var(--forest-muted);
   max-width: 48ch;
@@ -458,7 +459,7 @@
   border-left: 2px solid var(--gold);
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 15.5px;
+  font-size: var(--t-body);
   line-height: 1.6;
   color: var(--forest-text);
   max-width: 44ch;
@@ -466,7 +467,7 @@
 
 .meta {
   margin: 0 0 26px;
-  font-size: 11px;
+  font-size: var(--t-micro);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--forest-muted);
@@ -479,9 +480,9 @@
   background: var(--gold-light);
   color: #22200f;
   border-radius: var(--radius-full);
-  padding: 12px 24px;
-  font-size: 13.5px;
-  font-weight: 600;
+  padding: var(--ctrl-pad);
+  font-size: var(--t-ctrl);
+  font-weight: var(--ctrl-weight);
   transition: 0.18s;
 }
 
@@ -540,7 +541,7 @@
   height: 62px;
   padding: 0;
   border: 1px solid transparent;
-  border-radius: 9px;
+  border-radius: var(--radius-sm);
   background: none;
   overflow: hidden;
   cursor: pointer;
@@ -556,7 +557,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 .thumb:hover {
@@ -751,11 +752,6 @@
   .rail {
     justify-items: stretch;
     gap: 18px;
-  }
-
-  .headline {
-    font-size: var(--t-section);
-    line-height: var(--t-section-lh);
   }
 
   .railTop {

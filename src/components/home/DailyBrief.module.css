@@ -1,10 +1,10 @@
 .section {
   background: var(--bg);
-  padding: 60px 0 80px;
+  padding: var(--sec-y) 0;
 }
 
 .eyebrow {
-  margin: 0 0 14px;
+  margin: 0 0 var(--eyebrow-gap);
 }
 
 .head {
@@ -17,8 +17,9 @@
 
 .title {
   font-family: var(--font-serif);
-  font-size: clamp(26px, 3vw, 36px);
-  line-height: 1.2;
+  font-size: var(--t-section-sm);
+  line-height: var(--t-section-sm-lh);
+  letter-spacing: var(--t-display-ls);
   color: var(--ink);
   font-weight: 500;
   margin: 0;
@@ -32,7 +33,7 @@
   background: var(--surface);
   border-radius: var(--radius-full);
   padding: 8px 16px;
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   color: var(--ink-soft);
   white-space: nowrap;
   margin-bottom: 4px;
@@ -71,7 +72,7 @@
   color: var(--gold-dark);
   border-radius: var(--radius-full);
   padding: 3px 10px;
-  font-size: 10.5px;
+  font-size: var(--t-overline);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin-bottom: 10px;
@@ -79,7 +80,7 @@
 
 .featureTitle {
   font-family: var(--font-serif);
-  font-size: 17px;
+  font-size: var(--t-title-sm);
   line-height: 1.35;
   color: var(--ink);
   font-weight: 500;
@@ -88,7 +89,7 @@
 
 .featureDesc {
   margin: 0 0 12px;
-  font-size: 12.5px;
+  font-size: var(--t-caption);
   line-height: 1.55;
   color: var(--muted);
 }
@@ -97,7 +98,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: var(--t-caption);
   color: var(--gold-dark);
   font-weight: 600;
 }
@@ -132,12 +133,12 @@
 
 .listIndex {
   font-family: var(--font-serif);
-  font-size: 15px;
+  font-size: var(--t-lead);
   color: var(--gold);
 }
 
 .listText {
-  font-size: 13px;
+  font-size: var(--t-label);
   line-height: 1.5;
   color: var(--ink-soft);
 }
@@ -147,31 +148,17 @@
   .row {
     grid-template-columns: 1fr;
   }
-
-  .title {
-    font-size: var(--t-sub);
-    line-height: var(--t-sub-lh);
-  }
 }
 
 /* ── Mobile: ≤734px ──────────────────────────────────────────────────────
    The lead card keeps its picture beside its copy. Stacking the two turned a
    compact card into a 400px block and the section into 1,044px. */
 @media (max-width: 734px) {
-  .section {
-    padding: var(--sec-y) 0;
-  }
-
   .head {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
     margin-bottom: 20px;
-  }
-
-  .title {
-    font-size: var(--t-sub);
-    line-height: var(--t-sub-lh);
   }
 
   .row {

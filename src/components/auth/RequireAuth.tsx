@@ -5,7 +5,11 @@ import styles from './RequireAuth.module.css';
 
 /** Escape hatch for design work: with no identity provider configured there is
  *  no way to sign in, so guarding would make ArtSpace unreachable on a fresh
- *  clone. Set VITE_ARTSPACE_OPEN=true to keep it open even when one is. */
+ *  clone. Set VITE_ARTSPACE_OPEN=true to keep it open even when one is.
+ *
+ *  Not exported: RequireAdmin needs this exact same check (see its own
+ *  comment) but a file exporting anything besides a component breaks Fast
+ *  Refresh, so it keeps its own copy instead of importing this one. */
 const alwaysOpen =
   import.meta.env.VITE_ARTSPACE_OPEN === 'true' || import.meta.env.VITE_ARTSPACE_OPEN === '1';
 

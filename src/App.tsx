@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom
 import { SessionProvider } from './lib/session';
 import { RequireAuth } from './components/auth/RequireAuth';
 import { RequireNonGuardian } from './components/auth/RequireNonGuardian';
+import { RequireAdmin } from './components/auth/RequireAdmin';
 import { WorkspaceHome } from './components/auth/WorkspaceHome';
 import { RouteFallback } from './components/ui/RouteFallback';
 
@@ -62,6 +63,13 @@ const BuyerComingSoonPage = lazy(async () => ({ default: (await import('./pages/
 
 const GuardianRequestsPage = lazy(async () => ({ default: (await import('./pages/GuardianRequestsPage')).GuardianRequestsPage }));
 const GuardianMinorViewPage = lazy(async () => ({ default: (await import('./pages/GuardianMinorViewPage')).GuardianMinorViewPage }));
+
+const AdminOverviewPage = lazy(async () => ({ default: (await import('./pages/AdminOverviewPage')).AdminOverviewPage }));
+const AdminComingSoonPage = lazy(async () => ({ default: (await import('./pages/AdminComingSoonPage')).AdminComingSoonPage }));
+const AdminUploadArtworkPage = lazy(async () => ({ default: (await import('./pages/AdminUploadArtworkPage')).AdminUploadArtworkPage }));
+const AdminLinkArtworksPage = lazy(async () => ({ default: (await import('./pages/AdminLinkArtworksPage')).AdminLinkArtworksPage }));
+const AdminCoaReviewPage = lazy(async () => ({ default: (await import('./pages/AdminCoaReviewPage')).AdminCoaReviewPage }));
+const AdminFlaggedConversationsPage = lazy(async () => ({ default: (await import('./pages/AdminFlaggedConversationsPage')).AdminFlaggedConversationsPage }));
 
 function App() {
   return (
@@ -160,6 +168,22 @@ function App() {
             <Route path="/collect/messages" element={<BuyerMessagesPage />} />
             <Route path="/collect/rooms" element={<ViewingRoomsPage />} />
             <Route path="/collect/help" element={<BuyerComingSoonPage title="Help Center" />} />
+          </Route>
+
+          {/* Admin Portal — docs/pivot-checklist/29-feature-admin-functions.md.
+              A pure admin account has no artist/buyer business either, so this
+              sits alongside RequireNonGuardian's tree rather than inside it;
+              RequireAdmin is what actually keeps everyone else out. */}
+          <Route element={<RequireAdmin><Outlet /></RequireAdmin>}>
+            <Route path="/admin" element={<AdminOverviewPage />} />
+            <Route path="/admin/upload" element={<AdminUploadArtworkPage />} />
+            <Route path="/admin/link" element={<AdminLinkArtworksPage />} />
+            <Route path="/admin/coa" element={<AdminCoaReviewPage />} />
+            <Route path="/admin/flagged" element={<AdminFlaggedConversationsPage />} />
+            <Route path="/admin/opportunities" element={<AdminComingSoonPage title="Opportunities" />} />
+            <Route path="/admin/users" element={<AdminComingSoonPage title="Users" />} />
+            <Route path="/admin/settings" element={<AdminComingSoonPage title="System Settings" />} />
+            <Route path="/admin/profile" element={<AdminComingSoonPage title="Admin Profile" />} />
           </Route>
         </Route>
 

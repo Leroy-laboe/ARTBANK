@@ -181,7 +181,7 @@ export async function setArtworkStatus(id: string, status: 'draft' | 'published'
 
 /** A URL-safe id derived from the title, with a short suffix so two works
  *  called "Study" don't collide. Doubles as the smart-link slug. */
-function slugFor(title: string): string {
+export function slugFor(title: string): string {
   const base = title
     .toLowerCase()
     .normalize('NFD')

@@ -89,7 +89,10 @@ export type IconName =
   | 'tag'
   | 'compass'
   | 'bolt'
-  | 'check';
+  | 'check'
+  | 'flag'
+  | 'link'
+  | 'settings';
 
 const paths: Record<IconName, React.ReactNode> = {
   search: (
@@ -621,6 +624,25 @@ const paths: Record<IconName, React.ReactNode> = {
   ),
   bolt: <polygon points="13.6 2.5 5 13.6 11 13.6 10.4 21.5 19 10.4 13 10.4" />,
   check: <polyline points="4.5 12.5 9.5 17.5 19.5 6.5" />,
+  flag: (
+    <>
+      <path d="M5.5 3.5v17" />
+      <path d="M5.5 4.5h11l-2.8 4.2 2.8 4.3h-11z" />
+    </>
+  ),
+  link: (
+    <>
+      <path d="M9.5 14.5 14.5 9.5" />
+      <path d="M11 6.3l1.6-1.6a4 4 0 0 1 5.7 5.7l-2.1 2.1" />
+      <path d="M13 17.7l-1.6 1.6a4 4 0 0 1-5.7-5.7l2.1-2.1" />
+    </>
+  ),
+  settings: (
+    <>
+      <circle cx="12" cy="12" r="3.2" />
+      <path d="M12 3.5v2.4M12 18.1v2.4M20.5 12h-2.4M5.9 12H3.5M17.7 6.3l-1.7 1.7M8 14l-1.7 1.7M17.7 17.7 16 16M8 10 6.3 8.3" />
+    </>
+  ),
 };
 
 export function Icon({

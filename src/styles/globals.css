@@ -38,6 +38,14 @@
   --font-hand: 'Caveat', 'Segoe Script', 'Bradley Hand', cursive;
 
   --container: 1280px;
+  /* The listing pages (artists, marketplace) run a filter sidebar, a four-up
+     card grid and a right rail side by side. At --container that grid gets
+     145px per card, which is what was breaking the creator card's footer row
+     onto itself. Marketplace had already solved this locally with a 1560px
+     max-width; artists had not, and had silently zeroed .container's gutter
+     instead — so the two listing pages, with identical grids, sat on two
+     different ones. This is that width, named, and used by both. */
+  --container-wide: 1560px;
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 22px;
@@ -70,7 +78,7 @@ body {
   background: var(--bg);
   color: var(--ink-soft);
   font-family: var(--font-sans);
-  font-size: 15.5px;
+  font-size: var(--t-body);
   line-height: 1.55;
 }
 
@@ -101,6 +109,12 @@ h4 {
   color: var(--ink);
   margin: 0;
   font-weight: 500;
+  /* Display leading, not body leading. Without this a heading that doesn't
+     set its own line-height inherits body's 1.55 — which is how the artists
+     and marketplace page titles ended up as 46px and 42px type on 71px and
+     65px lines, while every homepage heading sets ~1.15 for itself. Anything
+     that does declare its own still wins. */
+  line-height: 1.2;
 }
 
 p {
@@ -115,7 +129,7 @@ ul {
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--t-caption);
   font-weight: 600;
   letter-spacing: 1.6px;
   text-transform: uppercase;
@@ -139,6 +153,29 @@ ul {
 
 @media (max-width: 734px) {
   .container {
+    padding: 0 20px;
+  }
+}
+
+/* The listing pages' container — same gutters on the same tiers as
+   .container, only wider. Defined here beside it rather than twice in
+   CreatorsPage.module.css and MarketplacePage.module.css, which is where the
+   two copies drifted apart in the first place. */
+.container-wide {
+  width: 100%;
+  max-width: var(--container-wide);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+@media (max-width: 1068px) {
+  .container-wide {
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 734px) {
+  .container-wide {
     padding: 0 20px;
   }
 }
@@ -172,25 +209,114 @@ ul {
 
 :root {
   /* Display type. Three steps per role — a phone gets a smaller size and
-     looser leading, because display leading only works at display sizes. */
+     looser leading, because display leading only works at display sizes.
+
+     The desktop values are `clamp()` rather than flat px because desktop
+     fluidity between 1069px and ~1400px was already approved and was
+     previously expressed as nine separate clamp formulas, one per section.
+     Folding those into two tokens keeps the fluidity and removes the drift:
+     every section headline on the public site now resolves to one of exactly
+     two sizes at any given width instead of eight. */
   --t-hero: 52px;
   --t-hero-lh: 1.1;
-  --t-section: 46px;
-  --t-section-lh: 1.13;
+
+  /* Level 1 — the page's load-bearing section headlines (ArtSpace, buyer
+     sourcing, discipline browser). */
+  --t-section: clamp(38px, 3.4vw, 46px);
+  --t-section-lh: 1.15;
+
+  /* Level 2 — the quieter bands that sit between them (featured artist,
+     market intelligence, daily brief, Jenaisis, join). Same role, lower
+     billing; keeping it a real step is what stops every band reading as
+     equally important. Capped at 36px because two of these bands carry a
+     deliberate one-line cap on a gold phrase — see their own comments. */
+  --t-section-sm: clamp(31px, 2.75vw, 36px);
+  --t-section-sm-lh: 1.18;
+
   --t-sub: 30px;
   --t-sub-lh: 1.15;
 
-  /* One vertical rhythm for every band, instead of ten different paddings. */
-  --sec-y: 96px;
+  /* Tracking for display type. One value, applied at both display levels. */
+  --t-display-ls: -0.01em;
+
+  /* Gap under a gold eyebrow before the headline it introduces. Was 14, 16
+     and 18px across sections that all do the same thing. */
+  --eyebrow-gap: 16px;
+
+  /* ── Text scale ───────────────────────────────────────────────────────
+     Six steps, down from the twelve that had accumulated between 10px and
+     15.5px (10 / 10.5 / 11 / 11.5 / 12 / 12.5 / 13 / 13.5 / 14 / 14.5 / 15 /
+     15.5). The half-pixel steps were never a design decision — they are what
+     happens when a section is sized by eye in isolation. Body stays at the
+     15.5px the site already reads at; everything below steps from it.
+
+     Deliberately NOT applied inside the two dashboard mockups
+     (ArtspaceOverview, BuyerSourcing): those render a product UI at reduced
+     scale, so their 8–11px type is a picture, not text, and normalising it
+     would break the illusion the section depends on. */
+  /* Sub-headings — card titles, panel headings, feature titles. Two steps
+     replacing the seven (16 / 17 / 18 / 19 / 20 / 21 / 22) that the same
+     role had drifted across. Decorative serif numerals, the Jenaisis
+     monogram and anything in --font-hand are deliberately not on this
+     scale: they are marks, not headings. */
+  --t-title: 19px;
+  --t-title-sm: 16px;
+
+  --t-body: 15.5px;
+  --t-lead: 15px;
+  --t-sm: 14px;
+  --t-label: 13px;
+  --t-caption: 12px;
+  --t-micro: 11px;
+  /* Uppercase, tracked micro-labels only — a real role on this site (the
+     market band's facts, the Jenaisis rail note, stat labels), which is why
+     it survives as its own step rather than folding into --t-micro. */
+  --t-overline: 10px;
+
+  /* ── Controls ─────────────────────────────────────────────────────────
+     Two control sizes, so a CTA in one band is the same object as a CTA in
+     the next. Before this the public site carried five label sizes (13 /
+     13.5 / 14 / 14.5 / 15) and three weights (500 / 600 / 700) across
+     eleven near-identical button classes.
+
+     Fill, border and radius stay with each section on purpose: the forest
+     rectangle in the buyer band and the gold pill in the Jenaisis band are
+     doing different jobs and should not converge. Only the label and the
+     footprint are shared. */
+  --t-ctrl: 14px; /* page and band CTAs */
+  --t-ctrl-sm: 13px; /* toolbar chips, card actions, header controls */
+  --ctrl-weight: 600;
+  /* Padding-sized buttons land at ~47px with this; --ctrl-h is for the band
+     CTAs that set an explicit height instead. The two agree to within a
+     pixel, which is the point — before, they ranged 40px to 52px. */
+  --ctrl-pad: 14px 24px;
+  --ctrl-pad-sm: 9px 18px;
+  --ctrl-h: 48px;
+
+  /* ── Cards ────────────────────────────────────────────────────────────
+     The four public card types (artwork, listing, creator, real artist)
+     already shared a shell — surface, 1px border, --radius-md, and a
+     translateY(-3px) + --shadow-md hover. Only the body padding had drifted,
+     into 14/16/16 on two of them and 13/14/15 on the other two. One value,
+     since they are one object. */
+  --card-pad: 14px 16px 16px;
+
+  /* ── Vertical rhythm ──────────────────────────────────────────────────
+     Two band depths rather than nine. `--sec-y` is the standard band;
+     `--sec-y-tight` is for the connective stripes that are deliberately
+     shallower than the sections they separate. */
+  --sec-y: 80px;
+  --sec-y-tight: 52px;
 }
 
 @media (max-width: 1068px) {
   :root {
     --t-hero: 44px;
     --t-section: 38px;
-    --t-section-lh: 1.15;
+    --t-section-sm: 31px;
     --t-sub: 26px;
-    --sec-y: 76px;
+    --sec-y: 64px;
+    --sec-y-tight: 44px;
   }
 }
 
@@ -200,9 +326,12 @@ ul {
     --t-hero-lh: 1.14;
     --t-section: 30px;
     --t-section-lh: 1.18;
+    --t-section-sm: 25px;
+    --t-section-sm-lh: 1.24;
     --t-sub: 21px;
     --t-sub-lh: 1.25;
-    --sec-y: 56px;
+    --sec-y: 52px;
+    --sec-y-tight: 40px;
   }
 }
 

@@ -32,12 +32,14 @@ export function CreatorCard({ creator }: { creator: CreatorProfile }) {
         <div className={styles.name}>{creator.name}</div>
         <div className={styles.title}>{creator.title}</div>
 
+        {/* No follower count: these are example profiles, so the number was
+            invented, and a public follower figure reads as the popularity
+            ranking 17-do-not-build-guardrails.md rules out. */}
         <div className={styles.footerRow}>
           <span className={styles.country}>
             <img src={creator.countryFlag} alt="" className={styles.flag} />
             <span className={styles.countryText}>{creator.country}</span>
           </span>
-          <span className={styles.followers}>{creator.followers} Followers</span>
         </div>
       </div>
     </article>

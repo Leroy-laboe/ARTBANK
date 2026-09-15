@@ -188,7 +188,7 @@ export const recentViewers: Viewer[] = [
       photo('photo-1541701494587-cb58502866ab', 80, 80),
       photo('photo-1502920917128-1aa500764cbd', 80, 80),
       photo('photo-1519608487953-e999c86e7455', 80, 80),
-      photo('photo-1549887534-1541e9326642', 80, 80),
+      photo('photo-1577720580479-7d839d829c73', 80, 80),
     ],
     lastViewedDate: 'May 8, 2025',
     lastViewedTime: '10:42 AM',
@@ -201,7 +201,7 @@ export const recentViewers: Viewer[] = [
     avatarUrl: photo('photo-1534528741775-53994a69daeb', 96, 96),
     viewedCount: 2,
     thumbs: [
-      photo('photo-1549887534-1541e9326642', 80, 80),
+      photo('photo-1577720580479-7d839d829c73', 80, 80),
       photo('photo-1577720580479-7d839d829c73', 80, 80),
     ],
     lastViewedDate: 'May 7, 2025',

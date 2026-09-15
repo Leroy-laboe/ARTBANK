@@ -20,7 +20,7 @@ export const adminUnclaimedArtworks: AdminUnclaimedArtwork[] = [
   {
     id: 'ua2',
     title: 'City Reflections',
-    imageUrl: photo('photo-1549887534-1541e9326642', 160, 160),
+    imageUrl: photo('photo-1577720580479-7d839d829c73', 160, 160),
     entrantName: 'Samira Khan',
     uploadedDate: '12 Oct 2024',
     matchState: 'none',

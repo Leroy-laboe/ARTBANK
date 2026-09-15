@@ -119,7 +119,7 @@ export const works: Work[] = [
     year: 2023,
     medium: 'Acrylic on Canvas',
     dimensions: '60 × 60 cm',
-    imageUrl: photo('photo-1549887534-1541e9326642', 120, 120),
+    imageUrl: photo('photo-1577720580479-7d839d829c73', 120, 120),
     status: 'Published',
     availability: 'Available',
     visibility: 'public',

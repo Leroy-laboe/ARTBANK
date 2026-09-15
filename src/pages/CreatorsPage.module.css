@@ -17,6 +17,22 @@
   min-width: 0;
 }
 
+.demoNote {
+  margin: 0 0 18px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--gold-bg);
+  font-size: var(--t-caption);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.demoNote strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

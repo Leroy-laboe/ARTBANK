@@ -76,6 +76,13 @@ export function CreatorsPage() {
 
             {realArtists.length > 0 && <h2 className={styles.discoverHeading}>Discover Creators</h2>}
 
+            {/* The brief's completion test: every sample is clearly labelled.
+                The grid below is illustrative, not real accounts. */}
+            <p className={styles.demoNote} role="note">
+              <strong>Example profiles.</strong> These illustrate the directory and are not real
+              ARTBANK accounts.
+            </p>
+
             <CreatorsToolbar total={filteredCreators.length} view={view} onViewChange={setView} />
 
             <div id="creators-grid" className={view === 'grid' ? styles.grid : styles.gridList}>

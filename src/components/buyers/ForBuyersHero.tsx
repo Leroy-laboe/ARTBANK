@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
+import { useSession } from '../../lib/sessionContext';
 import type { BuyerArtwork } from '../../data/buyerContent';
 import styles from './ForBuyersHero.module.css';
 
@@ -18,6 +19,10 @@ export function ForBuyersHero({
   onSubmit: () => void;
   featured: BuyerArtwork | null;
 }) {
+  // Same rule as ForBuyersArtworkCard: the signed-in artwork page is behind a
+  // login, so signed-out visitors get the public artwork link instead.
+  const { isAuthenticated } = useSession();
+
   return (
     <section className={styles.hero}>
       <div className={styles.left}>
@@ -47,7 +52,10 @@ export function ForBuyersHero({
       </div>
 
       {featured && (
-        <Link to={`/collect/artworks/${featured.id}`} className={styles.banner}>
+        <Link
+          to={isAuthenticated ? `/collect/artworks/${featured.id}` : `/a/${featured.id}`}
+          className={styles.banner}
+        >
           {featured.imageUrl && <img src={featured.imageUrl} alt="" className={styles.bannerImage} />}
           <div className={styles.scrim} />
           <div className={styles.bannerContent}>

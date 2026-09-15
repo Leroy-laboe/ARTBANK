@@ -54,13 +54,15 @@ export function BuyerSourcing() {
             </ul>
 
             <div className={styles.ctas}>
-              <ShinyButton to="/marketplace" className={styles.ctaPrimaryShiny}>
+              {/* /marketplace only redirects to /for-buyers now, and
+                  /how-it-works is still a placeholder — both CTAs point at
+                  pages that exist. */}
+              <ShinyButton to="/for-buyers" className={styles.ctaPrimaryShiny}>
                 Explore Artworks
                 <Icon name="arrow-right" size={15} />
               </ShinyButton>
-              <Link to="/how-it-works" className={styles.ctaGhost}>
-                <Icon name="play" size={13} />
-                See how it works
+              <Link to="/artists" className={styles.ctaGhost}>
+                Browse artists
               </Link>
             </div>
           </div>

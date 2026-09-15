@@ -185,8 +185,22 @@ export const testimonialAvatars = [
   'linear-gradient(160deg,#e8e0c9,#8a7a3f)',
 ];
 
-export const footerLinks = {
-  platform: ['Artists', 'For Buyers'],
-  resources: ['How It Works', 'Pricing', 'Help Center', 'Guides'],
-  company: ['About Us', 'Careers', 'Press', 'Contact'],
+/** Only destinations that exist. Help Center, Guides, About Us, Careers, Press
+ *  and Contact had no pages behind them and rendered as href="#" on every
+ *  page of the site; they come back here when they do. */
+export const footerLinks: Record<'platform' | 'resources' | 'account', { label: string; href: string }[]> = {
+  platform: [
+    { label: 'Artists', href: '/artists' },
+    { label: 'For Buyers', href: '/for-buyers' },
+  ],
+  // Terms and Privacy are not repeated here — the footer's bottom bar already
+  // carries every legal link.
+  resources: [
+    { label: 'How It Works', href: '/how-it-works' },
+    { label: 'Pricing', href: '/pricing' },
+  ],
+  account: [
+    { label: 'Sign in', href: '/login' },
+    { label: 'Create your JO1N ID', href: '/register' },
+  ],
 };

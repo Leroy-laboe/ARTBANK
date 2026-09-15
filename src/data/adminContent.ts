@@ -121,7 +121,7 @@ export const adminQueue: AdminQueueItem[] = [
   {
     id: 'q4',
     type: 'unclaimed',
-    imageUrl: photo('photo-1549887534-1541e9326642', 120, 120),
+    imageUrl: photo('photo-1577720580479-7d839d829c73', 120, 120),
     title: 'New unclaimed artwork',
     detailLines: ['City Reflections', 'Uploaded by admin • 12 Oct 2024', 'Entrant name: Samira Khan'],
     date: '12 Oct 2024',

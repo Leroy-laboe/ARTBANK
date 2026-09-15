@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
+import { useSession } from '../../lib/sessionContext';
 import type { BuyerArtwork } from '../../data/buyerContent';
 import styles from './ForBuyersArtworkCard.module.css';
 
@@ -23,7 +24,11 @@ export function ForBuyersArtworkCard({
 }) {
   const hasPrice = artwork.priceLabel !== 'Price on request';
   const actionLabel = hasPrice ? 'View Details' : artwork.artistId ? 'Contact Artist' : 'View Artwork';
-  const detailHref = `/collect/artworks/${artwork.id}`;
+  // /collect/artworks/:id is behind sign-in, so on this public page it sent
+  // every signed-out visitor straight to a login wall. They get the public
+  // Smart Artwork Link page for the same work instead.
+  const { isAuthenticated } = useSession();
+  const detailHref = isAuthenticated ? `/collect/artworks/${artwork.id}` : `/a/${artwork.id}`;
 
   return (
     <article className={styles.card}>

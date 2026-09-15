@@ -77,11 +77,13 @@ export function CreatorFilterSidebar({
                 aria-pressed={active}
                 onClick={() => toggleCategory(cat.label)}
               >
+                {/* No count beside each category: the figures (Painters 4,258,
+                    …) were invented, and fake statistics are ruled out by
+                    17-do-not-build-guardrails.md. */}
                 <span className={styles.categoryLabel}>
                   <Icon name={cat.icon} size={15} />
                   {cat.label}
                 </span>
-                <span className={styles.categoryCount}>{cat.count.toLocaleString()}</span>
               </button>
             );
           })}
@@ -96,6 +98,7 @@ export function CreatorFilterSidebar({
         <div className={styles.selectWrap}>
           <select
             className={styles.selectBox}
+            aria-label="Country"
             value={filters.country}
             onChange={(e) => onChange({ country: e.target.value })}
           >
@@ -117,6 +120,7 @@ export function CreatorFilterSidebar({
         <div className={styles.selectWrap}>
           <select
             className={styles.selectBox}
+            aria-label="Art style"
             value={filters.style}
             onChange={(e) => onChange({ style: e.target.value })}
           >
@@ -146,7 +150,6 @@ export function CreatorFilterSidebar({
                 />
                 {stage.label}
               </span>
-              <span className={styles.checkCount}>({stage.count.toLocaleString()})</span>
             </label>
           ))}
         </div>

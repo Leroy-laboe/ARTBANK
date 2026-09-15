@@ -7,7 +7,7 @@ import styles from './Footer.module.css';
 const FOOTER_GROUPS = [
   { title: 'Platform', links: footerLinks.platform },
   { title: 'Resources', links: footerLinks.resources },
-  { title: 'Company', links: footerLinks.company },
+  { title: 'Account', links: footerLinks.account },
 ];
 
 export function Footer() {
@@ -38,27 +38,28 @@ export function Footer() {
                 <Icon name="chevron-down" size={15} className={styles.groupCaret} />
               </summary>
               <ul className={styles.linkList}>
-                {links.map((label) => (
-                  <li key={label}>
-                    <a href="#">{label}</a>
+                {links.map(({ label, href }) => (
+                  <li key={href}>
+                    <Link to={href}>{label}</Link>
                   </li>
                 ))}
               </ul>
             </details>
           ))}
 
+          {/* This was a newsletter form whose submit handler only called
+              preventDefault() — it accepted an email address and sent it
+              nowhere. There is no mailing list behind the site yet, so the
+              column offers the one real next step instead. */}
           <div className={styles.newsletterCol}>
-            <div className={styles.colTitle}>Stay Connected</div>
-            <p style={{ fontSize: 13.5, marginBottom: 14 }}>Subscribe to our newsletter</p>
-            <form
-              className={styles.newsletterRow}
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <input type="email" placeholder="Enter your email" required />
-              <button type="submit" aria-label="Subscribe">
-                <Icon name="arrow-right" size={16} />
-              </button>
-            </form>
+            <div className={styles.colTitle}>Get Started</div>
+            <p className={styles.ctaText}>
+              Create a free JO1N ID to build your ArtSpace or start collecting.
+            </p>
+            <Link to="/register" className={styles.ctaLink}>
+              Create your JO1N ID
+              <Icon name="arrow-right" size={15} />
+            </Link>
           </div>
         </div>
 

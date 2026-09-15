@@ -197,7 +197,7 @@ export const bestOpportunity: {
   badge: 'High Match',
   title: 'Hotel Art Collection',
   summary: 'Curated for boutique hotels worldwide.',
-  imageUrl: photo('photo-1549887534-1541e9326642', 520, 640),
+  imageUrl: photo('photo-1577720580479-7d839d829c73', 520, 640),
   facts: [
     { icon: 'credit-card', label: 'Budget', value: 'USD 10,000 - 15,000' },
     { icon: 'image', label: 'Format', value: 'Original Artwork' },

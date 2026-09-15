@@ -64,7 +64,7 @@ export const discoverHero = {
   titleAccent: 'Speaks to You',
   blurb: 'Explore original artworks from verified artists worldwide.',
   cta: 'Explore Artworks',
-  imageUrl: photo('photo-1549887534-1541e9326642', 900, 500),
+  imageUrl: photo('photo-1577720580479-7d839d829c73', 900, 500),
 };
 
 export type TrustTile = { icon: IconName; title: string; note: string };
@@ -162,7 +162,7 @@ export const discoverArtworks: BuyerArtwork[] = [
     year: 2024,
     medium: 'Acrylic on Canvas',
     dimensions: '60 × 80 cm',
-    imageUrl: photo('photo-1549887534-1541e9326642', 600, 600),
+    imageUrl: photo('photo-1577720580479-7d839d829c73', 600, 600),
     priceLabel: 'USD 1,800',
     availability: 'Available',
     passport: 'Verified',
@@ -307,7 +307,7 @@ export type BuyerArtworkDetail = BuyerArtwork & {
 
 export const demoArtworkDetail: BuyerArtworkDetail = {
   ...discoverArtworks[0],
-  imageUrl: photo('photo-1549887534-1541e9326642', 1000, 1000),
+  imageUrl: photo('photo-1577720580479-7d839d829c73', 1000, 1000),
   description:
     'Silent Harmony explores the balance between chaos and stillness. Layers of texture and neutral tones reflect the quiet moments we often overlook.',
   specs: [
@@ -381,7 +381,7 @@ export const buyerEnquiries: BuyerEnquiry[] = [
     artwork: 'Silent Harmony',
     artistName: 'Maya Tan',
     artistHandle: null,
-    imageUrl: photo('photo-1549887534-1541e9326642', 160, 160),
+    imageUrl: photo('photo-1577720580479-7d839d829c73', 160, 160),
     purposeLabel: 'Acquisition',
     enquiredOn: on(2025, 4, 20),
     status: 'Awaiting Response',

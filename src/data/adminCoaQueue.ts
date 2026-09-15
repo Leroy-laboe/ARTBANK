@@ -38,7 +38,7 @@ export const adminCoaQueue: AdminCoaCase[] = [
         sizeLabel: '1.1 MB',
         uploadedDate: '12 Oct 2024',
         kind: 'image',
-        url: photo('photo-1549887534-1541e9326642', 200, 200),
+        url: photo('photo-1577720580479-7d839d829c73', 200, 200),
       },
       {
         id: 'e3',

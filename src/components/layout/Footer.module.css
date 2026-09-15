@@ -75,40 +75,34 @@
   color: var(--gold-light);
 }
 
-.newsletterRow {
-  display: flex;
-  margin-top: 4px;
-  border: 1px solid var(--dark-border);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-  background: var(--dark-2);
-}
-
-.newsletterRow input {
-  flex: 1;
-  min-width: 0;
-  background: transparent;
-  border: none;
-  padding: 12px 16px;
-  color: #fff;
+.ctaText {
   font-size: var(--t-label);
-  outline: none;
+  line-height: 1.6;
+  margin-bottom: 16px;
 }
 
-.newsletterRow input::placeholder {
-  color: var(--muted);
-}
-
-.newsletterRow button {
-  width: 42px;
-  flex-shrink: 0;
+.ctaLink {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  background: var(--gold);
+  gap: 8px;
+  padding: var(--ctrl-pad-sm);
+  border-radius: var(--radius-full);
+  background: var(--gold-light);
   color: #1c1509;
-  border: none;
-  cursor: pointer;
+  font-size: var(--t-ctrl-sm);
+  font-weight: var(--ctrl-weight);
+  transition: background 0.15s ease;
+}
+
+.ctaLink:hover {
+  background: var(--gold);
+}
+
+.linkList a:focus-visible,
+.bottomLinks a:focus-visible,
+.ctaLink:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 3px;
 }
 
 .bottom {
@@ -118,7 +112,8 @@
   gap: 16px;
   padding: 24px 0;
   font-size: var(--t-caption);
-  color: var(--muted);
+  /* --muted-2, not --muted: on --dark, --muted measured 4.07:1, under AA. */
+  color: var(--muted-2);
   flex-wrap: wrap;
 }
 
@@ -221,7 +216,7 @@
 
   .groupCaret {
     display: block;
-    color: var(--muted);
+    color: var(--muted-2);
   }
 
   .group[open] .groupCaret {

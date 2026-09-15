@@ -38,6 +38,24 @@ export async function signIn(email: string, password: string) {
   const client = requireSupabase();
   const { data, error } = await client.auth.signInWithPassword({ email, password });
   if (error) throw error;
+
+  // Supabase Auth has no idea about public.users.status — a suspended
+  // account's password is still valid, so the block has to happen here,
+  // right after authentication succeeds and before the caller navigates
+  // anywhere. Migration 0035's current_user_id() is the layer that can't be
+  // bypassed from the client (every RLS policy fails closed for a
+  // non-active row); this is the layer that gives the person an actual
+  // explanation instead of a screen full of silently-empty data.
+  const profile = await fetchProfileRow('auth_user_id', data.user.id);
+  if (profile && profile.status !== 'active') {
+    await client.auth.signOut();
+    throw new Error(
+      profile.status === 'suspended'
+        ? 'This account has been suspended. Contact support if you think this is a mistake.'
+        : 'This account is no longer active.',
+    );
+  }
+
   return data;
 }
 

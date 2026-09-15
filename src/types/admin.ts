@@ -80,6 +80,21 @@ export type AdminUploadedArtwork = {
   claimed: boolean;
 };
 
+/* ── Users ── */
+
+export type AdminUserRole = 'artist' | 'buyer' | 'guardian' | 'partner' | 'admin';
+export type AdminUserStatus = 'active' | 'suspended' | 'deleted';
+
+export type AdminUserRow = {
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl: string | null;
+  role: AdminUserRole;
+  status: AdminUserStatus;
+  joinedDate: string;
+};
+
 /* ── Link Artworks ── */
 
 export type AdminMatchState = 'suggested' | 'none' | 'linked';

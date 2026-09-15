@@ -25,6 +25,7 @@ as $$
     select 1 from public.users
      where auth_user_id = auth.uid()
        and role = 'admin'
+       and status = 'active'
   )
 $$;
 
@@ -114,6 +115,19 @@ create policy "Admins read all users"
   on public.users for select
   using ((select public.is_admin()));
 
+-- ── users: admin can suspend/reactivate an account ───────────────────────
+-- Deliberately broad at the RLS layer (any column, not just status) —
+-- what actually keeps this from becoming a second way to grant admin is the
+-- prevent_client_role_change trigger below, which vetoes any change to
+-- `role` from an authenticated client session regardless of who's asking,
+-- admin included. RLS says an admin may update a user row; the trigger says
+-- role specifically is never one of the columns that write can touch.
+drop policy if exists "Admins update users" on public.users;
+create policy "Admins update users"
+  on public.users for update
+  using ((select public.is_admin()))
+  with check ((select public.is_admin()));
+
 -- ── storage: admin can open a private evidence file ──────────────────────
 -- artwork-documents (0020) is a private bucket; createSignedUrl still checks
 -- a select policy against storage.objects, and the existing policy is
@@ -158,3 +172,38 @@ drop trigger if exists prevent_client_role_change on public.users;
 create trigger prevent_client_role_change
   before update of role on public.users
   for each row execute function public.prevent_client_role_change();
+
+-- ── what "suspend" actually does ─────────────────────────────────────────
+-- Suspending an account (Admin → Users) only ever set users.status —
+-- nothing read it back. Supabase Auth is a separate system from this table,
+-- so a suspended account could still sign in with its real password, and
+-- every RLS policy in 0001–0034 grants access by matching
+-- current_user_id() against a row, with no status check anywhere. The
+-- practical effect was that Suspend did nothing at all once someone was
+-- already signed in.
+--
+-- current_user_id() (0011) is the one choke point nearly every policy in
+-- the schema calls through — RLS-wise, "not you" and "you, but not right
+-- now" should look identical. Redefining it to return null for a
+-- non-active row makes every one of those policies fail closed the moment
+-- an account is suspended or deleted, with no per-policy changes needed:
+-- reading your own artworks, messages, saved works, all of it, starts
+-- failing exactly like it would for a stranger.
+--
+-- This does NOT sign a suspended user out or block the Supabase Auth login
+-- itself — that's a separate, client-side fix (services/auth.ts checks
+-- status right after sign-in and signs back out if it isn't 'active').
+-- What this guarantees is the part that can't be bypassed from the client:
+-- even with a valid session, a suspended account's own data becomes
+-- unreachable.
+create or replace function public.current_user_id()
+returns uuid
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select id from public.users
+   where auth_user_id = auth.uid()
+     and status = 'active'
+$$;

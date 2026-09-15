@@ -10,12 +10,15 @@ import type {
   AdminRegisteredUser,
   AdminUnclaimedArtwork,
   AdminUploadedArtwork,
+  AdminUserRow,
+  AdminUserStatus,
 } from '../types/admin';
 import {
   adminUnclaimedArtworks as demoUnclaimed,
 } from '../data/adminLinkArtworks';
 import { adminCoaQueue as demoCoaQueue } from '../data/adminCoaQueue';
 import { adminFlaggedConversations as demoFlagged } from '../data/adminFlaggedConversations';
+import { adminUsers as demoUsers } from '../data/adminUsers';
 
 /** Reads and writes the tables behind the Admin Portal — requires migration
  *  0035, which adds `is_admin()` and the admin-wide RLS policies every query
@@ -41,6 +44,20 @@ export function describeAdminError(err: unknown): string {
     return 'The database refused this — check that your account has role = admin and that migration 0035 has run.';
   }
   return message || 'Something went wrong. Please try again.';
+}
+
+/** Supabase RLS filters an update/delete via its USING clause like an
+ *  invisible WHERE — a caller with no matching row (not signed in, not
+ *  actually an admin, a stale session) gets back zero affected rows and no
+ *  error at all, which otherwise reads as success. Every mutation below
+ *  chains `.select('id')` and passes the result through this so a blocked
+ *  write throws instead of quietly pretending to have worked — this is
+ *  exactly what would have silently "succeeded" at suspending an account
+ *  from a session that was never really authenticated as admin. */
+function assertRowAffected(rows: { id: string }[] | null, action: string): void {
+  if (!rows || rows.length === 0) {
+    throw new Error(`${action} didn't apply — check that you're signed in as an admin and try again.`);
+  }
 }
 
 /* ── Function #1: upload an artwork for someone without an account ───────── */
@@ -199,8 +216,9 @@ export async function updateEntrantArtwork(
     row.dimensions = height && width ? `${height} × ${width} ${unit}` : '';
   }
 
-  const { error } = await supabase.from('artworks').update(row).eq('id', artworkId);
+  const { data, error } = await supabase.from('artworks').update(row).eq('id', artworkId).select('id');
   if (error) throw error;
+  assertRowAffected(data, 'Save');
 }
 
 /** Deletes the record entirely, including its files. `artwork_images` and
@@ -217,8 +235,9 @@ export async function deleteArtworkRecord(artworkId: string): Promise<void> {
     client.from('artwork_evidence_files').select('storage_path').eq('artwork_id', artworkId),
   ]);
 
-  const { error } = await client.from('artworks').delete().eq('id', artworkId);
+  const { data, error } = await client.from('artworks').delete().eq('id', artworkId).select('id');
   if (error) throw error;
+  assertRowAffected(data, 'Delete');
 
   const imagePaths = (images.data ?? [])
     .map((r) => r.storage_path as string | null)
@@ -312,11 +331,13 @@ export async function searchRegisteredUsers(query: string): Promise<AdminRegiste
 
 export async function linkArtworkToUser(artworkId: string, userId: string): Promise<void> {
   if (!supabase) throw new Error('No database is configured.');
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('artworks')
     .update({ artist_id: userId, updated_at: new Date().toISOString() })
-    .eq('id', artworkId);
+    .eq('id', artworkId)
+    .select('id');
   if (error) throw error;
+  assertRowAffected(data, 'Link');
 }
 
 /* ── Function #3: review COA requests ─────────────────────────────────────── */
@@ -418,24 +439,28 @@ export async function resolveEvidenceUrl(storagePath: string): Promise<string | 
 
 export async function approveCoa(artworkId: string): Promise<void> {
   if (!supabase) throw new Error('No database is configured.');
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('artworks')
     .update({ coa_status: 'issued', coa_rejection_reason: null, updated_at: new Date().toISOString() })
-    .eq('id', artworkId);
+    .eq('id', artworkId)
+    .select('id');
   if (error) throw error;
+  assertRowAffected(data, 'Approve');
 }
 
 export async function rejectCoa(artworkId: string, reason: string): Promise<void> {
   if (!supabase) throw new Error('No database is configured.');
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('artworks')
     .update({
       coa_status: 'not_requested',
       coa_rejection_reason: reason.trim() || null,
       updated_at: new Date().toISOString(),
     })
-    .eq('id', artworkId);
+    .eq('id', artworkId)
+    .select('id');
   if (error) throw error;
+  assertRowAffected(data, 'Reject');
 }
 
 /* ── Function #4: moderate flagged conversations ──────────────────────────── */
@@ -585,9 +610,77 @@ export async function resolveFlag(
   profile: Profile,
 ): Promise<void> {
   if (!supabase) throw new Error('No database is configured.');
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('conversation_flags')
     .update({ status: resolution, resolved_by: profile.id, resolved_at: new Date().toISOString() })
-    .eq('id', flagId);
+    .eq('id', flagId)
+    .select('id');
   if (error) throw error;
+  assertRowAffected(data, 'Resolve');
+}
+
+/* ── Users ── */
+
+type UserRow = {
+  id: string;
+  display_name: string | null;
+  artist_name: string | null;
+  email: string;
+  avatar_url: string | null;
+  role: AdminUserRow['role'];
+  status: AdminUserStatus;
+  created_at: string;
+};
+
+/** The whole registered directory, not just one role — an admin needs to
+ *  find a buyer as easily as an artist. Requires 0035's "Admins read all
+ *  users" policy; falls back to a small demo directory otherwise. */
+export async function listUsers(query = ''): Promise<{ items: AdminUserRow[]; isDemo: boolean }> {
+  if (!supabase) return { items: demoUsers, isDemo: true };
+
+  let builder = supabase
+    .from('users')
+    .select('id, display_name, artist_name, email, avatar_url, role, status, created_at')
+    .order('created_at', { ascending: false })
+    .limit(PAGE_SIZE);
+
+  const q = query.trim();
+  if (q) {
+    const escaped = q.replace(/[%,]/g, '');
+    builder = builder.or(
+      `display_name.ilike.%${escaped}%,artist_name.ilike.%${escaped}%,email.ilike.%${escaped}%`,
+    );
+  }
+
+  const { data, error } = await builder;
+  if (error) return { items: demoUsers, isDemo: true };
+
+  const rows = (data ?? []) as unknown as UserRow[];
+  return {
+    items: rows.map((row) => ({
+      id: row.id,
+      name: row.artist_name?.trim() || row.display_name?.trim() || row.email,
+      email: row.email,
+      avatarUrl: row.avatar_url,
+      role: row.role,
+      status: row.status,
+      joinedDate: formatAdminDate(row.created_at),
+    })),
+    isDemo: false,
+  };
+}
+
+/** Suspend or reactivate an account. Never role — see migration 0035's
+ *  prevent_client_role_change trigger, which vetoes a role write from any
+ *  authenticated client session regardless of who's asking. This function
+ *  deliberately has no way to pass one. */
+export async function setUserStatus(userId: string, status: 'active' | 'suspended'): Promise<void> {
+  if (!supabase) throw new Error('No database is configured.');
+  const { data, error } = await supabase
+    .from('users')
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq('id', userId)
+    .select('id');
+  if (error) throw error;
+  assertRowAffected(data, status === 'suspended' ? 'Suspend' : 'Reactivate');
 }

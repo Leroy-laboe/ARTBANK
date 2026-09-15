@@ -23,7 +23,20 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     // the same tick sees "in flight" rather than "no profile".
     setProfileLoading(true);
     try {
-      setProfile(await getMyProfile());
+      const found = await getMyProfile();
+
+      // signIn() (services/auth.ts) already blocks this at the point of
+      // logging in — this covers the account suspended *after* the session
+      // was issued, e.g. reopening a tab hours later. Supabase Auth's own
+      // session has no idea it happened, so ending it is this file's job.
+      if (found && found.status !== 'active') {
+        await signOutService();
+        setAuthenticated(false);
+        setProfile(null);
+        return;
+      }
+
+      setProfile(found);
     } catch {
       // A missing or unreadable profile row shouldn't sign the user out —
       // they're still authenticated, just without a local record yet.

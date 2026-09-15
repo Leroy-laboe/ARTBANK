@@ -3,23 +3,22 @@ import type { Profile } from '../types/user';
 
 /** Reads and writes public.users.
  *
- *  This is the one table that already had an update policy before the pivot
- *  migrations ("Users can update their own profile", scoped to
- *  auth.uid() = auth_user_id in 0008), so the profile editor can save for
- *  real. The public presentation columns come from 0021. */
+ *  Since 0036 the client roles hold column-level privileges on this table,
+ *  not table-wide ones. Any account's public presentation columns can be read
+ *  (subject to the row policies), but `email`, `is_minor`, `status`,
+ *  `jo1n_identity_id`, `auth_user_id` and the raw `public_email` cannot — not
+ *  even on your own row, because a column privilege can't tell rows apart.
+ *  Your own full row comes from the my_profile() function instead.
+ *
+ *  Writes are column-limited the same way: the profile editor's fields are
+ *  updatable, the account-control ones are not. */
 
-/** One list, not the three migration-era tiers it used to be split into.
- *  The split existed so a database missing 0021 or 0022 could still serve a
- *  partial profile; the app now assumes its schema is current and lets a
- *  behind database fail loudly instead. */
-const PROFILE_COLUMNS =
-  'id, auth_user_id, jo1n_identity_id, email, display_name, avatar_url, role, status, country, country_code, organization, collecting_interests, is_minor, created_at, artist_name, nationality, website, public_email, short_bio, artist_statement, cover_url, mediums, years_active, education, awards, social_links, profile_handle, profile_visibility, show_contact_information, allow_enquiries, show_artwork_prices';
-
-/** The subset a stranger may see. `email`, `role`, `status` and `is_minor` are
- *  deliberately absent: 0021's read policy is row-level, so keeping them out
- *  of the query is what actually stops them reaching a public page. */
+/** The subset a stranger may see. Every column here is one 0036 grants to the
+ *  client roles. `contact_email` stands in for `public_email`: it is generated
+ *  from it and is null unless the artist switched Show Contact Information
+ *  on, so a hidden contact address never leaves the database. */
 export const PUBLIC_PROFILE_COLUMNS =
-  'id, display_name, avatar_url, cover_url, country, country_code, artist_name, nationality, website, public_email, short_bio, artist_statement, mediums, years_active, education, awards, social_links, profile_handle, profile_visibility, show_contact_information, allow_enquiries, show_artwork_prices, created_at';
+  'id, display_name, avatar_url, cover_url, country, country_code, artist_name, nationality, website, contact_email, short_bio, artist_statement, mediums, years_active, education, awards, social_links, profile_handle, profile_visibility, show_contact_information, allow_enquiries, show_artwork_prices, created_at';
 
 type Row = Record<string, unknown>;
 
@@ -50,7 +49,9 @@ export function rowToProfile(row: Row): Profile {
     artistName: text(row, 'artist_name'),
     nationality: text(row, 'nationality'),
     website: text(row, 'website'),
-    publicEmail: text(row, 'public_email'),
+    // Your own row (my_profile) carries public_email; anyone else's row only
+    // ever carries the generated contact_email.
+    publicEmail: text(row, 'public_email') ?? text(row, 'contact_email'),
     shortBio: text(row, 'short_bio'),
     artistStatement: text(row, 'artist_statement'),
     coverUrl: text(row, 'cover_url'),
@@ -70,19 +71,19 @@ export function rowToProfile(row: Row): Profile {
   };
 }
 
-/** Reads one profile row by column and value.
+/** Reads the signed-in account's own full profile.
  *
- *  This used to be three tiers — 0022's country_code, then 0021's
- *  public-profile columns, then a pre-0021 base — each retrying on a
- *  "column does not exist" error. That treated "which migrations are applied"
- *  as a runtime unknown: it cost two extra round-trips on the fallback path,
- *  it swallowed a genuine typo'd column as though it were a version
- *  difference, and it grew a rung every time a migration added a field.
+ *  Goes through my_profile() (0036) rather than the table, because the
+ *  account-control columns — email, is_minor, status, identity ids — are no
+ *  longer selectable from the client at all; see the note at the top of this
+ *  file. The function only ever returns the caller's own row.
  *
- *  The schema is now something the app may assume. A database that is behind
- *  should fail loudly here rather than quietly serve a profile with its
- *  newest fields missing — see finding 5 in
- *  docs/pivot-checklist/27-production-readiness-audit.md. */
+ *  `column`/`value` are kept so existing callers need no change, and act as a
+ *  check: the row is returned only if it really is the one they asked for.
+ *
+ *  The schema is something the app may assume. A database that is behind
+ *  should fail loudly here rather than quietly serve a partial profile — see
+ *  finding 5 in docs/pivot-checklist/27-production-readiness-audit.md. */
 export async function fetchProfileRow(
   column: string,
   value: string,
@@ -90,14 +91,12 @@ export async function fetchProfileRow(
   const client = supabase;
   if (!client) return null;
 
-  const { data, error } = await client
-    .from('users')
-    .select(PROFILE_COLUMNS)
-    .eq(column, value)
-    .maybeSingle();
+  const { data, error } = await client.rpc('my_profile');
 
   if (error) throw error;
-  return data ? rowToProfile(data as Row) : null;
+  if (!data) return null;
+  const row = data as Row;
+  return String(row[column] ?? '') === value ? rowToProfile(row) : null;
 }
 
 export type ProfilePatch = {

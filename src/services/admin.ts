@@ -301,28 +301,47 @@ export async function listUnclaimedArtworks(): Promise<{
   };
 }
 
+/** Account emails and status are not client-selectable on public.users since
+ *  0036 — a column privilege can't be granted to admins only, so admin reads
+ *  of those columns go through is_admin()-gated functions instead. */
+type AdminDirectoryRow = {
+  id: string;
+  display_name: string | null;
+  artist_name: string | null;
+  email: string;
+  avatar_url: string | null;
+  role: AdminUserRow['role'];
+  status: AdminUserStatus;
+  created_at: string;
+};
+
+async function adminDirectory(query: string, limit: number): Promise<AdminDirectoryRow[] | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase.rpc('admin_list_users', {
+    p_query: query.trim(),
+    p_limit: limit,
+  });
+  if (error) return null;
+  return (data ?? []) as AdminDirectoryRow[];
+}
+
+/** id → email for the accounts embedded in a queue row. */
+async function adminEmails(ids: (string | null | undefined)[]): Promise<Map<string, string>> {
+  const unique = [...new Set(ids.filter((id): id is string => Boolean(id)))];
+  if (!supabase || unique.length === 0) return new Map();
+  const { data, error } = await supabase.rpc('admin_user_emails', { p_ids: unique });
+  if (error || !data) return new Map();
+  return new Map((data as { id: string; email: string }[]).map((row) => [row.id, row.email]));
+}
+
 /** Registered users the admin can search when linking an unclaimed artwork by
- *  hand — requires 0035's "Admins read all users" policy. Empty query
- *  returns the most recently created accounts rather than everyone. */
+ *  hand. Empty query returns the most recently created accounts rather than
+ *  everyone. */
 export async function searchRegisteredUsers(query: string): Promise<AdminRegisteredUser[]> {
-  if (!supabase) return [];
+  const data = await adminDirectory(query, 10);
+  if (!data) return [];
 
-  let builder = supabase
-    .from('users')
-    .select('id, display_name, email')
-    .order('created_at', { ascending: false })
-    .limit(10);
-
-  const q = query.trim();
-  if (q) {
-    const escaped = q.replace(/[%,]/g, '');
-    builder = builder.or(`display_name.ilike.%${escaped}%,email.ilike.%${escaped}%`);
-  }
-
-  const { data, error } = await builder;
-  if (error || !data) return [];
-
-  return (data as { id: string; display_name: string | null; email: string }[]).map((row) => ({
+  return data.map((row) => ({
     id: row.id,
     name: row.display_name ?? row.email,
     email: row.email,
@@ -350,7 +369,7 @@ type CoaRow = {
   medium: string | null;
   dimensions: string | null;
   description: string | null;
-  artist: { display_name: string | null; email: string } | null;
+  artist: { id: string; display_name: string | null } | null;
   artwork_images: { url: string; is_primary: boolean; position: number }[] | null;
   artwork_evidence_files: {
     id: string;
@@ -385,7 +404,7 @@ export async function listCoaQueue(): Promise<{ items: AdminCoaCase[]; isDemo: b
     .from('artworks')
     .select(
       `id, title, artist_display_name, year, medium, dimensions, description,
-       artist:users!artist_id(display_name, email),
+       artist:users!artist_id(id, display_name),
        artwork_images(url, is_primary, position),
        artwork_evidence_files(id, file_name, file_type, file_size, storage_path, uploaded_at)`,
     )
@@ -396,12 +415,13 @@ export async function listCoaQueue(): Promise<{ items: AdminCoaCase[]; isDemo: b
   if (error) return { items: demoCoaQueue, isDemo: true };
 
   const rows = (data ?? []) as unknown as CoaRow[];
+  const emails = await adminEmails(rows.map((row) => row.artist?.id));
   return {
     items: rows.map((row) => ({
       id: row.id,
       title: row.title,
       artistName: row.artist?.display_name ?? row.artist_display_name ?? 'Unknown artist',
-      artistEmail: row.artist?.email ?? '—',
+      artistEmail: (row.artist && emails.get(row.artist.id)) ?? '—',
       year: row.year ? String(row.year) : '—',
       medium: row.medium ?? '—',
       dimensions: row.dimensions ?? '—',
@@ -472,8 +492,8 @@ type FlagRow = {
   created_at: string;
   conversations: {
     id: string;
-    artist: { id: string; display_name: string | null; email: string } | null;
-    buyer: { id: string; display_name: string | null; email: string } | null;
+    artist: { id: string; display_name: string | null } | null;
+    buyer: { id: string; display_name: string | null } | null;
     messages: { id: string; body: string; created_at: string; sender_id: string }[] | null;
   } | null;
 };
@@ -496,8 +516,8 @@ export async function listFlaggedConversations(): Promise<{
       `id, action, reason, created_at,
        conversations (
          id,
-         artist:users!conversations_artist_id_fkey(id, display_name, email),
-         buyer:users!conversations_buyer_id_fkey(id, display_name, email),
+         artist:users!conversations_artist_id_fkey(id, display_name),
+         buyer:users!conversations_buyer_id_fkey(id, display_name),
          messages(id, body, created_at, sender_id)
        )`,
     )
@@ -508,13 +528,18 @@ export async function listFlaggedConversations(): Promise<{
   if (error) return { items: demoFlagged, isDemo: true };
 
   const rows = (data ?? []) as unknown as FlagRow[];
+  const emails = await adminEmails(
+    rows.flatMap((row) => [row.conversations?.artist?.id, row.conversations?.buyer?.id]),
+  );
+  const nameFor = (party: { id: string; display_name: string | null } | null) =>
+    party?.display_name ?? (party ? emails.get(party.id) : undefined) ?? 'Unknown';
   return {
     items: rows
       .filter((row) => row.conversations)
       .map((row) => {
         const convo = row.conversations!;
-        const artistName = convo.artist?.display_name ?? convo.artist?.email ?? 'Unknown';
-        const buyerName = convo.buyer?.display_name ?? convo.buyer?.email ?? 'Unknown';
+        const artistName = nameFor(convo.artist);
+        const buyerName = nameFor(convo.buyer);
         const senderName = (senderId: string) =>
           senderId === convo.artist?.id ? artistName : senderId === convo.buyer?.id ? buyerName : 'Unknown';
 
@@ -621,41 +646,16 @@ export async function resolveFlag(
 
 /* ── Users ── */
 
-type UserRow = {
-  id: string;
-  display_name: string | null;
-  artist_name: string | null;
-  email: string;
-  avatar_url: string | null;
-  role: AdminUserRow['role'];
-  status: AdminUserStatus;
-  created_at: string;
-};
-
 /** The whole registered directory, not just one role — an admin needs to
- *  find a buyer as easily as an artist. Requires 0035's "Admins read all
- *  users" policy; falls back to a small demo directory otherwise. */
+ *  find a buyer as easily as an artist. Reads through admin_list_users()
+ *  (0036); falls back to a small demo directory when there is no database or
+ *  the caller isn't an admin. */
 export async function listUsers(query = ''): Promise<{ items: AdminUserRow[]; isDemo: boolean }> {
   if (!supabase) return { items: demoUsers, isDemo: true };
 
-  let builder = supabase
-    .from('users')
-    .select('id, display_name, artist_name, email, avatar_url, role, status, created_at')
-    .order('created_at', { ascending: false })
-    .limit(PAGE_SIZE);
+  const rows = await adminDirectory(query, PAGE_SIZE);
+  if (!rows) return { items: demoUsers, isDemo: true };
 
-  const q = query.trim();
-  if (q) {
-    const escaped = q.replace(/[%,]/g, '');
-    builder = builder.or(
-      `display_name.ilike.%${escaped}%,artist_name.ilike.%${escaped}%,email.ilike.%${escaped}%`,
-    );
-  }
-
-  const { data, error } = await builder;
-  if (error) return { items: demoUsers, isDemo: true };
-
-  const rows = (data ?? []) as unknown as UserRow[];
   return {
     items: rows.map((row) => ({
       id: row.id,
@@ -670,17 +670,19 @@ export async function listUsers(query = ''): Promise<{ items: AdminUserRow[]; is
   };
 }
 
-/** Suspend or reactivate an account. Never role — see migration 0035's
- *  prevent_client_role_change trigger, which vetoes a role write from any
- *  authenticated client session regardless of who's asking. This function
- *  deliberately has no way to pass one. */
+/** Suspend or reactivate an account. Never role — this function deliberately
+ *  has no way to pass one.
+ *
+ *  `status` is not a client-updatable column since 0036 (otherwise a
+ *  suspended account could simply set itself back to active), so the write
+ *  goes through admin_set_user_status(), which checks is_admin() itself and
+ *  returns the id it changed. */
 export async function setUserStatus(userId: string, status: 'active' | 'suspended'): Promise<void> {
   if (!supabase) throw new Error('No database is configured.');
-  const { data, error } = await supabase
-    .from('users')
-    .update({ status, updated_at: new Date().toISOString() })
-    .eq('id', userId)
-    .select('id');
+  const { data, error } = await supabase.rpc('admin_set_user_status', {
+    p_user_id: userId,
+    p_status: status,
+  });
   if (error) throw error;
   assertRowAffected(data, status === 'suspended' ? 'Suspend' : 'Reactivate');
 }

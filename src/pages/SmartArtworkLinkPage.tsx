@@ -20,7 +20,7 @@ import styles from './SmartArtworkLinkPage.module.css';
 export function SmartArtworkLinkPage() {
   const { id = '' } = useParams();
   const [searchParams] = useSearchParams();
-  const { profile } = useSession();
+  const { profile, loading: sessionLoading } = useSession();
 
   const [artwork, setArtwork] = useState<BuyerArtworkDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -33,6 +33,12 @@ export function SmartArtworkLinkPage() {
   const loggedRef = useRef(false);
 
   useEffect(() => {
+    // Wait for the session to settle. Reading the artwork before it does
+    // served a signed-in visitor the signed-out view, and logged their visit
+    // as anonymous, whenever their session resolved a moment after first
+    // render — which on a cold link from Instagram or a QR code is usual.
+    if (sessionLoading) return;
+
     let active = true;
     setLoading(true);
 
@@ -53,9 +59,10 @@ export function SmartArtworkLinkPage() {
     return () => {
       active = false;
     };
-    // profile is read once the visit is logged, not re-logged on every
-    // session change — loggedRef, not the dependency array, guards that.
-  }, [id]);
+    // Re-reads when the session changes so saved/presented state is right for
+    // whoever is looking. loggedRef, not the dependency array, is what keeps
+    // the visit itself logged exactly once.
+  }, [id, profile, source, sessionLoading]);
 
   async function handlePresentYourself() {
     if (!profile) return;

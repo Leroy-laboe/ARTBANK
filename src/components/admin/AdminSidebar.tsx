@@ -3,13 +3,13 @@ import { Link, NavLink } from 'react-router-dom';
 import { Icon } from '../ui/Icon';
 import { adminPrimaryNav, adminSecondaryNav } from '../../data/adminContent';
 import { getOverviewCounts } from '../../services/admin';
-import logo from '../../assets/images/artbank-logo-light.png';
+import logo from '../../assets/images/artbank-logo-dark.png';
 import styles from './AdminSidebar.module.css';
 
-/** The Admin Portal shell nav — forest-dark, distinct from the ArtSpace
- *  sidebar's light surface so an admin never mistakes the portal for their
- *  own artist/buyer workspace. Shared by every admin screen; the active row
- *  comes from the router rather than a prop, same as ArtspaceSidebar. */
+/** The Admin Portal shell nav — light surface, matching the same chrome as
+ *  ArtSpace's and the buyer workspace's own sidebars rather than standing
+ *  apart from them. Shared by every admin screen; the active row comes from
+ *  the router rather than a prop, same as ArtspaceSidebar. */
 export function AdminSidebar() {
   // The `3` in adminPrimaryNav's data is a demo placeholder for when there's
   // no session to count against — same pattern as ArtspaceSidebar's unread

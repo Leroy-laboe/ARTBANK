@@ -1,48 +1,24 @@
 .card {
-  position: relative;
-  min-height: 128px;
+  padding: 18px 20px;
   border-radius: var(--radius-md);
-  background-size: cover;
-  background-position: center;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  isolation: isolate;
-}
-
-.scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: linear-gradient(160deg, rgba(19, 31, 24, 0.92), rgba(19, 31, 24, 0.72));
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
 }
 
 .quote {
-  position: relative;
-  z-index: 1;
   margin: 0;
-  padding: 20px 22px;
+  padding-left: 14px;
+  border-left: 2px solid var(--gold);
   display: flex;
   flex-direction: column;
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 15.5px;
-  line-height: 1.4;
-  color: var(--gold-light);
-}
-
-.quote::before {
-  content: '“';
-  font-size: 26px;
-  line-height: 1;
-  color: var(--gold);
-  margin-bottom: 4px;
-}
-
-.line {
-  color: var(--forest-text);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
 }
 
 .line:last-child {
-  color: var(--gold-light);
+  color: var(--gold-dark);
+  font-weight: 600;
 }

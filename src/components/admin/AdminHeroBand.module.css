@@ -1,28 +1,15 @@
 .band {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 32px;
-  min-height: 190px;
-  padding: 30px 36px;
+  padding: 28px 32px;
   border-radius: var(--radius-lg);
-  background-size: cover;
-  background-position: center;
-  overflow: hidden;
-  isolation: isolate;
-}
-
-.scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: linear-gradient(100deg, rgba(19, 31, 24, 0.94) 0%, rgba(19, 31, 24, 0.8) 46%, rgba(19, 31, 24, 0.42) 100%);
+  background: var(--gold-bg);
+  border: 1px solid var(--border-soft);
 }
 
 .copy {
-  position: relative;
-  z-index: 1;
   max-width: 480px;
 }
 
@@ -32,15 +19,15 @@
   font-weight: 600;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  color: var(--gold-light);
+  color: var(--gold-dark);
   margin: 0 0 10px;
 }
 
 .title {
   font-family: var(--font-serif);
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.12;
-  color: #fff;
+  font-size: clamp(26px, 2.8vw, 34px);
+  line-height: 1.14;
+  color: var(--ink);
   font-weight: 500;
   margin: 0 0 12px;
 }
@@ -49,13 +36,11 @@
   margin: 0;
   font-size: 14px;
   line-height: 1.6;
-  color: var(--forest-text);
+  color: var(--ink-soft);
   max-width: 40ch;
 }
 
 .quote {
-  position: relative;
-  z-index: 1;
   flex-shrink: 0;
   max-width: 260px;
   margin: 0;
@@ -63,9 +48,9 @@
   border-left: 2px solid var(--gold);
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.55;
-  color: var(--forest-text);
+  color: var(--ink-soft);
 }
 
 @media (max-width: 900px) {
@@ -86,7 +71,6 @@
 
 @media (max-width: 650px) {
   .band {
-    padding: 24px 22px;
-    min-height: 0;
+    padding: 22px 20px;
   }
 }

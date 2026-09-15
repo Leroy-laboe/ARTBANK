@@ -1,13 +1,12 @@
 import { adminHero } from '../../data/adminContent';
 import styles from './AdminHeroBand.module.css';
 
-/** The Overview screen's masthead — a quiet echo of the public site's forest
- *  bands (FeaturedArtistBand and friends), scaled down for a dashboard. */
+/** The Overview screen's masthead — a light gold-toned card, matching the
+ *  rest of the admin portal's chrome (and ArtSpace's own photo-free
+ *  dashboard) rather than the public site's dark forest bands. */
 export function AdminHeroBand() {
   return (
-    <section className={styles.band} style={{ backgroundImage: `url(${adminHero.imageUrl})` }}>
-      <div className={styles.scrim} />
-
+    <section className={styles.band}>
       <div className={styles.copy}>
         <p className={styles.eyebrow}>{adminHero.eyebrow}</p>
         <h1 className={styles.title}>{adminHero.title}</h1>

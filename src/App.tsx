@@ -29,7 +29,7 @@ import { ComingSoonPage } from './pages/ComingSoonPage';
  *
  * Pages use named exports and React.lazy wants a default, hence the small
  * unwrap on each line. */
-const MarketplacePage = lazy(async () => ({ default: (await import('./pages/MarketplacePage')).MarketplacePage }));
+const ForBuyersPage = lazy(async () => ({ default: (await import('./pages/ForBuyersPage')).ForBuyersPage }));
 const CreatorsPage = lazy(async () => ({ default: (await import('./pages/CreatorsPage')).CreatorsPage }));
 const PricingPage = lazy(async () => ({ default: (await import('./pages/PricingPage')).PricingPage }));
 const TermsPage = lazy(async () => ({ default: (await import('./pages/TermsPage')).TermsPage }));
@@ -70,6 +70,7 @@ const AdminUploadArtworkPage = lazy(async () => ({ default: (await import('./pag
 const AdminLinkArtworksPage = lazy(async () => ({ default: (await import('./pages/AdminLinkArtworksPage')).AdminLinkArtworksPage }));
 const AdminCoaReviewPage = lazy(async () => ({ default: (await import('./pages/AdminCoaReviewPage')).AdminCoaReviewPage }));
 const AdminFlaggedConversationsPage = lazy(async () => ({ default: (await import('./pages/AdminFlaggedConversationsPage')).AdminFlaggedConversationsPage }));
+const AdminUsersPage = lazy(async () => ({ default: (await import('./pages/AdminUsersPage')).AdminUsersPage }));
 
 function App() {
   return (
@@ -98,13 +99,16 @@ function App() {
             entire point is a link someone with no account can open. */}
         <Route path="/a/:id" element={<SmartArtworkLinkPage />} />
         <Route path="/how-it-works" element={<ComingSoonPage title="How It Works" />} />
-        <Route path="/for-buyers" element={<ComingSoonPage title="For Buyers" />} />
+        <Route path="/for-buyers" element={<ForBuyersPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         {/* "Membership" became "Pricing" in the nav. */}
         <Route path="/membership" element={<Navigate to="/pricing" replace />} />
 
-        {/* Hidden from the nav until functional — still routable by direct URL. */}
-        <Route path="/marketplace" element={<MarketplacePage />} />
+        {/* Retired in favour of /for-buyers, which is the same real-artwork
+            grid rebuilt without MarketplacePage's fabricated stats, MRI
+            score and auction/payment claims — see ForBuyersPage's own
+            comment. Redirect rather than 404 for anyone with the old link. */}
+        <Route path="/marketplace" element={<Navigate to="/for-buyers" replace />} />
         <Route path="/archive" element={<ComingSoonPage title="ARTCHIVE" />} />
         <Route path="/articon" element={<ComingSoonPage title="ARTICON" />} />
         <Route path="/academy" element={<ComingSoonPage title="ARTCADEMY" />} />
@@ -181,7 +185,7 @@ function App() {
             <Route path="/admin/coa" element={<AdminCoaReviewPage />} />
             <Route path="/admin/flagged" element={<AdminFlaggedConversationsPage />} />
             <Route path="/admin/opportunities" element={<AdminComingSoonPage title="Opportunities" />} />
-            <Route path="/admin/users" element={<AdminComingSoonPage title="Users" />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
             <Route path="/admin/settings" element={<AdminComingSoonPage title="System Settings" />} />
             <Route path="/admin/profile" element={<AdminComingSoonPage title="Admin Profile" />} />
           </Route>

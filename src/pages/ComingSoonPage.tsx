@@ -17,12 +17,15 @@ export function ComingSoonPage({ title }: { title: string }) {
             <p className={`eyebrow ${styles.eyebrow}`}>{title}</p>
             <h1 className={styles.title}>Coming Soon</h1>
             <p className={styles.desc}>
-              We&rsquo;re putting the finishing touches on {title}. Check back soon — in the
-              meantime, explore the marketplace preview and creator spotlight on the home page.
+              We&rsquo;re putting the finishing touches on {title}. In the meantime, browse the
+              artists already on ARTBANK or see how the platform works for buyers.
             </p>
             <div className={styles.actions}>
-              <Button variant="primary" to="/" icon={<Icon name="arrow-right" size={16} />}>
-                Back to Home
+              <Button variant="primary" to="/artists" icon={<Icon name="arrow-right" size={16} />}>
+                Browse artists
+              </Button>
+              <Button variant="ghost" to="/for-buyers">
+                For buyers
               </Button>
             </div>
           </div>

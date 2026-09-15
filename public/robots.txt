@@ -1,0 +1,11 @@
+# Private workspaces and invite-only links are kept out of search.
+# This is an indexing hint, not access control — every path below is also
+# guarded by sign-in or by row-level security in the database.
+User-agent: *
+Allow: /
+Disallow: /artspace
+Disallow: /collect
+Disallow: /admin
+Disallow: /guardian
+Disallow: /workspace
+Disallow: /rooms/

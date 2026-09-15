@@ -20,6 +20,8 @@ import { SmartArtworkLinkPage } from './pages/SmartArtworkLinkPage';
 import { PublicViewingRoomPage } from './pages/PublicViewingRoomPage';
 import { PublicArtistPage } from './pages/PublicArtistPage';
 import { ComingSoonPage } from './pages/ComingSoonPage';
+import { NotFoundPage } from './pages/NotFoundPage';
+import { RouteMeta } from './components/seo/RouteMeta';
 
 /* ── Lazily loaded ─────────────────────────────────────────────────────────
  * Everything behind a sign-in, plus the secondary marketing pages. A visitor
@@ -30,6 +32,7 @@ import { ComingSoonPage } from './pages/ComingSoonPage';
  * Pages use named exports and React.lazy wants a default, hence the small
  * unwrap on each line. */
 const ForBuyersPage = lazy(async () => ({ default: (await import('./pages/ForBuyersPage')).ForBuyersPage }));
+const HowItWorksPage = lazy(async () => ({ default: (await import('./pages/HowItWorksPage')).HowItWorksPage }));
 const CreatorsPage = lazy(async () => ({ default: (await import('./pages/CreatorsPage')).CreatorsPage }));
 const PricingPage = lazy(async () => ({ default: (await import('./pages/PricingPage')).PricingPage }));
 const TermsPage = lazy(async () => ({ default: (await import('./pages/TermsPage')).TermsPage }));
@@ -75,6 +78,7 @@ const AdminUsersPage = lazy(async () => ({ default: (await import('./pages/Admin
 function App() {
   return (
     <BrowserRouter>
+      <RouteMeta />
       <SessionProvider>
       {/* One boundary around the whole table rather than per route: the
           fallback is identical everywhere, and nesting them would only add
@@ -98,7 +102,7 @@ function App() {
             19-feature-smart-artwork-link-qr.md. Also outside RequireAuth: the
             entire point is a link someone with no account can open. */}
         <Route path="/a/:id" element={<SmartArtworkLinkPage />} />
-        <Route path="/how-it-works" element={<ComingSoonPage title="How It Works" />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
         <Route path="/for-buyers" element={<ForBuyersPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         {/* "Membership" became "Pricing" in the nav. */}
@@ -202,7 +206,7 @@ function App() {
         <Route path="/register" element={<AuthPage mode="signup" />} />
         {/* The Header still links here from the CareerBank flow. */}
         <Route path="/apply" element={<Navigate to="/register" replace />} />
-        <Route path="*" element={<ComingSoonPage title="This page" />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       </Suspense>
       </SessionProvider>

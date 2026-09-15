@@ -198,16 +198,16 @@ export async function listDiscoverArtworks(
     .select(ARTWORK_SELECT)
     .eq('status', 'published')
     .eq('visibility', 'public')
-    // Records with no account behind them are excluded. The competition
-    // entries (0003) were uploaded on the entrants' behalf and have a name but
-    // no artist_id, which means nobody can be followed, contacted or enquired
-    // with — BuyerArtworkPage already has to say "this record has no ArtBank
-    // account behind it". A feed of works whose whole purpose is to start a
-    // conversation should not be mostly works that cannot hold one.
-    //
-    // Excluded from the listing, not deleted: the rows still exist and stay
-    // reachable by direct link, exactly like an `unlisted` work.
-    .not('artist_id', 'is', null)
+    // Records with no account behind them (the competition entries from 0003,
+    // and anything uploaded through Admin → Upload Artwork) used to be
+    // excluded here entirely, on the reasoning that a feed meant for starting
+    // a conversation shouldn't be mostly works that can't hold one. That's
+    // now a deliberate product call the other way: these are real, published
+    // pieces whose whole point is to get the entrant public visibility before
+    // they even have an account, so they stay in the feed. BuyerArtworkPage
+    // already degrades gracefully for this case ("this record has no
+    // ArtBank account behind it, so it cannot take enquiries") — Save still
+    // works, only Contact/enquiry is unavailable.
     .order('published_at', { ascending: false, nullsFirst: false })
     .limit(limit);
 

@@ -57,7 +57,8 @@
   padding: 11px 22px;
   border: none;
   border-radius: var(--radius-full);
-  background: var(--gold);
+  /* --gold-dark: white on --gold is 3.13:1, under AA. */
+  background: var(--gold-dark);
   color: #fff;
   font-family: var(--font-sans);
   font-size: 13px;
@@ -67,7 +68,7 @@
 }
 
 .searchBtn:hover {
-  background: var(--gold-dark);
+  background: var(--ink);
 }
 
 .banner {

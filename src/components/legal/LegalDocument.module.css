@@ -21,7 +21,7 @@
 .updated {
   margin: 0 0 24px;
   font-size: var(--t-caption);
-  color: var(--muted-2);
+  color: var(--muted);
 }
 
 .intro {

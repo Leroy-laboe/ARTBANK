@@ -108,7 +108,7 @@
 .count {
   flex-shrink: 0;
   font-size: 11px;
-  color: var(--muted-2);
+  color: var(--muted);
 }
 
 .itemActive .count {

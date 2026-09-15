@@ -177,6 +177,11 @@ export function FeaturedArtistBand() {
         <div
           className={styles.gallery}
           ref={galleryRef}
+          // A scrollable region has to be reachable by keyboard, or a
+          // keyboard user can't scroll it at all (WCAG 2.1.1).
+          tabIndex={0}
+          role="region"
+          aria-label={`Gallery of works by ${featuredArtist.titleLead.split(' turns')[0]}`}
           // A finger on the carousel holds the rotation; letting go returns
           // it, and the swipe itself re-arms the clock through `active`.
           onTouchStart={() => setHeld(true)}

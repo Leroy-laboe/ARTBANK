@@ -134,7 +134,7 @@
 .listIndex {
   font-family: var(--font-serif);
   font-size: var(--t-lead);
-  color: var(--gold);
+  color: var(--gold-dark);
 }
 
 .listText {

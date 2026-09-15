@@ -59,14 +59,17 @@
   --sh-card-foreground: #15110c;
   --sh-popover: #ffffff;
   --sh-popover-foreground: #15110c;
-  --sh-primary: #b9884f;
+  /* Primary is the darker gold, not --gold (#b9884f): white text on --gold
+     measured 3.13:1, under WCAG AA. The foreground tokens follow globals.css's
+     AA-adjusted --gold-dark and --muted. */
+  --sh-primary: #86633a;
   --sh-primary-foreground: #ffffff;
   --sh-secondary: #f6ecd9;
-  --sh-secondary-foreground: #8f6a3a;
+  --sh-secondary-foreground: #86633a;
   --sh-muted: #efe9dd;
-  --sh-muted-foreground: #7c7468;
+  --sh-muted-foreground: #736b5f;
   --sh-accent: #f6ecd9;
-  --sh-accent-foreground: #8f6a3a;
+  --sh-accent-foreground: #86633a;
   --sh-destructive: #c8433f;
   --sh-destructive-foreground: #ffffff;
   --sh-border: #e8e1d3;

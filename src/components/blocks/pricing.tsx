@@ -78,7 +78,7 @@ export function Pricing({
   return (
     <div className="relative mx-auto max-w-5xl px-6 py-14 bg-[radial-gradient(ellipse_60%_55%_at_50%_0%,rgba(185,136,79,0.10),transparent_65%)]">
       <div className="text-center space-y-3 mb-10">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
         <p className="text-muted-foreground text-base whitespace-pre-line">{description}</p>
       </div>
 

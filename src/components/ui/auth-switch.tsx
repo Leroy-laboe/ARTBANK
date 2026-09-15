@@ -102,7 +102,13 @@ export default function AuthSwitch({
         <div className={styles.signinSignup}>
           {/* Sign In Form */}
           <form className={styles.signInForm} onSubmit={handleSignIn}>
-            <h2 className={styles.title}>Sign in</h2>
+            {/* The page's one h1 is whichever form is showing; the other form
+                stays in the DOM for the slide animation, so it keeps an h2. */}
+            {isSignUp ? (
+              <h2 className={styles.title}>Sign in</h2>
+            ) : (
+              <h1 className={styles.title}>Sign in</h1>
+            )}
             <div className={styles.inputField}>
               <i>📧</i>
               <input type="email" name="email" placeholder="Email" autoComplete="email" />
@@ -139,7 +145,11 @@ export default function AuthSwitch({
                 <span className={styles.confirmIcon} aria-hidden="true">
                   📬
                 </span>
-                <h2 className={styles.title}>Check your email</h2>
+                {isSignUp ? (
+                  <h1 className={styles.title}>Check your email</h1>
+                ) : (
+                  <h2 className={styles.title}>Check your email</h2>
+                )}
                 <p className={styles.confirmText}>
                   We’ve sent a confirmation link to
                   {signedUpEmail && <strong className={styles.confirmEmail}> {signedUpEmail}</strong>}.
@@ -148,7 +158,11 @@ export default function AuthSwitch({
               </div>
             ) : (
               <>
-                <h2 className={styles.title}>Create your JO1N ID</h2>
+                {isSignUp ? (
+                  <h1 className={styles.title}>Create your JO1N ID</h1>
+                ) : (
+                  <h2 className={styles.title}>Create your JO1N ID</h2>
+                )}
                 <p className={styles.subtitle}>Start with identity. Build value as you grow.</p>
                 <p className={styles.blurb}>
                   The free foundation includes your JO1N ID, profile, three work records and public
